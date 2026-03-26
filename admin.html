@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoftMed Solutions - Painel Administrativo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .status-valid {
+            background: #d4edda;
+            color: #155724;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .status-expired {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .instructions {
+            background: #e8f0fe;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .instructions code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ Painel Administrativo - SoftMed Solutions</h1>
+            <p>Gerencie médicos, legistas, pacientes e certificados</p>
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalDoctors">0</div>
+                <div class="stat-label">Médicos/Legistas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalPatients">0</div>
+                <div class="stat-label">Pacientes/Falecidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="validCertificates">0</div>
+                <div class="stat-label">Certificados Válidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="expiredCertificates">0</div>
+                <div class="stat-label">Certificados Expirados</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="doctors">👨‍⚕️ Médicos / Legistas</button>
+            <button class="tab-btn" data-tab="patients">👥 Pacientes / Falecidos</button>
+            <button class="tab-btn" data-tab="certificates">🔐 Certificados Digitais</button>
+            <button class="tab-btn" data-tab="export">📤 Exportar Dados</button>
+            <button class="tab-btn" data-tab="help">❓ Ajuda</button>
+        </div>
+
+        <!-- Aba de Médicos -->
+        <div id="doctors-tab" class="tab-content active">
+            <h2>👨‍⚕️ Gerenciar Médicos / Legistas</h2>
+            <button class="btn" onclick="openDoctorModal()">+ Novo Profissional</button>
+            <div class="table-container">
+                <table id="doctors-table">
+                    <thead>
+                        <tr><th>ID</th><th>Nome</th><th>CRM</th><th>Código</th><th>Certificado</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="doctors-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Aba de Pacientes -->
+        <div id="patients-tab" class="tab-content">
+            <h2>👥 Gerenciar Pacientes / Falecidos</h2>
+            <button class="btn" onclick="openPatientModal()">+ Novo Paciente</button>
+            <div class="table-container">
+                <table id="patients-table">
+                    <thead>
+                        <tr><th>ID</th><th>Nome</th><th>Idade</th><th>Leito</th><th>Diagnóstico</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="patients-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Aba de Certificados -->
+        <div id="certificates-tab" class="tab-content">
+            <h2>🔐 Gerenciar Certificados Digitais</h2>
+            <div class="table-container">
+                <table id="certificates-table">
+                    <thead>
+                        <tr><th>Profissional</th><th>CRM</th><th>Emissor</th><th>Emissão</th><th>Expiração</th><th>Status</th><th>Serial</th></tr>
+                    </thead>
+                    <tbody id="certificates-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Aba de Exportação -->
+        <div id="export-tab" class="tab-content">
+            <h2>📤 Exportar Dados</h2>
+            <div class="form-group">
+                <label>Selecione o sistema:</label>
+                <select id="export-mode">
+                    <option value="hospitalar">Sistema Hospitalar</option>
+                    <option value="funeraria">Sistema Funerária</option>
+                </select>
+            </div>
+            <button class="btn" onclick="exportData()">📄 Gerar JSON</button>
+            <div id="export-output" class="instructions" style="display: none; margin-top: 20px;">
+                <h3>📋 JSON Gerado:</h3>
+                <pre id="export-json" style="background: #f8f9fa; padding: 15px; overflow-x: auto; font-size: 12px;"></pre>
+                <button class="btn" onclick="copyToClipboard()">📋 Copiar JSON</button>
+                <button class="btn btn-secondary" onclick="downloadJSON()">💾 Baixar JSON</button>
+            </div>
+        </div>
+
+        <!-- Aba de Ajuda -->
+        <div id="help-tab" class="tab-content">
+            <h2>❓ Como Usar o Painel Administrativo</h2>
+            <div class="instructions">
+                <h3>📌 Adicionar/Editar Dados:</h3>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li>Use as abas para navegar entre médicos e pacientes</li>
+                    <li>Clique em "+ Novo" para adicionar um registro</li>
+                    <li>Preencha o formulário e clique em "Salvar"</li>
+                    <li>Para editar, clique no ícone de lápis ✏️</li>
+                    <li>Para excluir, clique no ícone de lixeira 🗑️</li>
+                </ol>
+                
+                <h3 style="margin-top: 20px;">📌 Sincronizar com Google Sheets:</h3>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li>Crie uma planilha no Google Sheets com as abas "doctors" e "patients"</li>
+                    <li>Publique a planilha como CSV (Arquivo > Compartilhar > Publicar na web)</li>
+                    <li>Copie o ID da planilha da URL</li>
+                    <li>Atualize o arquivo <code>js/google-sheets.js</code> com seu Sheet ID</li>
+                    <li>O sistema carregará automaticamente os dados do Google Sheets</li>
+                </ol>
+                
+                <h3 style="margin-top: 20px;">📌 Para usar apenas JSON local:</h3>
+                <p>Os dados são salvos no seu navegador (localStorage). Para persistir no GitHub:</p>
+                <ol style="margin-left: 20px;">
+                    <li>Vá para a aba "Exportar Dados"</li>
+                    <li>Copie o JSON gerado</li>
+                    <li>No GitHub, edite o arquivo <code>dados/dados-hospitalar.json</code> ou <code>dados/dados-funeraria.json</code></li>
+                    <li>Cole o JSON substituindo o conteúdo</li>
+                    <li>Commit as mudanças</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Médico -->
+    <div id="doctorModal" class="modal">
+        <div class="modal-content">
+            <h2 id="doctorModalTitle">Adicionar Médico</h2>
+            <form id="doctorForm">
+                <input type="hidden" id="doctorId">
+                <div class="form-group"><label>Nome:</label><input type="text" id="doctorName" required></div>
+                <div class="form-group"><label>CRM:</label><input type="text" id="doctorCRM" required></div>
+                <div class="form-group"><label>Código de Acesso (6 dígitos):</label><input type="password" id="doctorCode" maxlength="6" required></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Data da Última Alteração:</label><input type="text" id="doctorLastChange" readonly></div>
+                </div>
+                <div class="form-group"><label>Certificado - Emissor:</label><input type="text" id="certIssuer" value="ICP-Brasil - Saúde"></div>
+                <div class="form-group"><label>Certificado - Número Serial:</label><input type="text" id="certSerial" placeholder="BR-SAUDE-XXXXXX"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Data de Emissão:</label><input type="date" id="certIssued"></div>
+                    <div class="form-group"><label>Data de Expiração:</label><input type="date" id="certExpiration"></div>
+                </div>
+                <div class="form-group"><label>Nível do Certificado:</label>
+                    <select id="certLevel"><option>A3 - Assinatura Digital</option><option>A2 - Assinatura Digital</option><option>A1 - Assinatura Digital</option></select>
+                </div>
+                <button type="submit" class="btn">💾 Salvar</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('doctorModal')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Paciente -->
+    <div id="patientModal" class="modal">
+        <div class="modal-content">
+            <h2 id="patientModalTitle">Adicionar Paciente</h2>
+            <form id="patientForm">
+                <input type="hidden" id="patientId">
+                <div class="form-row">
+                    <div class="form-group"><label>Nome:</label><input type="text" id="patientName" required></div>
+                    <div class="form-group"><label>Idade:</label><input type="number" id="patientAge" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Gênero:</label><select id="patientGender"><option>Feminino</option><option>Masculino</option></select></div>
+                    <div class="form-group"><label>Tipo Sanguíneo:</label><select id="patientBlood"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Data de Internação/Óbito:</label><input type="date" id="patientAdmission"></div>
+                    <div class="form-group"><label>Leito/Urna:</label><input type="text" id="patientRoom"></div>
+                </div>
+                <div class="form-group"><label>Diagnóstico/Causa da Morte:</label><input type="text" id="patientDiagnosis"></div>
+                <div class="form-group"><label>Histórico Médico:</label><textarea id="patientMedicalHistory" rows="3"></textarea></div>
+                <div class="form-group"><label>Histórico do Paciente:</label><textarea id="patientHistory" rows="3" placeholder="Use 📅 para marcar datas"></textarea></div>
+                <div class="form-group"><label>Medicações:</label><input type="text" id="patientMedications"></div>
+                <div class="form-group"><label>Alergias:</label><input type="text" id="patientAllergies"></div>
+                <div class="form-group"><label>Observações Confidenciais:</label><textarea id="patientMedicalNotes" rows="3"></textarea></div>
+                <div class="form-group"><label>URL da Foto:</label><input type="text" id="patientPhoto" placeholder="./img/paciente.jpg"></div>
+                <button type="submit" class="btn">💾 Salvar</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('patientModal')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let doctors = [];
+        let patients = [];
+        let currentMode = 'hospitalar';
+
+        function loadFromLocalStorage() {
+            const savedDoctors = localStorage.getItem('softmed_doctors');
+            const savedPatients = localStorage.getItem('softmed_patients');
+            
+            if (savedDoctors) doctors = JSON.parse(savedDoctors);
+            if (savedPatients) patients = JSON.parse(savedPatients);
+            
+            renderTables();
+            updateStats();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('softmed_doctors', JSON.stringify(doctors));
+            localStorage.setItem('softmed_patients', JSON.stringify(patients));
+        }
+
+        function renderTables() {
+            // Renderizar médicos
+            const doctorsBody = document.getElementById('doctors-table-body');
+            doctorsBody.innerHTML = doctors.map(doctor => `
+                <tr>
+                    <td>${doctor.id}</td>
+                    <td>${doctor.name}</td>
+                    <td>${doctor.crm}</td>
+                    <td>••••••</td>
+                    <td><span class="${doctor.certificate?.status === 'Expirado' ? 'status-expired' : 'status-valid'}">${doctor.certificate?.status || 'Válido'}</span></td>
+                    <td>
+                        <button class="edit-btn" onclick="editDoctor(${doctor.id})">✏️</button>
+                        <button class="delete-btn" onclick="deleteDoctor(${doctor.id})">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Renderizar pacientes
+            const patientsBody = document.getElementById('patients-table-body');
+            patientsBody.innerHTML = patients.map(patient => `
+                <tr>
+                    <td>${patient.id}</td>
+                    <td>${patient.name}</td>
+                    <td>${patient.age}</td>
+                    <td>${patient.room}</td>
+                    <td>${patient.diagnosis.substring(0, 30)}${patient.diagnosis.length > 30 ? '...' : ''}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editPatient(${patient.id})">✏️</button>
+                        <button class="delete-btn" onclick="deletePatient(${patient.id})">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Renderizar certificados
+            const certsBody = document.getElementById('certificates-table-body');
+            certsBody.innerHTML = doctors.map(doctor => `
+                <tr>
+                    <td>${doctor.name}</td>
+                    <td>${doctor.crm}</td>
+                    <td>${doctor.certificate?.issuer || 'ICP-Brasil'}</td>
+                    <td>${doctor.certificate?.issuedDate || 'N/A'}</td>
+                    <td>${doctor.certificate?.expirationDate || 'N/A'}</td>
+                    <td><span class="${doctor.certificate?.status === 'Expirado' ? 'status-expired' : 'status-valid'}">${doctor.certificate?.status || 'Válido'}</span></td>
+                    <td><code>${doctor.certificate?.serialNumber || 'N/A'}</code></td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('totalDoctors').innerHTML = doctors.length;
+            document.getElementById('totalPatients').innerHTML = patients.length;
+            document.getElementById('validCertificates').innerHTML = doctors.filter(d => d.certificate?.status !== 'Expirado').length;
+            document.getElementById('expiredCertificates').innerHTML = doctors.filter(d => d.certificate?.status === 'Expirado').length;
+        }
+
+        function getNextId(type) {
+            const items = type === 'doctor' ? doctors : patients;
+            return items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
+        }
+
+        function openDoctorModal(doctor = null) {
+            const modal = document.getElementById('doctorModal');
+            const title = document.getElementById('doctorModalTitle');
+            
+            if (doctor) {
+                title.innerText = 'Editar Médico';
+                document.getElementById('doctorId').value = doctor.id;
+                document.getElementById('doctorName').value = doctor.name;
+                document.getElementById('doctorCRM').value = doctor.crm;
+                document.getElementById('doctorCode').value = doctor.observationCode;
+                document.getElementById('doctorLastChange').value = doctor.lastPasswordChange || new Date().toLocaleString('pt-BR');
+                document.getElementById('certIssuer').value = doctor.certificate?.issuer || 'ICP-Brasil
