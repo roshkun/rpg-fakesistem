@@ -1,25 +1,89 @@
 {
   "doctors": {
     "1": {
+      "id": "1",
       "name": "Dr. Carlos Mendes",
       "crm": "CRM 12345",
       "observationCode": "123456",
       "savedPassword": "123456",
-      "lastPasswordChange": "15/11/2024 14:30"
+      "lastPasswordChange": "15/11/2024 14:30",
+      "certificate": {
+        "issuer": "ICP-Brasil - Autoridade Certificadora Saúde",
+        "serialNumber": "BR-SAUDE-123456789",
+        "issuedDate": "15/11/2022",
+        "expirationDate": "15/11/2025",
+        "status": "Válido",
+        "level": "A3 - Assinatura Digital",
+        "fingerprint": "A1:B2:C3:D4:E5:F6:G7:H8:I9:J0"
+      }
     },
     "2": {
+      "id": "2",
       "name": "Dra. Ana Paula Souza",
       "crm": "CRM 67890",
       "observationCode": "234567",
       "savedPassword": "234567",
-      "lastPasswordChange": "16/11/2024 09:15"
+      "lastPasswordChange": "16/11/2024 09:15",
+      "certificate": {
+        "issuer": "ICP-Brasil - Autoridade Certificadora Saúde",
+        "serialNumber": "BR-SAUDE-987654321",
+        "issuedDate": "10/10/2023",
+        "expirationDate": "10/10/2026",
+        "status": "Válido",
+        "level": "A3 - Assinatura Digital",
+        "fingerprint": "B2:C3:D4:E5:F6:G7:H8:I9:J0:K1"
+      }
     },
     "3": {
+      "id": "3",
       "name": "Dr. Ricardo Almeida",
       "crm": "CRM 54321",
       "observationCode": "345678",
       "savedPassword": "345678",
-      "lastPasswordChange": "14/11/2024 11:20"
+      "lastPasswordChange": "14/11/2024 11:20",
+      "certificate": {
+        "issuer": "ICP-Brasil - Autoridade Certificadora Saúde",
+        "serialNumber": "BR-SAUDE-456789123",
+        "issuedDate": "20/12/2020",
+        "expirationDate": "20/12/2024",
+        "status": "Expirado",
+        "level": "A3 - Assinatura Digital",
+        "fingerprint": "C3:D4:E5:F6:G7:H8:I9:J0:K1:L2"
+      }
+    },
+    "4": {
+      "id": "4",
+      "name": "Dra. Mariana Oliveira",
+      "crm": "CRM 98765",
+      "observationCode": "456789",
+      "savedPassword": "456789",
+      "lastPasswordChange": "17/11/2024 16:45",
+      "certificate": {
+        "issuer": "ICP-Brasil - Autoridade Certificadora Saúde",
+        "serialNumber": "BR-SAUDE-789123456",
+        "issuedDate": "05/05/2023",
+        "expirationDate": "05/05/2026",
+        "status": "Válido",
+        "level": "A3 - Assinatura Digital",
+        "fingerprint": "D4:E5:F6:G7:H8:I9:J0:K1:L2:M3"
+      }
+    },
+    "5": {
+      "id": "5",
+      "name": "Dr. Fernando Costa",
+      "crm": "CRM 45678",
+      "observationCode": "567890",
+      "savedPassword": "567890",
+      "lastPasswordChange": "13/11/2024 10:00",
+      "certificate": {
+        "issuer": "ICP-Brasil - Autoridade Certificadora Saúde",
+        "serialNumber": "BR-SAUDE-321654987",
+        "issuedDate": "25/08/2024",
+        "expirationDate": "25/08/2027",
+        "status": "Válido",
+        "level": "A3 - Assinatura Digital",
+        "fingerprint": "E5:F6:G7:H8:I9:J0:K1:L2:M3:N4"
+      }
     }
   },
   "patients": [
@@ -33,51 +97,13 @@
       "room": "201-A",
       "diagnosis": "Hipertensão arterial descompensada",
       "medicalHistory": "Paciente hipertensa há 20 anos. Apresentou melhora significativa após internação.",
-      "patientHistory": "📅 2015: Diagnóstico inicial de hipertensão\n📅 2018: Início do tratamento com Losartana\n📅 2024: Internação por descompensação - melhora inexplicável",
+      "patientHistory": "📅 2015: Diagnóstico inicial de hipertensão\n📅 2018: Início do tratamento com Losartana\n📅 2020: Ajuste de medicação\n📅 2024: Internação por descompensação - melhora inexplicável",
       "medications": "Losartana 100mg/dia",
       "allergies": "Nenhuma",
       "medicalNotes": "🔴 OBSERVAÇÃO CONFIDENCIAL: Paciente apresentou melhora inexplicável dos níveis pressóricos após 48h de internação. Redução de 180/110 para 120/80 sem ajuste significativo na medicação.",
       "lastUpdate": "19/11/2024",
       "initials": "MS",
       "color": "#FF6B6B",
-      "photoUrl": ""
-    },
-    {
-      "id": 2,
-      "name": "José Augusto Lima",
-      "age": 65,
-      "gender": "Masculino",
-      "bloodType": "O+",
-      "admissionDate": "17/11/2024",
-      "room": "203-B",
-      "diagnosis": "Pneumonia bacteriana",
-      "medicalHistory": "Paciente com febre e tosse. Melhora significativa em 36h.",
-      "patientHistory": "📅 2020: Diagnóstico de DPOC leve\n📅 2022: Pneumonia bacteriana - internado por 10 dias\n📅 2024: Nova internação - recuperação acelerada",
-      "medications": "Ceftriaxona 1g/dia, Azitromicina 500mg",
-      "allergies": "Dipirona",
-      "medicalNotes": "🔴 OBSERVAÇÃO CONFIDENCIAL: Cultura do escarro não identificou bactéria, porém quadro clínico melhorou 100% em 36h.",
-      "lastUpdate": "19/11/2024",
-      "initials": "JL",
-      "color": "#4ECDC4",
-      "photoUrl": ""
-    },
-    {
-      "id": 3,
-      "name": "Ana Beatriz Santos",
-      "age": 28,
-      "gender": "Feminino",
-      "bloodType": "B-",
-      "admissionDate": "16/11/2024",
-      "room": "105-C",
-      "diagnosis": "Apendicite aguda",
-      "medicalHistory": "Submetida a apendicectomia de urgência. Pós-operatório tranquilo.",
-      "patientHistory": "📅 2022: Primeira crise de dor abdominal\n📅 2023: Diagnóstico de apendicite crônica\n📅 2024: Apendicite aguda - cirurgia de emergência",
-      "medications": "Dipirona 1g 6/6h, Cefalotina 1g 6/6h",
-      "allergies": "Nenhuma",
-      "medicalNotes": "🔴 OBSERVAÇÃO CONFIDENCIAL: Anatomopatológico do apêndice não mostrou sinais de inflamação aguda, apesar dos sintomas clássicos.",
-      "lastUpdate": "18/11/2024",
-      "initials": "AS",
-      "color": "#45B7D1",
       "photoUrl": ""
     }
   ]
