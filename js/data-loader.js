@@ -4,10 +4,57 @@ let doctorsDB = {};
 let patients = [];
 let dataSource = 'none';
 
-// Dados de exemplo para fallback (caso não consiga carregar do Google Sheets)
-const fallbackData = {
-    hospitalar: {
-        doctors: {
+async function loadData(mode) {
+    console.log('🚀 Carregando dados para modo:', mode);
+    
+    try {
+        const data = await loadFromGoogleSheets(mode);
+        
+        if (data && data.doctors && data.doctors.length > 0) {
+            // Converter array para objeto
+            const doctors = {};
+            data.doctors.forEach(doctor => {
+                const id = doctor.id || Object.keys(doctors).length + 1;
+                doctors[id] = {
+                    id: id,
+                    name: doctor.name || 'Nome não informado',
+                    crm: doctor.crm || 'CRM não informado',
+                    observationCode: doctor.observationCode || '000000',
+                    savedPassword: doctor.observationCode || '000000',
+                    lastPasswordChange: doctor.lastPasswordChange || new Date().toLocaleString('pt-BR'),
+                    certificate: {
+                        issuer: doctor.certificate_issuer || 'ICP-Brasil',
+                        serialNumber: doctor.certificate_serial || `BR-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+                        issuedDate: doctor.certificate_issued || new Date().toLocaleDateString('pt-BR'),
+                        expirationDate: doctor.certificate_expiration || new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR'),
+                        level: doctor.certificate_level || 'A3',
+                        status: doctor.certificate_status || 'Válido'
+                    }
+                };
+            });
+            
+            doctorsDB = doctors;
+            patients = data.patients;
+            dataSource = 'sheets';
+            console.log('✅ Dados carregados do Google Sheets!');
+            return true;
+        }
+        
+        // Fallback: dados de exemplo
+        console.warn('⚠️ Nenhum dado do Sheets, usando fallback');
+        loadFallbackData(mode);
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Erro:', error);
+        loadFallbackData(mode);
+        return true;
+    }
+}
+
+function loadFallbackData(mode) {
+    if (mode === 'hospitalar') {
+        doctorsDB = {
             "1": {
                 id: "1",
                 name: "Dr. Carlos Mendes",
@@ -23,9 +70,25 @@ const fallbackData = {
                     status: "Válido",
                     level: "A3"
                 }
+            },
+            "2": {
+                id: "2",
+                name: "Dra. Ana Paula Souza",
+                crm: "CRM 67890",
+                observationCode: "234567",
+                savedPassword: "234567",
+                lastPasswordChange: "16/11/2024 09:15",
+                certificate: {
+                    issuer: "ICP-Brasil - Saúde",
+                    serialNumber: "BR-SAUDE-002",
+                    issuedDate: "10/10/2023",
+                    expirationDate: "10/10/2026",
+                    status: "Válido",
+                    level: "A3"
+                }
             }
-        },
-        patients: [
+        };
+        patients = [
             {
                 id: 1,
                 name: "Maria Aparecida Silva",
@@ -45,10 +108,9 @@ const fallbackData = {
                 color: "#FF6B6B",
                 photoUrl: ""
             }
-        ]
-    },
-    funeraria: {
-        doctors: {
+        ];
+    } else {
+        doctorsDB = {
             "1": {
                 id: "1",
                 name: "Dr. Carlos Mendes - Legista",
@@ -65,8 +127,8 @@ const fallbackData = {
                     level: "A3"
                 }
             }
-        },
-        patients: [
+        };
+        patients = [
             {
                 id: 1,
                 name: "Mariana Luz",
@@ -75,172 +137,34 @@ const fallbackData = {
                 bloodType: "A-",
                 admissionDate: "10/03/2026",
                 room: "305-B",
-                diagnosis: "Recuperação Pós-Falência Hepática",
+                diagnosis: "Óbito por falência hepática",
                 medicalHistory: "Paciente em estado terminal.",
-                patientHistory: "📅 10/03: Internação\n📅 26/03: Melhora milagrosa",
+                patientHistory: "📅 10/03: Internação\n📅 26/03: Óbito",
                 medications: "Nenhum",
                 allergies: "Nenhuma",
-                medicalNotes: "🔴 LAUDO CONFIDENCIAL: Fígado novo sem cirurgia.",
+                medicalNotes: "🔍 LAUDO PRELIMINAR: Ao exame externo, não há cicatrizes de procedimentos cirúrgicos.",
                 lastUpdate: "26/03/2026",
                 initials: "ML",
                 color: "#6B94FF",
                 photoUrl: ""
             }
-        ]
+        ];
     }
-};
-
-async function loadDataFromSheets(mode) {
-    if (!isGoogleSheetsConfigured()) {
-        console.log('⚠️ Google Sheets não configurado');
-        return false;
-    }
-    
-    try {
-        console.log('🔄 Tentando carregar do Google Sheets...');
-        const data = await loadFromGoogleSheets(mode);
-        
-        if (!data || !data.doctors || data.doctors.length === 0) {
-            console.warn('⚠️ Dados vazios do Google Sheets');
-            return false;
-        }
-        
-        // Converter array para objeto
-        const doctors = {};
-        data.doctors.forEach(doctor => {
-            const id = doctor.id || Object.keys(doctors).length + 1;
-            doctors[id] = {
-                id: id,
-                name: doctor.name,
-                crm: doctor.crm,
-                observationCode: doctor.observationCode,
-                savedPassword: doctor.observationCode,
-                lastPasswordChange: doctor.lastPasswordChange || new Date().toLocaleString('pt-BR'),
-                certificate: {
-                    issuer: doctor.certificate_issuer || 'ICP-Brasil',
-                    serialNumber: doctor.certificate_serial || `BR-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
-                    issuedDate: doctor.certificate_issued || new Date().toLocaleDateString('pt-BR'),
-                    expirationDate: doctor.certificate_expiration || new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR'),
-                    level: doctor.certificate_level || 'A3',
-                    status: doctor.certificate_status || 'Válido'
-                }
-            };
-        });
-        
-        const processedData = { doctors, patients: data.patients };
-        processLoadedData(processedData);
-        dataSource = 'sheets';
-        console.log('✅ Dados carregados do Google Sheets!');
-        return true;
-        
-    } catch (error) {
-        console.error('❌ Erro ao carregar do Google Sheets:', error);
-        return false;
-    }
-}
-
-function loadFallbackData(mode) {
-    console.log('📁 Usando dados de fallback para modo:', mode);
-    const fallback = fallbackData[mode];
-    if (!fallback) {
-        console.error('❌ Fallback não encontrado para modo:', mode);
-        return false;
-    }
-    processLoadedData(fallback);
     dataSource = 'fallback';
-    console.log('✅ Dados de fallback carregados!');
-    return true;
-}
-
-async function loadData(mode) {
-    console.log('🚀 Iniciando carregamento de dados para modo:', mode);
-    
-    // Tentar Google Sheets primeiro
-    let success = await loadDataFromSheets(mode);
-    
-    // Se falhar, usar fallback
-    if (!success) {
-        console.log('⚠️ Google Sheets falhou, usando fallback...');
-        success = loadFallbackData(mode);
-    }
-    
-    if (!success) {
-        console.error('❌ Todas as fontes falharam!');
-        return false;
-    }
-    
-    console.log(`✅ Dados carregados com sucesso! Fonte: ${dataSource}`);
-    return true;
-}
-
-function processLoadedData(data) {
-    doctorsDB = data.doctors;
-    patients = data.patients;
-    
-    // Garantir campos obrigatórios nos pacientes
-    patients.forEach((patient, index) => {
-        if (!patient.patientHistory) patient.patientHistory = "Histórico não informado";
-        if (!patient.photoUrl) patient.photoUrl = "";
-        if (!patient.initials) {
-            const names = patient.name.split(' ');
-            patient.initials = names[0].charAt(0) + (names[1] ? names[1].charAt(0) : names[0].charAt(1));
-        }
-        if (!patient.color) {
-            const defaultColors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#B5EAD7", "#C7CEE6"];
-            patient.color = defaultColors[index % defaultColors.length];
-        }
-        if (!patient.id) patient.id = index + 1;
-    });
-    
-    // Garantir campos obrigatórios nos médicos
-    for (const [id, doctor] of Object.entries(doctorsDB)) {
-        if (!doctor.savedPassword) doctor.savedPassword = doctor.observationCode;
-        if (!doctor.lastPasswordChange) doctor.lastPasswordChange = new Date().toLocaleString('pt-BR');
-        
-        if (!doctor.certificate) {
-            doctor.certificate = {
-                issuer: "ICP-Brasil",
-                serialNumber: `BR-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
-                issuedDate: new Date().toLocaleDateString('pt-BR'),
-                expirationDate: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR'),
-                status: "Válido",
-                level: "A3"
-            };
-        }
-        
-        // Verificar expiração
-        if (doctor.certificate.expirationDate) {
-            const expDate = new Date(doctor.certificate.expirationDate.split('/').reverse().join('-'));
-            const today = new Date();
-            doctor.certificate.status = expDate < today ? "Expirado" : "Válido";
-        }
-    }
-    
-    console.log(`📊 Dados processados: ${Object.keys(doctorsDB).length} médicos, ${patients.length} pacientes`);
+    console.log('✅ Dados de fallback carregados');
 }
 
 function updateDoctorSelect() {
     const select = document.getElementById('certificateSelect');
-    if (!select) {
-        console.warn('⚠️ Select de médicos não encontrado');
-        return;
-    }
-    
-    if (!doctorsDB || Object.keys(doctorsDB).length === 0) {
-        console.warn('⚠️ Nenhum médico carregado');
-        select.innerHTML = '<option value="">Nenhum médico disponível</option>';
-        return;
-    }
+    if (!select) return;
     
     select.innerHTML = '<option value="">Selecione um profissional...</option>';
     for (const [id, doctor] of Object.entries(doctorsDB)) {
-        if (doctor) {
-            const option = document.createElement('option');
-            option.value = id;
-            const statusIcon = doctor.certificate?.status === 'Expirado' ? '⚠️' : '✅';
-            option.textContent = `${doctor.name || 'Sem nome'} - ${doctor.crm || 'N/A'} ${statusIcon} (${doctor.certificate?.status || 'Válido'})`;
-            select.appendChild(option);
-        }
+        const option = document.createElement('option');
+        option.value = id;
+        const statusIcon = doctor.certificate?.status === 'Expirado' ? '⚠️' : '✅';
+        option.textContent = `${doctor.name} - ${doctor.crm} ${statusIcon} (${doctor.certificate?.status || 'Válido'})`;
+        select.appendChild(option);
     }
     console.log(`✅ Select atualizado com ${Object.keys(doctorsDB).length} profissionais`);
 }
@@ -248,11 +172,5 @@ function updateDoctorSelect() {
 function getCertificateInfo(doctorId) {
     const doctor = doctorsDB[doctorId];
     if (!doctor || !doctor.certificate) return null;
-    
-    const cert = doctor.certificate;
-    return {
-        ...cert,
-        isValid: cert.status !== 'Expirado',
-        message: cert.status === 'Expirado' ? '⚠️ Certificado EXPIRADO! Contate o suporte.' : '✅ Certificado válido'
-    };
+    return doctor.certificate;
 }
