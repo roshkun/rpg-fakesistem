@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>SoftMed Solutions - Sistema Integrado</title>
+    <style>
+        /* Estilos base - serão sobrescritos pelo modo */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Modo Hospitalar (padrão) */
+        body.hospitalar {
+            background: #e9ecef;
+        }
+
+        body.hospitalar .main-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        body.hospitalar .main-menu {
+            background: #2c3e50;
+        }
+
+        body.hospitalar .patients-sidebar {
+            background: white;
+            border-right: 1px solid #dee2e6;
+        }
+
+        body.hospitalar .sidebar-header {
+            background: #f8f9fa;
+        }
+
+        body.hospitalar .user-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body.hospitalar .patient-card {
+            border-left: 5px solid #3498db;
+        }
+
+        /* Modo Funerária */
+        body.funeraria {
+            background: #1a1a1a;
+        }
+
+        body.funeraria .main-header {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            border-bottom: 2px solid #6b4e3a;
+        }
+
+        body.funeraria .main-menu {
+            background: #2c2c2c;
+        }
+
+        body.funeraria .patients-sidebar {
+            background: #2c2c2c;
+            border-right: 1px solid #3a3a3a;
+        }
+
+        body.funeraria .sidebar-header {
+            background: #242424;
+            border-bottom: 2px solid #3a3a3a;
+        }
+
+        body.funeraria .sidebar-header h3 {
+            color: #d4af7a;
+        }
+
+        body.funeraria .user-info {
+            background: linear-gradient(135deg, #3a2c2c 0%, #2c2424 100%);
+            border: 1px solid #6b4e3a;
+        }
+
+        body.funeraria .user-info .doctor-name {
+            color: #d4af7a;
+        }
+
+        body.funeraria .patient-card {
+            background: #2c2c2c;
+            border-left: 5px solid #6b4e3a;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        body.funeraria .patient-name-large {
+            color: #d4af7a;
+        }
+
+        body.funeraria .info-card {
+            background: #242424;
+            border: 1px solid #3a3a3a;
+        }
+
+        body.funeraria .info-label {
+            color: #d4af7a;
+        }
+
+        body.funeraria .info-value {
+            color: #e0e0e0;
+        }
+
+        body.funeraria .medical-section {
+            background: #242424;
+            border-left: 4px solid #6b4e3a;
+        }
+
+        body.funeraria .section-title {
+            color: #d4af7a;
+        }
+
+        body.funeraria .section-content {
+            color: #b0b0b0;
+        }
+
+        body.funeraria .protected-notes {
+            background: #2a2420;
+            border-left: 4px solid #6b4e3a;
+        }
+
+        body.funeraria .polaroid {
+            background: #242424;
+            border: 1px solid #3a3a3a;
+        }
+
+        body.funeraria .polaroid-caption {
+            color: #d4af7a;
+        }
+
+        body.funeraria .main-footer {
+            background: #2c2c2c;
+            color: #8a8a8a;
+            border-top: 1px solid #3a3a3a;
+        }
+
+        /* Estilos comuns */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header-top {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hospital-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo svg {
+            width: 45px;
+            height: 45px;
+        }
+
+        .logo-area h1 {
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .logo-area p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .hospital-accreditation {
+            text-align: right;
+            font-size: 0.8rem;
+            border-left: 2px solid #ffd700;
+            padding-left: 20px;
+        }
+
+        .hospital-accreditation span {
+            font-weight: bold;
+        }
+
+        .date-area {
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .main-menu {
+            padding: 0 30px;
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .menu-items {
+            display: flex;
+            gap: 5px;
+        }
+
+        .menu-item {
+            background: transparent;
+            border: none;
+            padding: 14px 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .menu-item.active {
+            border-bottom: 3px solid;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .patients-sidebar {
+            width: 340px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.02);
+            height: 100%;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .patients-sidebar.hidden {
+            width: 0;
+            min-width: 0;
+            border-right: none;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 2px solid;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .search-box {
+            margin-top: 12px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 35px 10px 12px;
+            border: 1px solid;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .search-box::after {
+            content: "🔍";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            opacity: 0.5;
+        }
+
+        .user-info {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .user-info .doctor-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .user-info .doctor-crm {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .logout-btn, .toggle-sidebar-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .patients-list-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px;
+            min-height: 0;
+            max-height: calc(6 * 85px);
+        }
+
+        .patients-list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .patients-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .patient-list-item {
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid;
+            position: relative;
+        }
+
+        .patient-list-item:hover {
+            transform: translateX(3px);
+        }
+
+        .patient-list-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            padding-right: 30px;
+        }
+
+        .patient-room {
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+
+        .patient-date {
+            font-size: 0.7rem;
+            margin-top: 3px;
+        }
+
+        .patient-badge-side {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .toggle-sidebar-float {
+            position: fixed;
+            left: 10px;
+            bottom: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+            transition: all 0.3s;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-sidebar-float.visible {
+            display: flex;
+        }
+
+        .patient-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .patient-photo-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 12px 12px 20px 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+            max-width: 200px;
+        }
+
+        .polaroid:hover {
+            transform: translateY(-5px);
+        }
+
+        .polaroid-image {
+            width: 176px;
+            height: 176px;
+            object-fit: cover;
+            border-radius: 2px;
+            display: block;
+        }
+
+        .polaroid-caption {
+            text-align: center;
+            margin-top: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .polaroid-date {
+            text-align: center;
+            font-size: 0.65rem;
+            font-family: 'Courier New', monospace;
+            margin-top: 5px;
+        }
+
+        .patient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .patient-info-header {
+            flex: 1;
+        }
+
+        .patient-name-large {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .patient-id {
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .patient-badge-large {
+            background: #6c757d;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-card {
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-label {
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .medical-section {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .section-content {
+            line-height: 1.6;
+        }
+
+        .history-section {
+            border-left-width: 4px;
+        }
+
+        .protected-notes {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .protected-title {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .password-prompt {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .code-input {
+            width: 100%;
+            max-width: 200px;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 3px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+
+        .btn-unlock {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            animation: modalSlideIn 0.3s ease;
+            text-align: center;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .reload-btn {
+            background: #dc3545;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .json-editor {
+            width: 100%;
+            min-height: 450px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            resize: vertical;
+        }
+
+        .certificate-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin: 10px 0;
+            background: white;
+            cursor: pointer;
+        }
+
+        .certificate-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.85rem;
+        }
+
+        .btn-login, .btn-import {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .login-error {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .main-footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .developer-footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.7rem;
+            margin-top: 10px;
+        }
+
+        .system-unavailable {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .lgpd-stamp {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            color: #ffd700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            font-family: monospace;
+            z-index: 1500;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content { flex-direction: column; }
+            .patients-sidebar { width: 100%; max-height: 400px; }
+            .content-area { padding: 15px; }
+            .patient-name-large { font-size: 1.3rem; }
+            .polaroid { max-width: 150px; }
+            .polaroid-image { width: 126px; height: 126px; }
+            .toggle-sidebar-float { display: none; }
+        }
+    </style>
+</head>
+<body class="hospitalar">
+    <div class="app-container" id="appContainer" style="display: none;">
+        <div class="main-header">
+            <div class="header-top">
+                <div class="hospital-info">
+                    <div class="logo-section">
+                        <div class="logo" id="logoContainer">
+                            <!-- Logo será inserido via JS -->
+                        </div>
+                        <div class="logo-area">
+                            <h1 id="systemTitle">🏥 HOSPITAL CENTRAL</h1>
+                            <p id="systemSubtitle">Prontuário Eletrônico - Sistema Integrado de Saúde</p>
+                        </div>
+                    </div>
+                    <div class="hospital-accreditation">
+                        <div id="accreditationLine1">🏅 Acreditado Nível III</div>
+                        <div id="accreditationLine2">⭐ Certificação Internacional JCI</div>
+                        <div class="date-area">📅 <span id="currentDate"></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-menu">
+                <div class="menu-items">
+                    <button class="menu-item active" data-page="prontuario" id="menuProntuario">📋 PRONTUÁRIO</button>
+                    <button class="menu-item" data-page="agenda" id="menuAgenda">📅 AGENDA</button>
+                    <button class="menu-item" data-page="exames" id="menuExames">🔬 EXAMES</button>
+                    <button class="menu-item" data-page="prescricoes" id="menuPrescricoes">💊 PRESCRIÇÕES</button>
+                    <button class="menu-item" data-page="relatorios" id="menuRelatorios">📊 RELATÓRIOS</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="patients-sidebar" id="patientsSidebar">
+                <div class="sidebar-header">
+                    <h3 id="sidebarTitle">👥 PACIENTES INTERNADOS</h3>
+                    <p>Total: <span id="totalPatients">0</span></p>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar...">
+                    </div>
+                    <div class="user-info" id="userInfo">
+                        <div class="doctor-name" id="doctorName">---</div>
+                        <div class="doctor-crm" id="doctorCRM">---</div>
+                        <button class="toggle-sidebar-btn" onclick="toggleSidebar()" id="toggleSidebarBtn">📁 Ocultar Lista</button>
+                        <button class="logout-btn" onclick="logout()" id="logoutBtn">🔓 Sair / Trocar</button>
+                    </div>
+                </div>
+                <div class="patients-list-container">
+                    <div class="patients-list" id="patientsList"></div>
+                </div>
+            </div>
+            <div class="content-area" id="contentArea"></div>
+        </div>
+
+        <div class="main-footer">
+            <p id="footerText">© 2024 Hospital Central | Em conformidade com a LGPD</p>
+            <div class="developer-footer">Desenvolvido por SoftMed Solutions - v3.2.1</div>
+        </div>
+    </div>
+
+    <button class="toggle-sidebar-float" id="toggleSidebarFloat" onclick="toggleSidebar()">📋</button>
+    <div class="lgpd-stamp" id="lgpdStamp">🔒 LGPD COMPLIANT</div>
+
+    <!-- Modal de Importação JSON -->
+    <div id="jsonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="jsonModalTitle">📋 Importar Dados do Sistema</div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px;">Cole o JSON com os dados abaixo:</p>
+                <textarea id="jsonData" class="json-editor" placeholder='{
+  "doctors": {
+    "1": { "name": "Dr. Carlos Mendes", "crm": "CRM 12345", "observationCode": "123456", "savedPassword": "123456", "lastPasswordChange": "15/11/2024 14:30" }
+  },
+  "patients": [...]
+}'></textarea>
+                <div id="jsonError" class="login-error">❌ JSON inválido. Verifique a formatação.</div>
+                <button class="btn-import" onclick="importJSON()">📥 Importar Dados</button>
+                <button class="btn-login" onclick="useDefaultData()" style="background: #6c757d; margin-top: 10px;">Usar Dados Padrão</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="certificate-icon" style="text-align:center; font-size:4rem;" id="loginIcon">🔐</div>
+            <div class="modal-header" id="loginTitle">Acesso ao Sistema</div>
+            <div class="modal-body">
+                <p style="text-align:center; margin-bottom:15px;" id="loginSubtitle">Autenticação via Certificado Digital</p>
+                <select id="certificateSelect" class="certificate-select">
+                    <option value="">Selecione um profissional...</option>
+                </select>
+                <div class="certificate-info" id="certificateInfo">
+                    <p><strong>📋 Informações do Certificado:</strong></p>
+                    <p id="certIssuer">Emissor: ICP-Brasil - Autoridade Certificadora Saúde</p>
+                    <p>Validade: 31/12/2025</p>
+                    <p>Nível: Certificado A3 - Assinatura Digital</p>
+                </div>
+                <div id="loginError" class="login-error">❌ Selecione um profissional válido</div>
+            </div>
+            <button class="btn-login" onclick="authenticateWithCertificate()" id="loginBtn">🔓 Acessar Sistema</button>
+        </div>
+    </div>
+
+    <!-- Modal para Código -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="codeModalTitle">🔒 Acesso Restrito</div>
+            <div class="modal-body">
+                <p style="text-align:center; margin-bottom:15px;" id="codeModalText">As informações são protegidas por sigilo.</p>
+                <p style="text-align:center; margin-bottom:10px; font-size:0.9rem;">Digite o código de acesso de 6 dígitos:</p>
+                <input type="password" id="accessCode" class="code-input" maxlength="6" placeholder="••••••" style="width:100%; text-align:center; font-size:1.2rem;">
+                <div id="codeError" class="error-message" style="display: none;"></div>
+                <div id="attemptCounter" style="font-size:0.7rem; margin-top:5px;"></div>
+            </div>
+            <button class="btn-login" onclick="verifyAccessCode()" id="verifyBtn">🔓 Visualizar</button>
+            <button class="btn-login" onclick="closeCodeModal()" style="background:#6c757d; margin-top:10px;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Erro -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <div class="error-icon">⚠️</div>
+            <div class="modal-header">Erro de Sistema</div>
+            <div class="modal-body">
+                <p>Erro de sistema. Recarregue a página para continuar.</p>
+                <p style="font-size:0.8rem; margin-top:10px;">Código: 0x8004F2A1 - Falha de autenticação</p>
+            </div>
+            <button class="reload-btn" onclick="simulateReload()">🔄 Recarregar Página</button>
+        </div>
+    </div>
+
+    <!-- Modal Genérico -->
+    <div id="genericModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="genericModalTitle"></div>
+            <div class="modal-body" id="genericModalBody"></div>
+            <button class="btn-login" onclick="closeGenericModal()" style="background:#6c757d;">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURAÇÃO DO MODO ====================
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode') || 'hospitalar';
+        
+        // Configurar modo
+        document.body.className = mode;
+        
+        // Configurar textos baseado no modo
+        const config = {
+            hospitalar: {
+                logo: '🏥',
+                systemTitle: 'HOSPITAL CENTRAL',
+                systemSubtitle: 'Prontuário Eletrônico - Sistema Integrado de Saúde',
+                accreditation1: '🏅 Acreditado Nível III',
+                accreditation2: '⭐ Certificação Internacional JCI',
+                sidebarTitle: '👥 PACIENTES INTERNADOS',
+                menuProntuario: '📋 PRONTUÁRIO',
+                menuAgenda: '📅 AGENDA MÉDICA',
+                menuExames: '🔬 EXAMES LABORATORIAIS',
+                menuPrescricoes: '💊 PRESCRIÇÕES',
+                menuRelatorios: '📊 RELATÓRIOS',
+                toggleSidebarBtn: '📁 Ocultar Lista',
+                logoutBtn: '🔓 Sair / Trocar Certificado',
+                footerText: '© 2024 Hospital Central | Em conformidade com a LGPD - Lei Geral de Proteção de Dados',
+                lgpdStamp: '🔒 LGPD COMPLIANT',
+                loginIcon: '🔐',
+                loginTitle: 'Acesso ao Sistema',
+                loginSubtitle: 'Autenticação via Certificado Digital',
+                certIssuer: 'Emissor: ICP-Brasil - Autoridade Certificadora Saúde',
+                loginBtn: '🔓 Acessar Sistema',
+                codeModalTitle: '🔒 Acesso Restrito',
+                codeModalText: 'As observações médicas são protegidas pela LGPD.',
+                verifyBtn: '🔓 Visualizar Observações',
+                searchPlaceholder: 'Buscar paciente...',
+                defaultDoctorName: 'Dr. Carlos Mendes',
+                defaultDoctorCRM: 'CRM 12345',
+                patientPrefix: '',
+                roomIcon: '🏥',
+                dateIcon: '📅'
+            },
+            funeraria: {
+                logo: '⚰️',
+                systemTitle: 'FUNERÁRIA PAZ ETERNA',
+                systemSubtitle: 'Sistema de Laudos - Serviços Funerários e Necrotério',
+                accreditation1: '🏅 Credenciada S.F.C.',
+                accreditation2: '⭐ Selo de Qualidade Funerária',
+                sidebarTitle: '⚰️ OCORRÊNCIAS FUNERÁRIAS',
+                menuProntuario: '📋 LAUDOS',
+                menuAgenda: '📅 AGENDA FUNERÁRIA',
+                menuExames: '🔬 EXAMES NECROSCÓPICOS',
+                menuPrescricoes: '⚱️ PREPARAÇÕES',
+                menuRelatorios: '📊 RELATÓRIOS IML',
+                toggleSidebarBtn: '📁 Ocultar Lista',
+                logoutBtn: '🔓 Sair / Trocar Legista',
+                footerText: '© 2024 Funerária Paz Eterna | Em conformidade com a LGPD - Laudos e Procedimentos Funerários',
+                lgpdStamp: '⚰️ LAUDO CONFIDENCIAL - SIGILO FUNERÁRIO ⚰️',
+                loginIcon: '⚰️',
+                loginTitle: 'Acesso ao Sistema Funerário',
+                loginSubtitle: 'Autenticação via Certificado Digital do Legista',
+                certIssuer: 'Emissor: ICP-Brasil - Autoridade Certificadora Funerária',
+                loginBtn: '🔓 Acessar Sistema',
+                codeModalTitle: '🔒 Acesso Restrito - Laudo Necroscópico',
+                codeModalText: 'O laudo necroscópico é protegido por sigilo funerário.',
+                verifyBtn: '🔓 Visualizar Laudo',
+                searchPlaceholder: 'Buscar falecido...',
+                defaultDoctorName: 'Dr. Carlos Mendes - Legista',
+                defaultDoctorCRM: 'CRM 12345',
+                patientPrefix: '⚰️ ',
+                roomIcon: '🏺',
+                dateIcon: '📅 Óbito:'
+            }
+        };
+        
+        const c = config[mode];
+        
+        // Aplicar textos
+        document.getElementById('systemTitle').innerHTML = c.systemTitle;
+        document.getElementById('systemSubtitle').innerHTML = c.systemSubtitle;
+        document.getElementById('accreditationLine1').innerHTML = c.accreditation1;
+        document.getElementById('accreditationLine2').innerHTML = c.accreditation2;
+        document.getElementById('sidebarTitle').innerHTML = c.sidebarTitle;
+        document.getElementById('menuProntuario').innerHTML = c.menuProntuario;
+        document.getElementById('menuAgenda').innerHTML = c.menuAgenda;
+        document.getElementById('menuExames').innerHTML = c.menuExames;
+        document.getElementById('menuPrescricoes').innerHTML = c.menuPrescricoes;
+        document.getElementById('menuRelatorios').innerHTML = c.menuRelatorios;
+        document.getElementById('toggleSidebarBtn').innerHTML = c.toggleSidebarBtn;
+        document.getElementById('logoutBtn').innerHTML = c.logoutBtn;
+        document.getElementById('footerText').innerHTML = c.footerText;
+        document.getElementById('lgpdStamp').innerHTML = c.lgpdStamp;
+        document.getElementById('loginIcon').innerHTML = c.loginIcon;
+        document.getElementById('loginTitle').innerHTML = c.loginTitle;
+        document.getElementById('loginSubtitle').innerHTML = c.loginSubtitle;
+        document.getElementById('certIssuer').innerHTML = c.certIssuer;
+        document.getElementById('loginBtn').innerHTML = c.loginBtn;
+        document.getElementById('codeModalTitle').innerHTML = c.codeModalTitle;
+        document.getElementById('codeModalText').innerHTML = c.codeModalText;
+        document.getElementById('verifyBtn').innerHTML = c.verifyBtn;
+        document.getElementById('searchInput').placeholder = c.searchPlaceholder;
+        
+        // Atualizar logo SVG
+        const logoContainer = document.getElementById('logoContainer');
+        if (mode === 'hospitalar') {
+            logoContainer.innerHTML = `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#1e3c72" stroke="#ffd700" stroke-width="2"/><path d="M50 30 L50 70 M30 50 L70 50" stroke="#ffd700" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="50" r="12" fill="#ffd700" stroke="none"/><path d="M50 38 L50 62 M38 50 L62 50" stroke="#1e3c72" stroke-width="2" stroke-linecap="round"/></svg>`;
+        } else {
+            logoContainer.innerHTML = `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#2c2c2c" stroke="#6b4e3a" stroke-width="2"/><path d="M50 30 L50 70 M30 50 L70 50" stroke="#6b4e3a" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="50" r="12" fill="#6b4e3a" stroke="none"/><path d="M50 38 L50 62 M38 50 L62 50" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/></svg>`;
+        }
+        
+        // ==================== CÓDIGO DO SISTEMA ====================
+        let doctorsDB = {};
+        let patients = [];
+        let currentPatientId = 1;
+        let currentPage = 'prontuario';
+        let searchTerm = '';
+        let currentDoctor = null;
+        let currentDoctorCode = null;
+        let currentDoctorLastChange = null;
+        let observationsUnlocked = false;
+        let sidebarVisible = true;
+        let failedAttempts = 0;
+        let systemHacked = false;
+        
+        // Dados padrão para cada modo
+        const defaultData = {
+            hospitalar: {
+                doctors: {
+                    "1": { name: "Dr. Carlos Mendes", crm: "CRM 12345", observationCode: "123456", savedPassword: "123456", lastPasswordChange: "15/11/2024 14:30" },
+                    "2": { name: "Dra. Ana Paula Souza", crm: "CRM 67890", observationCode: "234567", savedPassword: "234567", lastPasswordChange: "16/11/2024 09:15" }
+                },
+                patients: [
+                    { id: 1, name: "Maria Aparecida Silva", age: 72, gender: "Feminino", bloodType: "A+", admissionDate: "18/11/2024", room: "201-A", diagnosis: "Hipertensão arterial descompensada", medicalHistory: "Paciente hipertensa há 20 anos.", patientHistory: "📅 2015: Diagnóstico\n📅 2018: Tratamento", medications: "Losartana 100mg", allergies: "Nenhuma", medicalNotes: "🔴 Melhora inexplicável dos níveis pressóricos.", lastUpdate: "19/11/2024", initials: "MS", color: "#FF6B6B", photoUrl: "" }
+                ]
+            },
+            funeraria: {
+                doctors: {
+                    "1": { name: "Dr. Carlos Mendes - Legista", crm: "CRM 12345", observationCode: "123456", savedPassword: "123456", lastPasswordChange: "15/11/2024 14:30" },
+                    "2": { name: "Dra. Ana Paula Souza - Legista", crm: "CRM 67890", observationCode: "234567", savedPassword: "234567", lastPasswordChange: "16/11/2024 09:15" }
+                },
+                patients: [
+                    { id: 1, name: "Mariana Luz", age: 35, gender: "Feminino", bloodType: "A-", admissionDate: "10/03/2026", room: "305-B", diagnosis: "Óbito por Falência Hepática", medicalHistory: "Falecida em 10/03/2026.", patientHistory: "📅 10/03: Óbito registrado", medications: "Nenhuma", allergies: "Nenhuma", medicalNotes: "🔴 LAUDO CONFIDENCIAL: Exames post-mortem indicam regeneração hepática pós-morte.", lastUpdate: "26/03/2026", initials: "ML", color: "#6b4e3a", photoUrl: "" }
+                ]
+            }
+        };
+        
+        function updateDate() {
+            const now = new Date();
+            document.getElementById('currentDate').innerHTML = now.toLocaleDateString('pt-BR');
+        }
+        
+        function generateAvatar(initials, color) {
+            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='50%25' y='50%25' font-size='80' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'%3E${initials}%3C/text%3E%3C/svg%3E`;
+        }
+        
+        function getPatientPhoto(patient) {
+            if (patient.photoUrl && patient.photoUrl.trim() !== '') return patient.photoUrl;
+            return generateAvatar(patient.initials, patient.color);
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('patientsSidebar');
+            const floatBtn = document.getElementById('toggleSidebarFloat');
+            sidebarVisible = !sidebarVisible;
+            if (sidebarVisible) {
+                sidebar.classList.remove('hidden');
+                floatBtn.classList.remove('visible');
+                floatBtn.style.display = 'none';
+            } else {
+                sidebar.classList.add('hidden');
+                floatBtn.classList.add('visible');
+                floatBtn.style.display = 'flex';
+            }
+        }
+        
+        function importJSON() {
+            try {
+                const jsonText = document.getElementById('jsonData').value;
+                const data = JSON.parse(jsonText);
+                if (!data.doctors || !data.patients) throw new Error('JSON deve conter "doctors" e "patients"');
+                doctorsDB = data.doctors;
+                patients = data.patients;
+                patients.forEach(patient => {
+                    if (!patient.patientHistory) patient.patientHistory = "Histórico não informado";
+                    if (!patient.photoUrl) patient.photoUrl = "";
+                    if (!patient.initials) {
+                        const names = patient.name.split(' ');
+                        patient.initials = names[0].charAt(0) + (names[1] ? names[1].charAt(0) : names[0].charAt(1));
+                    }
+                    if (!patient.color) patient.color = mode === 'hospitalar' ? "#FF6B6B" : "#6b4e3a";
+                });
+                for (const [id, doctor] of Object.entries(doctorsDB)) {
+                    if (!doctor.savedPassword) doctor.savedPassword = doctor.observationCode;
+                    if (!doctor.lastPasswordChange) doctor.lastPasswordChange = new Date().toLocaleString('pt-BR');
+                }
+                const select = document.getElementById('certificateSelect');
+                select.innerHTML = '<option value="">Selecione um profissional...</option>';
+                for (const [id, doctor] of Object.entries(doctorsDB)) {
+                    const option = document.createElement('option');
+                    option.value = id;
+                    option.textContent = `${doctor.name} - ${doctor.crm} (Certificado A3)`;
+                    select.appendChild(option);
+                }
+                document.getElementById('jsonModal').style.display = 'none';
+                document.getElementById('loginModal').style.display = 'flex';
+                document.getElementById('jsonError').style.display = 'none';
+            } catch (e) {
+                document.getElementById('jsonError').style.display = 'block';
+                document.getElementById('jsonError').innerHTML = `❌ JSON inválido: ${e.message}`;
+            }
+        }
+        
+        function useDefaultData() {
+            doctorsDB = defaultData[mode].doctors;
+            patients = defaultData[mode].patients;
+            const select = document.getElementById('certificateSelect');
+            select.innerHTML = '<option value="">Selecione um profissional...</option>';
+            for (const [id, doctor] of Object.entries(doctorsDB)) {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = `${doctor.name} - ${doctor.crm} (Certificado A3)`;
+                select.appendChild(option);
+            }
+            document.getElementById('jsonModal').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+        
+        function authenticateWithCertificate() {
+            const doctorId = document.getElementById('certificateSelect').value;
+            if (!doctorId) {
+                document.getElementById('loginError').style.display = 'block';
+                return;
+            }
+            currentDoctor = doctorsDB[doctorId];
+            currentDoctorCode = currentDoctor.observationCode;
+            currentDoctorLastChange = currentDoctor.lastPasswordChange;
+            currentDoctor.id = doctorId;
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+            document.getElementById('doctorName').innerHTML = currentDoctor.name;
+            document.getElementById('doctorCRM').innerHTML = currentDoctor.crm;
+            failedAttempts = 0;
+            systemHacked = false;
+            init();
+        }
+        
+        function logout() {
+            currentDoctor = null;
+            currentDoctorCode = null;
+            currentDoctorLastChange = null;
+            observationsUnlocked = false;
+            failedAttempts = 0;
+            systemHacked = false;
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('certificateSelect').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+        
+        function showCodeModal() {
+            if (systemHacked) {
+                observationsUnlocked = true;
+                renderPatientContent();
+                return;
+            }
+            observationsUnlocked = false;
+            document.getElementById('accessCode').value = '';
+            document.getElementById('codeError').style.display = 'none';
+            document.getElementById('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
+            if (currentDoctor && currentDoctor.savedPassword && failedAttempts === 0) {
+                document.getElementById('accessCode').value = currentDoctor.savedPassword;
+                setTimeout(() => {
+                    const input = document.getElementById('accessCode');
+                    input.style.backgroundColor = mode === 'hospitalar' ? '#e8f0fe' : '#3a2c2c';
+                    setTimeout(() => { input.style.backgroundColor = ''; }, 1000);
+                }, 100);
+            }
+            document.getElementById('codeModal').style.display = 'flex';
+        }
+        
+        function verifyAccessCode() {
+            if (systemHacked) {
+                observationsUnlocked = true;
+                closeCodeModal();
+                renderPatientContent();
+                return;
+            }
+            const code = document.getElementById('accessCode').value;
+            if (code === currentDoctorCode) {
+                observationsUnlocked = true;
+                failedAttempts = 0;
+                closeCodeModal();
+                renderPatientContent();
+            } else {
+                failedAttempts++;
+                const errorDiv = document.getElementById('codeError');
+                if (failedAttempts >= 3) {
+                    errorDiv.style.display = 'block';
+                    errorDiv.innerHTML = `❌ Código incorreto. Tentativa ${failedAttempts}/3<br>${mode === 'hospitalar' ? '🔐' : '⚰️'} Última alteração: ${currentDoctorLastChange || 'não informada'}`;
+                    document.getElementById('attemptCounter').innerHTML = `Tentativas esgotadas! Sistema bloqueado.`;
+                    setTimeout(() => {
+                        document.getElementById('codeModal').style.display = 'none';
+                        document.getElementById('errorModal').style.display = 'flex';
+                    }, 1500);
+                } else {
+                    errorDiv.style.display = 'block';
+                    errorDiv.innerHTML = `❌ Código incorreto. Tentativa ${failedAttempts}/3<br>${mode === 'hospitalar' ? '🔐' : '⚰️'} Última alteração: ${currentDoctorLastChange || 'não informada'}`;
+                    document.getElementById('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
+                    document.getElementById('accessCode').value = '';
+                    document.getElementById('accessCode').focus();
+                }
+            }
+        }
+        
+        function simulateReload() {
+            document.getElementById('errorModal').style.display = 'none';
+            systemHacked = true;
+            observationsUnlocked = true;
+            renderPatientContent();
+        }
+        
+        function closeCodeModal() { document.getElementById('codeModal').style.display = 'none'; }
+        
+        function getFilteredPatients() {
+            if (!searchTerm) return patients;
+            return patients.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.room.toLowerCase().includes(searchTerm.toLowerCase()));
+        }
+        
+        function renderPatientsList() {
+            const container = document.getElementById('patientsList');
+            if (!container) return;
+            const filtered = getFilteredPatients();
+            container.innerHTML = '';
+            document.getElementById('totalPatients').innerHTML = filtered.length;
+            filtered.forEach(patient => {
+                const div = document.createElement('div');
+                div.className = 'patient-list-item';
+                if (patient.id === currentPatientId) div.classList.add('active');
+                div.onclick = () => selectPatient(patient.id);
+                div.innerHTML = `<div class="patient-name">${c.patientPrefix}${patient.name}</div><div class="patient-room">${c.roomIcon} ${patient.room}</div><div class="patient-date">${c.dateIcon} ${patient.admissionDate}</div><div class="patient-badge-side">#${patient.id}</div>`;
+                container.appendChild(div);
+            });
+        }
+        
+        function selectPatient(id) { currentPatientId = id; renderPatientsList(); if (currentPage === 'prontuario') renderPatientContent(); }
+        
+        function renderPatientContent() {
+            const patient = patients.find(p => p.id === currentPatientId);
+            if (!patient) return;
+            const photoUrl = getPatientPhoto(patient);
+            const contentArea = document.getElementById('contentArea');
+            if (!contentArea) return;
+            const patientHistoryHtml = patient.patientHistory ? `<div class="medical-section history-section"><div class="section-title">${mode === 'hospitalar' ? '📋' : '⚰️'} HISTÓRICO ${mode === 'hospitalar' ? 'DO PACIENTE' : 'FUNERÁRIO'}</div><div class="section-content" style="white-space: pre-line;">${patient.patientHistory}</div></div>` : '';
+            const medicalNotesTitle = mode === 'hospitalar' ? '🔒 OBSERVAÇÕES MÉDICAS (LGPD)' : '🔒 LAUDO NECROSCÓPICO (SIGILO FUNERÁRIO)';
+            const diagnosisTitle = mode === 'hospitalar' ? '📋 DIAGNÓSTICO' : '⚰️ CAUSA DA MORTE';
+            const historyTitle = mode === 'hospitalar' ? '📜 HISTÓRICO MÉDICO' : '📜 HISTÓRICO CLÍNICO';
+            const examsLabel = mode === 'hospitalar' ? '🔬 Ver Exames' : '🔬 Ver Exames Necroscópicos';
+            const fullRecordLabel = mode === 'hospitalar' ? '📄 Ver Prontuário Completo' : '📄 Ver Laudo Completo';
+            const unlockMessage = mode === 'hospitalar' ? '🔒 Conteúdo protegido pela LGPD' : '🔒 Laudo protegido por sigilo funerário';
+            
+            contentArea.innerHTML = `
+                <div class="patient-card">
+                    <div class="patient-photo-section"><div class="polaroid"><img src="${photoUrl}" class="polaroid-image" onerror="this.onerror=null; this.src='${generateAvatar(patient.initials, patient.color)}';"><div class="polaroid-caption">${patient.name}</div><div class="polaroid-date">${mode === 'hospitalar' ? '📸 Internação' : '⚰️ Óbito'}: ${patient.admissionDate}</div></div></div>
+                    <div class="patient-header"><div class="patient-info-header"><div class="patient-name-large">${c.patientPrefix}${patient.name}</div><div class="patient-id">${mode === 'hospitalar' ? 'Prontuário' : 'Laudo'} #${String(patient.id).padStart(4, '0')}</div></div><div class="patient-badge-large">${patient.room}</div></div>
+                    <div class="info-grid">
+                        <div class="info-card"><div class="info-label">📊 IDADE</div><div class="info-value">${patient.age} anos</div></div>
+                        <div class="info-card"><div class="info-label">⚥ GÊNERO</div><div class="info-value">${patient.gender}</div></div>
+                        <div class="info-card"><div class="info-label">🩸 TIPO SANGUÍNEO</div><div class="info-value">${patient.bloodType}</div></div>
+                        <div class="info-card"><div class="info-label">⚠️ ALERGIAS</div><div class="info-value">${patient.allergies}</div></div>
+                        <div class="info-card"><div class="info-label">💊 ${mode === 'hospitalar' ? 'MEDICAÇÕES' : 'MEDICAÇÕES PRÉVIAS'}</div><div class="info-value">${patient.medications}</div></div>
+                        <div class="info-card"><div class="info-label">📅 ATUALIZAÇÃO</div><div class="info-value">${patient.lastUpdate}</div></div>
+                    </div>
+                    <div class="medical-section"><div class="section-title">${diagnosisTitle}</div><div class="section-content"><strong>${patient.diagnosis}</strong></div></div>
+                    <div class="medical-section"><div class="section-title">${historyTitle}</div><div class="section-content">${patient.medicalHistory}</div></div>
+                    ${patientHistoryHtml}
+                    <div class="protected-notes"><div class="protected-title">${medicalNotesTitle}</div>
+                    ${observationsUnlocked ? `<div class="section-content" style="color:${mode === 'hospitalar' ? '#856404' : '#d4af7a'};">${patient.medicalNotes}</div>` : `<div class="password-prompt"><p>${unlockMessage}</p><button class="btn-unlock" onclick="showCodeModal()">🔓 Autorizar Acesso com Código</button></div>`}
+                    </div>
+                    <div class="action-buttons"><button class="btn btn-primary" onclick="showFullRecord(${patient.id})">${fullRecordLabel}</button><button class="btn btn-secondary" onclick="showExams(${patient.id})">${examsLabel}</button></div>
+                </div>`;
+        }
+        
+        function showFullRecord(patientId) {
+            const patient = patients.find(p => p.id === patientId);
+            const title = mode === 'hospitalar' ? `Prontuário Completo - ${patient.name}` : `Laudo Necroscópico - ${patient.name}`;
+            document.getElementById('genericModalTitle').innerHTML = title;
+            document.getElementById('genericModalBody').innerHTML = `<div><p><strong>Nome:</strong> ${patient.name}</p><p><strong>Idade:</strong> ${patient.age}</p><p><strong>${mode === 'hospitalar' ? 'Diagnóstico' : 'Causa da Morte'}:</strong> ${patient.diagnosis}</p>${observationsUnlocked ? `<p><strong>${mode === 'hospitalar' ? 'Observações' : 'Laudo'}:</strong> ${patient.medicalNotes}</p>` : '<p><em>Informações protegidas</em></p>'}</div>`;
+            document.getElementById('genericModal').style.display = 'flex';
+        }
+        
+        function showExams(patientId) {
+            const exams = mode === 'hospitalar' 
+                ? ["Hemograma: Normal", "Glicemia: 92 mg/dL", "Colesterol: 168 mg/dL", "Urina: Sem alterações"]
+                : ["Necropsia: Em análise", "Toxicologia: Aguardando", "Histopatologia: Em andamento", "Teste de Conservação: Normal"];
+            const title = mode === 'hospitalar' ? `Exames - ${patients.find(p=>p.id===patientId).name}` : `Exames Necroscópicos - ${patients.find(p=>p.id===patientId).name}`;
+            document.getElementById('genericModalTitle').innerHTML = title;
+            document.getElementById('genericModalBody').innerHTML = `<ul style="margin-left:20px;">${exams.map(e=>`<li>${e}</li>`).join('')}</ul>`;
+            document.getElementById('genericModal').style.display = 'flex';
+        }
+        
+        function closeGenericModal() { document.getElementById('genericModal').style.display = 'none'; }
+        function showSystemUnavailable(pageName) { document.getElementById('contentArea').innerHTML = `<div class="system-unavailable"><div class="system-unavailable-icon">🔧</div><h2>Sistema Indisponível</h2><button class="btn btn-primary" onclick="goToProntuario()">Voltar</button></div>`; }
+        function goToProntuario() { currentPage = 'prontuario'; updateMenuActive('prontuario'); renderPatientContent(); }
+        function updateMenuActive(page) { document.querySelectorAll('.menu-item').forEach(item => { if (item.getAttribute('data-page') === page) item.classList.add('active'); else item.classList.remove('active'); }); }
+        function setupMenuNavigation() { document.querySelectorAll('.menu-item').forEach(item => { item.addEventListener('click', () => { const page = item.getAttribute('data-page'); currentPage = page; updateMenuActive(page); if (page === 'prontuario') renderPatientContent(); else showSystemUnavailable(page); }); }); }
+        function setupSearch() { document.getElementById('searchInput').addEventListener('input', (e) => { searchTerm = e.target.value; renderPatientsList(); const filtered = getFilteredPatients(); if (filtered.length > 0 && !filtered.find(p => p.id === currentPatientId)) selectPatient(filtered[0].id); }); }
+        function init() { updateDate(); renderPatientsList(); setupMenuNavigation(); setupSearch(); renderPatientContent(); }
+        window.onclick = function(event) { if (event.target === document.getElementById('genericModal')) closeGenericModal(); if (event.target === document.getElementById('codeModal')) closeCodeModal(); if (event.target === document.getElementById('errorModal')) document.getElementById('errorModal').style.display = 'none'; };
+        
+        document.getElementById('jsonModal').style.display = 'flex';
+    </script>
+</body>
+</html>
