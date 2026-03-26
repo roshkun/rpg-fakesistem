@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <!-- Fundo gradiente -->
+    <defs>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#6c757d;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#495057;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+    
+    <!-- Círculo de fundo -->
+    <circle cx="100" cy="100" r="100" fill="url(#grad)"/>
+    
+    <!-- Silhueta de cabeça -->
+    <circle cx="100" cy="75" r="35" fill="white" fill-opacity="0.9"/>
+    
+    <!-- Olhos -->
+    <circle cx="80" cy="70" r="4" fill="#2c3e50"/>
+    <circle cx="120" cy="70" r="4" fill="#2c3e50"/>
+    
+    <!-- Pupilas -->
+    <circle cx="81" cy="71" r="1.5" fill="white"/>
+    <circle cx="121" cy="71" r="1.5" fill="white"/>
+    
+    <!-- Sorriso -->
+    <path d="M80 95 Q100 110 120 95" stroke="#2c3e50" stroke-width="3" fill="none" stroke-linecap="round"/>
+    
+    <!-- Corpo (ombros) -->
+    <path d="M60 130 L140 130" stroke="white" stroke-width="12" stroke-linecap="round" fill="none"/>
+    
+    <!-- Símbolo médico (opcional - cruz) -->
+    <path d="M150 165 L170 165 M160 155 L160 175" stroke="#ffd700" stroke-width="4" stroke-linecap="round" fill="none"/>
+    
+    <!-- Texto placeholder -->
+    <text x="100" y="185" text-anchor="middle" fill="white" font-size="12" font-family="Arial, sans-serif" font-weight="bold">SOFTMED</text>
+</svg>
