@@ -544,11 +544,13 @@ function applyConfig() {
 
 function initializeSystem() {
     if (isInitialized) return;
+    
+    updateDate();
+    
     if (!patients || patients.length === 0) {
         console.warn('Aguardando pacientes...');
         setTimeout(() => {
             if (patients && patients.length > 0) {
-                updateDate();
                 renderPatientsList();
                 setupMenuNavigation();
                 setupSearch();
@@ -560,7 +562,6 @@ function initializeSystem() {
         return;
     }
     
-    updateDate();
     renderPatientsList();
     setupMenuNavigation();
     setupSearch();
