@@ -13,6 +13,7 @@ let failedAttempts = 0;
 let systemHacked = false;
 let config = null;
 let mode = null;
+let isInitialized = false;
 
 // ==================== FUNÇÕES AUXILIARES ====================
 
@@ -29,7 +30,9 @@ function generateAvatar(initials, color) {
 }
 
 function getPatientPhoto(patient) {
-    if (patient.photoUrl && patient.photoUrl.trim() !== '') return patient.photoUrl;
+    if (patient.photoUrl && patient.photoUrl.trim() !== '') {
+        return patient.photoUrl;
+    }
     return generateAvatar(patient.initials, patient.color);
 }
 
@@ -41,11 +44,11 @@ function toggleSidebar() {
     if (sidebarVisible) {
         sidebar.classList.remove('hidden');
         floatBtn.classList.remove('visible');
-        floatBtn.style.display = 'none';
+        if (floatBtn) floatBtn.style.display = 'none';
     } else {
         sidebar.classList.add('hidden');
         floatBtn.classList.add('visible');
-        floatBtn.style.display = 'flex';
+        if (floatBtn) floatBtn.style.display = 'flex';
     }
 }
 
@@ -63,14 +66,24 @@ function authenticateWithCertificate() {
     currentDoctorLastChange = currentDoctor.lastPasswordChange;
     currentDoctor.id = doctorId;
     
+    // Fechar modal de login
     document.getElementById('loginModal').style.display = 'none';
-    document.getElementById('appContainer').style.display = 'flex';
+    
+    // Mostrar o container principal
+    const appContainer = document.getElementById('appContainer');
+    appContainer.style.display = 'flex';
+    
+    // Atualizar informações do médico na sidebar
     document.getElementById('doctorName').innerHTML = currentDoctor.name;
     document.getElementById('doctorCRM').innerHTML = currentDoctor.crm;
     
+    // Resetar estados
     failedAttempts = 0;
     systemHacked = false;
-    init();
+    observationsUnlocked = false;
+    
+    // Inicializar o sistema
+    initializeSystem();
 }
 
 function logout() {
@@ -80,8 +93,12 @@ function logout() {
     observationsUnlocked = false;
     failedAttempts = 0;
     systemHacked = false;
+    isInitialized = false;
     
+    // Esconder o container principal
     document.getElementById('appContainer').style.display = 'none';
+    
+    // Mostrar modal de login
     document.getElementById('loginModal').style.display = 'flex';
     document.getElementById('certificateSelect').value = '';
     document.getElementById('loginError').style.display = 'none';
@@ -178,6 +195,11 @@ function renderPatientsList() {
     container.innerHTML = '';
     document.getElementById('totalPatients').innerHTML = filtered.length;
     
+    if (filtered.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6c757d;">Nenhum paciente encontrado</div>';
+        return;
+    }
+    
     filtered.forEach(patient => {
         const div = document.createElement('div');
         div.className = 'patient-list-item';
@@ -202,8 +224,16 @@ function selectPatient(id) {
 // ==================== RENDERIZAÇÃO DO PRONTUÁRIO ====================
 
 function renderPatientContent() {
+    if (!patients || patients.length === 0) {
+        console.error('Nenhum paciente carregado');
+        return;
+    }
+    
     const patient = patients.find(p => p.id === currentPatientId);
-    if (!patient) return;
+    if (!patient) {
+        console.error('Paciente não encontrado:', currentPatientId);
+        return;
+    }
     
     const photoUrl = getPatientPhoto(patient);
     const contentArea = document.getElementById('contentArea');
@@ -275,15 +305,26 @@ function renderPatientContent() {
 
 function showFullRecord(patientId) {
     const patient = patients.find(p => p.id === patientId);
+    if (!patient) return;
+    
     const title = mode === 'hospitalar' ? `Prontuário Completo - ${patient.name}` : `Laudo Necroscópico - ${patient.name}`;
     
     document.getElementById('genericModalTitle').innerHTML = title;
     document.getElementById('genericModalBody').innerHTML = `
-        <div>
-            <p><strong>Nome:</strong> ${patient.name}</p>
-            <p><strong>Idade:</strong> ${patient.age} anos</p>
-            <p><strong>${mode === 'hospitalar' ? 'Diagnóstico' : 'Causa da Morte'}:</strong> ${patient.diagnosis}</p>
-            ${observationsUnlocked ? `<p><strong>${mode === 'hospitalar' ? 'Observações' : 'Laudo'}:</strong> ${patient.medicalNotes}</p>` : '<p><em>Informações protegidas</em></p>'}
+        <div style="line-height: 1.8;">
+            <p><strong>📋 Nome:</strong> ${patient.name}</p>
+            <p><strong>📊 Idade:</strong> ${patient.age} anos</p>
+            <p><strong>⚥ Gênero:</strong> ${patient.gender}</p>
+            <p><strong>🩸 Tipo Sanguíneo:</strong> ${patient.bloodType}</p>
+            <p><strong>🛏️ Leito:</strong> ${patient.room}</p>
+            <p><strong>📋 ${mode === 'hospitalar' ? 'Diagnóstico' : 'Causa da Morte'}:</strong> ${patient.diagnosis}</p>
+            <p><strong>📜 Histórico:</strong> ${patient.medicalHistory}</p>
+            <p><strong>💊 ${mode === 'hospitalar' ? 'Medicações' : 'Medicações Prévias'}:</strong> ${patient.medications}</p>
+            <p><strong>⚠️ Alergias:</strong> ${patient.allergies}</p>
+            ${observationsUnlocked ? `<p><strong>${mode === 'hospitalar' ? '🔒 Observações' : '🔒 Laudo'}:</strong> ${patient.medicalNotes}</p>` : '<p><em>🔒 Informações protegidas. Autorize acesso no prontuário.</em></p>'}
+            <p><strong>📅 Última Atualização:</strong> ${patient.lastUpdate}</p>
+            <hr>
+            <p style="color: #6c757d; font-size: 0.8rem;"><strong>🔒 Em conformidade com a LGPD</strong></p>
         </div>
     `;
     document.getElementById('genericModal').style.display = 'flex';
@@ -291,10 +332,10 @@ function showFullRecord(patientId) {
 
 function showExams(patientId) {
     const exams = mode === 'hospitalar' 
-        ? ["Hemograma: Normal", "Glicemia: 92 mg/dL", "Colesterol: 168 mg/dL", "Urina: Sem alterações"]
-        : ["Necropsia: Em análise", "Toxicologia: Aguardando", "Histopatologia: Em andamento", "Teste de Conservação: Normal"];
+        ? ["Hemograma completo: Dentro dos parâmetros normais", "Glicemia: 92 mg/dL", "Colesterol total: 168 mg/dL", "Urina tipo I: Sem alterações", "Raio-X tórax: Normal", "Eletrocardiograma: Ritmo sinusal"]
+        : ["Necropsia: Em análise preliminar", "Toxicologia: Aguardando resultado", "Histopatologia: Em andamento", "Teste de Conservação: Normal", "Raio-X: Sem alterações post-mortem", "Coleta de DNA: Em processamento"];
     
-    const title = mode === 'hospitalar' ? `Exames - ${patients.find(p=>p.id===patientId).name}` : `Exames Necroscópicos - ${patients.find(p=>p.id===patientId).name}`;
+    const title = mode === 'hospitalar' ? `Exames Laboratoriais - ${patients.find(p=>p.id===patientId).name}` : `Exames Necroscópicos - ${patients.find(p=>p.id===patientId).name}`;
     
     document.getElementById('genericModalTitle').innerHTML = title;
     document.getElementById('genericModalBody').innerHTML = `<ul style="margin-left:20px;">${exams.map(e=>`<li>${e}</li>`).join('')}</ul>`;
@@ -312,7 +353,8 @@ function showSystemUnavailable(pageName) {
         <div class="system-unavailable">
             <div class="system-unavailable-icon">🔧</div>
             <h2>Sistema Indisponível</h2>
-            <button class="btn btn-primary" onclick="goToProntuario()">Voltar</button>
+            <p>O módulo ${pageName} está temporariamente indisponível.</p>
+            <button class="btn btn-primary" onclick="goToProntuario()">Voltar para Prontuário</button>
         </div>
     `;
 }
@@ -399,7 +441,36 @@ function applyConfig() {
     }
 }
 
+function initializeSystem() {
+    if (isInitialized) return;
+    
+    console.log('Inicializando sistema...');
+    
+    // Atualizar data
+    updateDate();
+    
+    // Renderizar lista de pacientes
+    renderPatientsList();
+    
+    // Configurar navegação do menu
+    setupMenuNavigation();
+    
+    // Configurar busca
+    setupSearch();
+    
+    // Renderizar conteúdo do paciente atual
+    if (patients && patients.length > 0) {
+        currentPatientId = patients[0].id;
+        renderPatientContent();
+    }
+    
+    isInitialized = true;
+    console.log('Sistema inicializado com sucesso!');
+}
+
 async function init() {
+    console.log('Iniciando carregamento de dados...');
+    
     // Carregar dados
     const success = await loadDataFromFile(config.dataFile);
     
@@ -410,11 +481,14 @@ async function init() {
                 <h3 style="color:#dc3545;">Erro ao carregar dados</h3>
                 <p>Não foi possível carregar o arquivo ${config.dataFile}</p>
                 <p style="font-size:0.8rem; margin-top:10px;">Verifique se o arquivo existe no servidor.</p>
+                <p style="font-size:0.8rem; margin-top:5px;">Caminho completo: ${window.location.href}${config.dataFile}</p>
                 <button class="btn btn-primary" onclick="location.reload()" style="margin-top:20px;">🔄 Tentar Novamente</button>
             </div>
         `;
         return;
     }
+    
+    console.log('Dados carregados:', { doctors: Object.keys(doctorsDB).length, patients: patients.length });
     
     // Atualizar select de profissionais
     updateDoctorSelect();
@@ -437,29 +511,37 @@ window.onclick = function(event) {
 
 // ==================== INICIALIZAÇÃO DO SISTEMA ====================
 
-// Obter configuração e modo
-const { mode: currentMode, config: currentConfig } = getCurrentConfig();
-mode = currentMode;
-config = currentConfig;
-
-// Aplicar classe CSS
-document.body.className = mode;
-
-// Aplicar configurações de texto
-applyConfig();
-
-// Inicializar funções globais
-window.toggleSidebar = toggleSidebar;
-window.logout = logout;
-window.authenticateWithCertificate = authenticateWithCertificate;
-window.showCodeModal = showCodeModal;
-window.verifyAccessCode = verifyAccessCode;
-window.simulateReload = simulateReload;
-window.closeCodeModal = closeCodeModal;
-window.showFullRecord = showFullRecord;
-window.showExams = showExams;
-window.closeGenericModal = closeGenericModal;
-window.goToProntuario = goToProntuario;
-
-// Iniciar sistema
-init();
+// Aguardar DOM carregar
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM carregado, obtendo configuração...');
+    
+    // Obter configuração e modo
+    const { mode: currentMode, config: currentConfig } = getCurrentConfig();
+    mode = currentMode;
+    config = currentConfig;
+    
+    console.log('Modo:', mode);
+    console.log('Arquivo de dados:', config.dataFile);
+    
+    // Aplicar classe CSS
+    document.body.className = mode;
+    
+    // Aplicar configurações de texto
+    applyConfig();
+    
+    // Inicializar funções globais
+    window.toggleSidebar = toggleSidebar;
+    window.logout = logout;
+    window.authenticateWithCertificate = authenticateWithCertificate;
+    window.showCodeModal = showCodeModal;
+    window.verifyAccessCode = verifyAccessCode;
+    window.simulateReload = simulateReload;
+    window.closeCodeModal = closeCodeModal;
+    window.showFullRecord = showFullRecord;
+    window.showExams = showExams;
+    window.closeGenericModal = closeGenericModal;
+    window.goToProntuario = goToProntuario;
+    
+    // Iniciar sistema
+    init();
+});
