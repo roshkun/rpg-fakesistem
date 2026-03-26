@@ -46,7 +46,7 @@ const configs = {
         dateIcon: '📅',
         
         // Arquivo de dados
-        dataFile: 'dados/dados-hospitalar.json'
+        dataFile: './dados/dados-hospitalar.json'
     },
     
     funeraria: {
@@ -93,7 +93,7 @@ const configs = {
         dateIcon: '📅 Óbito:',
         
         // Arquivo de dados
-        dataFile: 'dados/dados-funeraria.json'
+        dataFile: './dados/dados-funeraria.json'
     }
 };
 

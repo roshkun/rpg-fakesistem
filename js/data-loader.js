@@ -5,10 +5,13 @@ let patients = [];
 
 async function loadDataFromFile(dataFile) {
     try {
+        console.log('Tentando carregar:', dataFile);
         const response = await fetch(dataFile);
+        
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
+        
         const data = await response.json();
         
         if (!data.doctors || !data.patients) {
@@ -18,7 +21,7 @@ async function loadDataFromFile(dataFile) {
         doctorsDB = data.doctors;
         patients = data.patients;
         
-        // Garantir campos obrigatórios
+        // Garantir campos obrigatórios nos pacientes
         patients.forEach(patient => {
             if (!patient.patientHistory) patient.patientHistory = "Histórico não informado";
             if (!patient.photoUrl) patient.photoUrl = "";
@@ -38,7 +41,9 @@ async function loadDataFromFile(dataFile) {
             if (!doctor.lastPasswordChange) doctor.lastPasswordChange = new Date().toLocaleString('pt-BR');
         }
         
+        console.log('Dados carregados com sucesso!', { doctors: doctorsDB, patients: patients.length });
         return true;
+        
     } catch (error) {
         console.error('Erro ao carregar dados:', error);
         return false;
