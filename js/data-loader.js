@@ -226,13 +226,21 @@ function updateDoctorSelect() {
         return;
     }
     
+    if (!doctorsDB || Object.keys(doctorsDB).length === 0) {
+        console.warn('⚠️ Nenhum médico carregado');
+        select.innerHTML = '<option value="">Nenhum médico disponível</option>';
+        return;
+    }
+    
     select.innerHTML = '<option value="">Selecione um profissional...</option>';
     for (const [id, doctor] of Object.entries(doctorsDB)) {
-        const option = document.createElement('option');
-        option.value = id;
-        const statusIcon = doctor.certificate?.status === 'Expirado' ? '⚠️' : '✅';
-        option.textContent = `${doctor.name} - ${doctor.crm} ${statusIcon} (${doctor.certificate?.status || 'Válido'})`;
-        select.appendChild(option);
+        if (doctor) {
+            const option = document.createElement('option');
+            option.value = id;
+            const statusIcon = doctor.certificate?.status === 'Expirado' ? '⚠️' : '✅';
+            option.textContent = `${doctor.name || 'Sem nome'} - ${doctor.crm || 'N/A'} ${statusIcon} (${doctor.certificate?.status || 'Válido'})`;
+            select.appendChild(option);
+        }
     }
     console.log(`✅ Select atualizado com ${Object.keys(doctorsDB).length} profissionais`);
 }
