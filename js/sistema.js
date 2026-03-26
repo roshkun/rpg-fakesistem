@@ -18,7 +18,6 @@ let isInitialized = false;
 
 function updateDate() {
     const now = new Date();
-    const dateElement = document.getElementById('currentDate');
     if (dateElement) dateElement.innerHTML = now.toLocaleDateString('pt-BR');
 }
 
@@ -312,16 +311,50 @@ function initializeSystem() {
 }
 
 async function init() {
-    console.log('Carregando dados...');
-    let success = await loadDataFromSheets(mode);
-    if (!success) success = await loadDataFromFile(config.dataFile);
+    console.log('🚀 Iniciando sistema...');
+    console.log('📋 Modo:', mode);
+    console.log('📋 Config:', config);
+    
+    // Mostrar loading na área de conteúdo
+    const contentArea = document.getElementById('contentArea');
+    if (contentArea) {
+        contentArea.innerHTML = `
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>🔄 Carregando dados do Google Sheets...</p>
+                <p style="font-size:0.8rem; margin-top:10px;">Aguarde um momento...</p>
+            </div>
+        `;
+    }
+    
+    // Carregar dados (prioriza Google Sheets, fallback para dados locais)
+    const success = await loadData(mode);
     
     if (!success) {
-        document.getElementById('contentArea').innerHTML = `<div class="loading-spinner"><div class="error-icon" style="font-size:3rem;">⚠️</div><h3 style="color:#dc3545;">Erro ao carregar dados</h3><p>Verifique o arquivo ${config.dataFile} ou a configuração do Google Sheets.</p><button class="btn btn-primary" onclick="location.reload()">🔄 Tentar Novamente</button></div>`;
+        console.error('❌ Falha ao carregar dados');
+        if (contentArea) {
+            contentArea.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="error-icon" style="font-size:3rem;">⚠️</div>
+                    <h3 style="color:#dc3545;">Erro ao carregar dados</h3>
+                    <p>Não foi possível carregar os dados.</p>
+                    <p>Verifique:</p>
+                    <ul style="text-align: left; margin-top: 10px;">
+                        <li>✅ Conexão com a internet</li>
+                        <li>✅ Configuração do Google Sheets</li>
+                        <li>✅ Planilha publicada</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="location.reload()" style="margin-top:20px;">🔄 Tentar Novamente</button>
+                </div>
+            `;
+        }
         return;
     }
     
+    console.log('✅ Dados carregados, atualizando select...');
     updateDoctorSelect();
+    
+    console.log('✅ Mostrando modal de login...');
     document.getElementById('loginModal').style.display = 'flex';
 }
 
