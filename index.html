@@ -699,17 +699,6 @@
             margin-top: 10px;
         }
 
-        .json-editor {
-            width: 100%;
-            min-height: 450px;
-            font-family: monospace;
-            font-size: 0.8rem;
-            padding: 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            resize: vertical;
-        }
-
         .certificate-select {
             width: 100%;
             padding: 12px;
@@ -729,7 +718,7 @@
             font-size: 0.85rem;
         }
 
-        .btn-login, .btn-import {
+        .btn-login {
             width: 100%;
             background: #28a745;
             color: white;
@@ -760,6 +749,27 @@
             margin: 10px 0;
         }
 
+        .loading-spinner {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .main-footer {
             text-align: center;
             padding: 15px;
@@ -772,11 +782,6 @@
             padding: 10px;
             font-size: 0.7rem;
             margin-top: 10px;
-        }
-
-        .system-unavailable {
-            text-align: center;
-            padding: 60px 20px;
         }
 
         .lgpd-stamp {
@@ -810,9 +815,7 @@
             <div class="header-top">
                 <div class="hospital-info">
                     <div class="logo-section">
-                        <div class="logo" id="logoContainer">
-                            <!-- Logo será inserido via JS -->
-                        </div>
+                        <div class="logo" id="logoContainer"></div>
                         <div class="logo-area">
                             <h1 id="systemTitle">🏥 HOSPITAL CENTRAL</h1>
                             <p id="systemSubtitle">Prontuário Eletrônico - Sistema Integrado de Saúde</p>
@@ -855,7 +858,12 @@
                     <div class="patients-list" id="patientsList"></div>
                 </div>
             </div>
-            <div class="content-area" id="contentArea"></div>
+            <div class="content-area" id="contentArea">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Carregando dados...</p>
+                </div>
+            </div>
         </div>
 
         <div class="main-footer">
@@ -867,25 +875,6 @@
     <button class="toggle-sidebar-float" id="toggleSidebarFloat" onclick="toggleSidebar()">📋</button>
     <div class="lgpd-stamp" id="lgpdStamp">🔒 LGPD COMPLIANT</div>
 
-    <!-- Modal de Importação JSON -->
-    <div id="jsonModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header" id="jsonModalTitle">📋 Importar Dados do Sistema</div>
-            <div class="modal-body">
-                <p style="margin-bottom: 15px;">Cole o JSON com os dados abaixo:</p>
-                <textarea id="jsonData" class="json-editor" placeholder='{
-  "doctors": {
-    "1": { "name": "Dr. Carlos Mendes", "crm": "CRM 12345", "observationCode": "123456", "savedPassword": "123456", "lastPasswordChange": "15/11/2024 14:30" }
-  },
-  "patients": [...]
-}'></textarea>
-                <div id="jsonError" class="login-error">❌ JSON inválido. Verifique a formatação.</div>
-                <button class="btn-import" onclick="importJSON()">📥 Importar Dados</button>
-                <button class="btn-login" onclick="useDefaultData()" style="background: #6c757d; margin-top: 10px;">Usar Dados Padrão</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal de Login -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
@@ -894,7 +883,7 @@
             <div class="modal-body">
                 <p style="text-align:center; margin-bottom:15px;" id="loginSubtitle">Autenticação via Certificado Digital</p>
                 <select id="certificateSelect" class="certificate-select">
-                    <option value="">Selecione um profissional...</option>
+                    <option value="">Carregando profissionais...</option>
                 </select>
                 <div class="certificate-info" id="certificateInfo">
                     <p><strong>📋 Informações do Certificado:</strong></p>
@@ -981,11 +970,10 @@
                 codeModalText: 'As observações médicas são protegidas pela LGPD.',
                 verifyBtn: '🔓 Visualizar Observações',
                 searchPlaceholder: 'Buscar paciente...',
-                defaultDoctorName: 'Dr. Carlos Mendes',
-                defaultDoctorCRM: 'CRM 12345',
                 patientPrefix: '',
                 roomIcon: '🏥',
-                dateIcon: '📅'
+                dateIcon: '📅',
+                dataFile: 'dados-hospitalar.json'
             },
             funeraria: {
                 logo: '⚰️',
@@ -1012,11 +1000,10 @@
                 codeModalText: 'O laudo necroscópico é protegido por sigilo funerário.',
                 verifyBtn: '🔓 Visualizar Laudo',
                 searchPlaceholder: 'Buscar falecido...',
-                defaultDoctorName: 'Dr. Carlos Mendes - Legista',
-                defaultDoctorCRM: 'CRM 12345',
                 patientPrefix: '⚰️ ',
                 roomIcon: '🏺',
-                dateIcon: '📅 Óbito:'
+                dateIcon: '📅 Óbito:',
+                dataFile: 'dados-funeraria.json'
             }
         };
         
@@ -1055,7 +1042,7 @@
             logoContainer.innerHTML = `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#2c2c2c" stroke="#6b4e3a" stroke-width="2"/><path d="M50 30 L50 70 M30 50 L70 50" stroke="#6b4e3a" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="50" r="12" fill="#6b4e3a" stroke="none"/><path d="M50 38 L50 62 M38 50 L62 50" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/></svg>`;
         }
         
-        // ==================== CÓDIGO DO SISTEMA ====================
+        // ==================== VARIÁVEIS GLOBAIS ====================
         let doctorsDB = {};
         let patients = [];
         let currentPatientId = 1;
@@ -1069,28 +1056,7 @@
         let failedAttempts = 0;
         let systemHacked = false;
         
-        // Dados padrão para cada modo
-        const defaultData = {
-            hospitalar: {
-                doctors: {
-                    "1": { name: "Dr. Carlos Mendes", crm: "CRM 12345", observationCode: "123456", savedPassword: "123456", lastPasswordChange: "15/11/2024 14:30" },
-                    "2": { name: "Dra. Ana Paula Souza", crm: "CRM 67890", observationCode: "234567", savedPassword: "234567", lastPasswordChange: "16/11/2024 09:15" }
-                },
-                patients: [
-                    { id: 1, name: "Maria Aparecida Silva", age: 72, gender: "Feminino", bloodType: "A+", admissionDate: "18/11/2024", room: "201-A", diagnosis: "Hipertensão arterial descompensada", medicalHistory: "Paciente hipertensa há 20 anos.", patientHistory: "📅 2015: Diagnóstico\n📅 2018: Tratamento", medications: "Losartana 100mg", allergies: "Nenhuma", medicalNotes: "🔴 Melhora inexplicável dos níveis pressóricos.", lastUpdate: "19/11/2024", initials: "MS", color: "#FF6B6B", photoUrl: "" }
-                ]
-            },
-            funeraria: {
-                doctors: {
-                    "1": { name: "Dr. Carlos Mendes - Legista", crm: "CRM 12345", observationCode: "123456", savedPassword: "123456", lastPasswordChange: "15/11/2024 14:30" },
-                    "2": { name: "Dra. Ana Paula Souza - Legista", crm: "CRM 67890", observationCode: "234567", savedPassword: "234567", lastPasswordChange: "16/11/2024 09:15" }
-                },
-                patients: [
-                    { id: 1, name: "Mariana Luz", age: 35, gender: "Feminino", bloodType: "A-", admissionDate: "10/03/2026", room: "305-B", diagnosis: "Óbito por Falência Hepática", medicalHistory: "Falecida em 10/03/2026.", patientHistory: "📅 10/03: Óbito registrado", medications: "Nenhuma", allergies: "Nenhuma", medicalNotes: "🔴 LAUDO CONFIDENCIAL: Exames post-mortem indicam regeneração hepática pós-morte.", lastUpdate: "26/03/2026", initials: "ML", color: "#6b4e3a", photoUrl: "" }
-                ]
-            }
-        };
-        
+        // ==================== FUNÇÕES ====================
         function updateDate() {
             const now = new Date();
             document.getElementById('currentDate').innerHTML = now.toLocaleDateString('pt-BR');
@@ -1120,13 +1086,23 @@
             }
         }
         
-        function importJSON() {
+        // ==================== CARREGAR DADOS DO JSON EXTERNO ====================
+        async function loadDataFromFile() {
             try {
-                const jsonText = document.getElementById('jsonData').value;
-                const data = JSON.parse(jsonText);
-                if (!data.doctors || !data.patients) throw new Error('JSON deve conter "doctors" e "patients"');
+                const response = await fetch(c.dataFile);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                if (!data.doctors || !data.patients) {
+                    throw new Error('JSON deve conter "doctors" e "patients"');
+                }
+                
                 doctorsDB = data.doctors;
                 patients = data.patients;
+                
+                // Garantir campos obrigatórios
                 patients.forEach(patient => {
                     if (!patient.patientHistory) patient.patientHistory = "Histórico não informado";
                     if (!patient.photoUrl) patient.photoUrl = "";
@@ -1136,10 +1112,13 @@
                     }
                     if (!patient.color) patient.color = mode === 'hospitalar' ? "#FF6B6B" : "#6b4e3a";
                 });
+                
                 for (const [id, doctor] of Object.entries(doctorsDB)) {
                     if (!doctor.savedPassword) doctor.savedPassword = doctor.observationCode;
                     if (!doctor.lastPasswordChange) doctor.lastPasswordChange = new Date().toLocaleString('pt-BR');
                 }
+                
+                // Atualizar select de profissionais
                 const select = document.getElementById('certificateSelect');
                 select.innerHTML = '<option value="">Selecione um profissional...</option>';
                 for (const [id, doctor] of Object.entries(doctorsDB)) {
@@ -1148,28 +1127,22 @@
                     option.textContent = `${doctor.name} - ${doctor.crm} (Certificado A3)`;
                     select.appendChild(option);
                 }
-                document.getElementById('jsonModal').style.display = 'none';
+                
+                // Mostrar modal de login
                 document.getElementById('loginModal').style.display = 'flex';
-                document.getElementById('jsonError').style.display = 'none';
-            } catch (e) {
-                document.getElementById('jsonError').style.display = 'block';
-                document.getElementById('jsonError').innerHTML = `❌ JSON inválido: ${e.message}`;
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                document.getElementById('contentArea').innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="error-icon" style="font-size:3rem;">⚠️</div>
+                        <h3 style="color:#dc3545;">Erro ao carregar dados</h3>
+                        <p>Não foi possível carregar o arquivo ${c.dataFile}</p>
+                        <p style="font-size:0.8rem; margin-top:10px;">Verifique se o arquivo existe no servidor.</p>
+                        <button class="btn btn-primary" onclick="location.reload()" style="margin-top:20px;">🔄 Tentar Novamente</button>
+                    </div>
+                `;
             }
-        }
-        
-        function useDefaultData() {
-            doctorsDB = defaultData[mode].doctors;
-            patients = defaultData[mode].patients;
-            const select = document.getElementById('certificateSelect');
-            select.innerHTML = '<option value="">Selecione um profissional...</option>';
-            for (const [id, doctor] of Object.entries(doctorsDB)) {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = `${doctor.name} - ${doctor.crm} (Certificado A3)`;
-                select.appendChild(option);
-            }
-            document.getElementById('jsonModal').style.display = 'none';
-            document.getElementById('loginModal').style.display = 'flex';
         }
         
         function authenticateWithCertificate() {
@@ -1354,7 +1327,8 @@
         function init() { updateDate(); renderPatientsList(); setupMenuNavigation(); setupSearch(); renderPatientContent(); }
         window.onclick = function(event) { if (event.target === document.getElementById('genericModal')) closeGenericModal(); if (event.target === document.getElementById('codeModal')) closeCodeModal(); if (event.target === document.getElementById('errorModal')) document.getElementById('errorModal').style.display = 'none'; };
         
-        document.getElementById('jsonModal').style.display = 'flex';
+        // Iniciar carregamento dos dados
+        loadDataFromFile();
     </script>
 </body>
 </html>

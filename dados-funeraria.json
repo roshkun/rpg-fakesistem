@@ -1,0 +1,84 @@
+{
+  "doctors": {
+    "1": {
+      "name": "Dr. Carlos Mendes - Legista",
+      "crm": "CRM 12345",
+      "observationCode": "123456",
+      "savedPassword": "123456",
+      "lastPasswordChange": "15/11/2024 14:30"
+    },
+    "2": {
+      "name": "Dra. Ana Paula Souza - Legista",
+      "crm": "CRM 67890",
+      "observationCode": "234567",
+      "savedPassword": "234567",
+      "lastPasswordChange": "16/11/2024 09:15"
+    },
+    "3": {
+      "name": "Dr. Ricardo Almeida - Legista",
+      "crm": "CRM 54321",
+      "observationCode": "345678",
+      "savedPassword": "345678",
+      "lastPasswordChange": "14/11/2024 11:20"
+    }
+  },
+  "patients": [
+    {
+      "id": 1,
+      "name": "Mariana Luz",
+      "age": 35,
+      "gender": "Feminino",
+      "bloodType": "A-",
+      "admissionDate": "10/03/2026",
+      "room": "305-B",
+      "diagnosis": "Recuperação Pós-Falência Hepática (Causa Desconhecida)",
+      "medicalHistory": "Paciente em estado terminal por Insuficiência Hepática Fulminante até 48h atrás.",
+      "patientHistory": "📅 10/03: Internação em coma hepático\n📅 24/03: Estado terminal\n📅 26/03: Paciente desperta lúcida; exames mostram fígado novo",
+      "medications": "Nenhum",
+      "allergies": "Nenhuma",
+      "medicalNotes": "🔴 LAUDO CONFIDENCIAL: Última visita apontava óbito em horas. Cenário atual é milagroso: novo órgão detectado via ultrassom, porém sem cicatrizes cirúrgicas.",
+      "lastUpdate": "26/03/2026",
+      "initials": "ML",
+      "color": "#6B94FF",
+      "photoUrl": ""
+    },
+    {
+      "id": 2,
+      "name": "Gustavo Boas",
+      "age": 29,
+      "gender": "Masculino",
+      "bloodType": "O+",
+      "admissionDate": "05/02/2026",
+      "room": "202-C",
+      "diagnosis": "Remissão Total de Miocardite Crônica",
+      "medicalHistory": "Paciente aguardava transplante cardíaco em regime de UTI.",
+      "patientHistory": "📅 05/02: Internação com choque cardiogênico\n📅 20/03: Estado Crítico\n📅 26/03: Coração apresenta vigor de atleta",
+      "medications": "Nenhum",
+      "allergies": "Dipirona",
+      "medicalNotes": "🔴 LAUDO CONFIDENCIAL: Não há rastro de esternotomia. O coração antigo parece ter sido substituído integralmente.",
+      "lastUpdate": "26/03/2026",
+      "initials": "GB",
+      "color": "#FF4E4E",
+      "photoUrl": ""
+    },
+    {
+      "id": 3,
+      "name": "Helena Troy",
+      "age": 24,
+      "gender": "Feminino",
+      "bloodType": "B+",
+      "admissionDate": "12/01/2026",
+      "room": "Hosp-104",
+      "diagnosis": "Reconstituição Medular Súbita",
+      "medicalHistory": "Estagiária com Aplasia Medular Severa. Dependente de transfusões diárias.",
+      "patientHistory": "📅 Jan/2026: Diagnóstico de falência medular\n📅 15/03: Neutropenia febril grave\n📅 26/03: Produção sanguínea normalizada",
+      "medications": "Nenhum",
+      "allergies": "Lactose",
+      "medicalNotes": "🔴 LAUDO CONFIDENCIAL: Medula óssea foi integralmente substituída. Não há registro de transplante ou quimioterapia prévia.",
+      "lastUpdate": "26/03/2026",
+      "initials": "HT",
+      "color": "#B584FF",
+      "photoUrl": ""
+    }
+  ]
+}
