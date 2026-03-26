@@ -60,6 +60,25 @@
       "initials": "JL",
       "color": "#4ECDC4",
       "photoUrl": ""
+    },
+    {
+      "id": 3,
+      "name": "Ana Beatriz Santos",
+      "age": 28,
+      "gender": "Feminino",
+      "bloodType": "B-",
+      "admissionDate": "16/11/2024",
+      "room": "105-C",
+      "diagnosis": "Apendicite aguda",
+      "medicalHistory": "Submetida a apendicectomia de urgência. Pós-operatório tranquilo.",
+      "patientHistory": "📅 2022: Primeira crise de dor abdominal\n📅 2023: Diagnóstico de apendicite crônica\n📅 2024: Apendicite aguda - cirurgia de emergência",
+      "medications": "Dipirona 1g 6/6h, Cefalotina 1g 6/6h",
+      "allergies": "Nenhuma",
+      "medicalNotes": "🔴 OBSERVAÇÃO CONFIDENCIAL: Anatomopatológico do apêndice não mostrou sinais de inflamação aguda, apesar dos sintomas clássicos.",
+      "lastUpdate": "18/11/2024",
+      "initials": "AS",
+      "color": "#45B7D1",
+      "photoUrl": ""
     }
   ]
 }
