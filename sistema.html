@@ -116,10 +116,10 @@
         .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px; }
         .info-card { padding: 15px; border-radius: 12px; }
         .info-label { font-weight: bold; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .info-value { font-size: 1rem; font-weight: 500; }
+        .info-value { font-size: 1rem; font-weight: 500; white-space: pre-line; }
         .medical-section { margin-top: 25px; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
         .section-title { font-weight: bold; margin-bottom: 12px; font-size: 1rem; }
-        .section-content { line-height: 1.6; }
+        .section-content { line-height: 1.6; white-space: pre-line; }
         .protected-notes { margin-top: 25px; padding: 20px; border-radius: 12px; }
         .protected-title { font-weight: bold; font-size: 1rem; margin-bottom: 15px; }
         .password-prompt { background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; }
@@ -240,7 +240,7 @@
             <div class="modal-body">
                 <p id="codeModalText">Informações protegidas</p>
                 <input type="password" id="accessCode" class="code-input" maxlength="6" placeholder="••••••">
-                <div id="savedPasswordInfo" style="font-size:0.7rem; color:#6c757d; margin-bottom:5px;"></div>
+                <div id="savedPasswordInfo" style="font-size:0.7rem; margin-bottom:5px;"></div>
                 <div id="codeError" class="error-message" style="display: none;"></div>
                 <div id="attemptCounter"></div>
             </div>
@@ -310,7 +310,10 @@
                 examsLabel: '🔬 Ver Exames',
                 fullRecordLabel: '📄 Ver Prontuário Completo',
                 unlockMessage: '🔒 Conteúdo protegido pela LGPD',
-                medicalNotesTitle: '🔒 OBSERVAÇÕES MÉDICAS (LGPD)'
+                medicalNotesTitle: '🔒 OBSERVAÇÕES MÉDICAS (LGPD)',
+                contactLabel: '📞 CONTATO',
+                addressLabel: '📍 ENDEREÇO',
+                protocolLabel: '📋 PROTOCOLO POLICIAL'
             },
             funeraria: {
                 systemTitle: 'FUNERÁRIA PAZ ETERNA',
@@ -344,7 +347,10 @@
                 examsLabel: '🔬 Ver Exames Necroscópicos',
                 fullRecordLabel: '📄 Ver Laudo Completo',
                 unlockMessage: '🔒 Laudo protegido por sigilo funerário',
-                medicalNotesTitle: '🔒 LAUDO NECROSCÓPICO (SIGILO FUNERÁRIO)'
+                medicalNotesTitle: '🔒 LAUDO NECROSCÓPICO (SIGILO FUNERÁRIO)',
+                contactLabel: '📞 CONTATO DA FAMÍLIA',
+                addressLabel: '📍 ENDEREÇO DA FAMÍLIA',
+                protocolLabel: '📋 PROTOCOLO POLICIAL'
             }
         };
         
@@ -395,31 +401,72 @@
         let searchTerm = '';
         let sidebarVisible = true;
         
-        // DADOS COM SENHAS DIFERENTES:
-        // observationCode = senha REAL do sistema
-        // savedPassword = senha que aparece no cache (pode ser diferente)
+        // DADOS COM OS NOVOS CAMPOS
         const fallbackData = {
             hospitalar: {
                 doctors: {
                     "1": { 
                         name: "Dr. Carlos Mendes", 
                         crm: "CRM 12345", 
-                        observationCode: "987654",  // SENHA REAL
-                        savedPassword: "123456",    // SENHA DO CACHE (antiga/errada)
+                        observationCode: "987654",
+                        savedPassword: "123456",
                         lastPasswordChange: "15/11/2024 14:30", 
                         certificate: { status: "Válido" } 
                     },
                     "2": { 
                         name: "Dra. Ana Paula Souza", 
                         crm: "CRM 67890", 
-                        observationCode: "567890",  // SENHA REAL
-                        savedPassword: "234567",    // SENHA DO CACHE (antiga/errada)
+                        observationCode: "567890",
+                        savedPassword: "234567",
                         lastPasswordChange: "16/11/2024 09:15", 
                         certificate: { status: "Válido" } 
                     }
                 },
                 patients: [
-                    { id: 1, name: "Maria Aparecida Silva", age: 72, gender: "Feminino", bloodType: "A+", admissionDate: "18/11/2024", room: "201-A", diagnosis: "Hipertensão arterial", medicalHistory: "Paciente hipertensa há 20 anos.", patientHistory: "📅 2015: Diagnóstico", medications: "Losartana 100mg", allergies: "Nenhuma", medicalNotes: "🔴 Melhora inexplicável.", lastUpdate: "19/11/2024", initials: "MS", color: "#FF6B6B", photoUrl: "" }
+                    { 
+                        id: 1, 
+                        name: "Maria Aparecida Silva", 
+                        age: 72, 
+                        gender: "Feminino", 
+                        bloodType: "A+", 
+                        admissionDate: "18/11/2024", 
+                        room: "201-A", 
+                        diagnosis: "Hipertensão arterial descompensada", 
+                        medicalHistory: "Paciente hipertensa há 20 anos. Apresentou melhora significativa após internação.", 
+                        patientHistory: "📅 2015: Diagnóstico inicial de hipertensão\n📅 2018: Início do tratamento com Losartana\n📅 2020: Ajuste de medicação\n📅 2024: Internação por descompensação - melhora inexplicável", 
+                        medications: "Losartana 100mg/dia", 
+                        allergies: "Nenhuma", 
+                        medicalNotes: "🔴 OBSERVAÇÃO CONFIDENCIAL: Paciente apresentou melhora inexplicável dos níveis pressóricos após 48h de internação. Redução de 180/110 para 120/80 sem ajuste significativo na medicação.", 
+                        lastUpdate: "19/11/2024", 
+                        initials: "MS", 
+                        color: "#FF6B6B", 
+                        photoUrl: "",
+                        phone: "(11) 98765-4321",
+                        address: "Rua das Flores, 123 - Jardim América - São Paulo/SP",
+                        protocol: "" 
+                    },
+                    { 
+                        id: 2, 
+                        name: "José Augusto Lima", 
+                        age: 65, 
+                        gender: "Masculino", 
+                        bloodType: "O+", 
+                        admissionDate: "17/11/2024", 
+                        room: "203-B", 
+                        diagnosis: "Pneumonia bacteriana", 
+                        medicalHistory: "Paciente com febre e tosse. Melhora significativa em 36h.", 
+                        patientHistory: "📅 2020: Diagnóstico de DPOC leve\n📅 2022: Pneumonia bacteriana - internado por 10 dias\n📅 2024: Nova internação - recuperação acelerada", 
+                        medications: "Ceftriaxona 1g/dia, Azitromicina 500mg", 
+                        allergies: "Dipirona", 
+                        medicalNotes: "🔴 OBSERVAÇÃO CONFIDENCIAL: Cultura do escarro não identificou bactéria, porém quadro clínico melhorou 100% em 36h.", 
+                        lastUpdate: "19/11/2024", 
+                        initials: "JL", 
+                        color: "#4ECDC4", 
+                        photoUrl: "",
+                        phone: "(11) 91234-5678",
+                        address: "Av. Paulista, 1000 - Bela Vista - São Paulo/SP",
+                        protocol: "" 
+                    }
                 ]
             },
             funeraria: {
@@ -427,22 +474,65 @@
                     "1": { 
                         name: "Dr. Carlos Mendes - Legista", 
                         crm: "CRM 12345", 
-                        observationCode: "987654",  // SENHA REAL
-                        savedPassword: "123456",    // SENHA DO CACHE (antiga/errada)
+                        observationCode: "987654",
+                        savedPassword: "123456",
                         lastPasswordChange: "15/11/2024 14:30", 
                         certificate: { status: "Válido" } 
                     },
                     "2": { 
                         name: "Dra. Ana Paula Souza - Legista", 
                         crm: "CRM 67890", 
-                        observationCode: "567890",  // SENHA REAL
-                        savedPassword: "234567",    // SENHA DO CACHE (antiga/errada)
+                        observationCode: "567890",
+                        savedPassword: "234567",
                         lastPasswordChange: "16/11/2024 09:15", 
                         certificate: { status: "Válido" } 
                     }
                 },
                 patients: [
-                    { id: 1, name: "Mariana Luz", age: 35, gender: "Feminino", bloodType: "A-", admissionDate: "10/03/2026", room: "305-B", diagnosis: "Óbito por falência hepática", medicalHistory: "Paciente em estado terminal.", patientHistory: "📅 10/03: Internação\n📅 26/03: Óbito", medications: "Nenhum", allergies: "Nenhuma", medicalNotes: "🔍 LAUDO: Exame externo sem cicatrizes.", lastUpdate: "26/03/2026", initials: "ML", color: "#6B94FF", photoUrl: "" }
+                    { 
+                        id: 1, 
+                        name: "Mariana Luz", 
+                        age: 35, 
+                        gender: "Feminino", 
+                        bloodType: "A-", 
+                        admissionDate: "10/03/2026", 
+                        room: "305-B", 
+                        diagnosis: "Recuperação Pós-Falência Hepática (Causa Desconhecida)", 
+                        medicalHistory: "Paciente em estado terminal por Insuficiência Hepática Fulminante até 48h atrás.", 
+                        patientHistory: "📅 10/03: Internação em coma hepático (ICN 95%)\n📅 24/03: Estado terminal - Falência múltipla iniciada\n📅 26/03: Paciente desperta lúcida; exames mostram fígado novo e funcionalidade 100%.", 
+                        medications: "Nenhum", 
+                        allergies: "Nenhuma", 
+                        medicalNotes: "🔍 LAUDO PRELIMINAR - LEGISTA: Ao exame externo, não há cicatrizes ou marcas de procedimentos cirúrgicos recentes. A ultrassonografia post-mortem revela estrutura hepática íntegra, incompatível com o histórico de falência.", 
+                        lastUpdate: "26/03/2026", 
+                        initials: "ML", 
+                        color: "#6B94FF", 
+                        photoUrl: "",
+                        familyPhone: "(11) 99999-8888",
+                        familyAddress: "Rua da Saudade, 45 - Centro - São Paulo/SP",
+                        protocol: "PC-2026-001234"
+                    },
+                    { 
+                        id: 2, 
+                        name: "Gustavo Boas", 
+                        age: 29, 
+                        gender: "Masculino", 
+                        bloodType: "O+", 
+                        admissionDate: "05/02/2026", 
+                        room: "202-C", 
+                        diagnosis: "Remissão Total de Miocardite Crônica", 
+                        medicalHistory: "Paciente aguardava transplante cardíaco em regime de UTI.", 
+                        patientHistory: "📅 05/02: Internação com choque cardiogênico\n📅 20/03: Listado como prioridade máxima\n📅 26/03: Coração apresenta vigor de atleta", 
+                        medications: "Nenhum", 
+                        allergies: "Dipirona", 
+                        medicalNotes: "🔍 LAUDO PRELIMINAR - LEGISTA: Ausência de cicatriz de esternotomia ou acesso torácico. Exame anatomopatológico do miocárdio em andamento.", 
+                        lastUpdate: "26/03/2026", 
+                        initials: "GB", 
+                        color: "#FF4E4E", 
+                        photoUrl: "",
+                        familyPhone: "(11) 97777-6666",
+                        familyAddress: "Rua dos Cardeais, 789 - Vila Mariana - São Paulo/SP",
+                        protocol: ""
+                    }
                 ]
             }
         };
@@ -505,8 +595,8 @@
                         doctorsArray.forEach(d => { 
                             doctors[d.id] = { 
                                 ...d, 
-                                observationCode: d.observationCode || '000000',  // Senha REAL do sistema
-                                savedPassword: d.savedPassword || d.observationCode || '000000'  // Senha do cache (pode ser diferente)
+                                observationCode: d.observationCode || '000000',
+                                savedPassword: d.savedPassword || d.observationCode || '000000'
                             }; 
                         });
                         doctorsDB = doctors;
@@ -547,7 +637,7 @@
             }
             currentDoctor = doctorsDB[doctorId];
             if (!currentDoctor) return;
-            currentDoctorCode = currentDoctor.observationCode;  // SENHA REAL do sistema
+            currentDoctorCode = currentDoctor.observationCode;
             
             document.getElementById('loginModal').style.display = 'none';
             document.getElementById('appContainer').style.display = 'flex';
@@ -603,6 +693,43 @@
                 return;
             }
             const photo = getPatientPhoto(patient);
+            
+            // Construir seções de contato conforme o modo
+            let contactHtml = '';
+            if (mode === 'hospitalar') {
+                if (patient.phone || patient.address) {
+                    contactHtml = `
+                        <div class="medical-section">
+                            <div class="section-title">${t.contactLabel}</div>
+                            <div class="info-grid" style="grid-template-columns: 1fr 1fr;">
+                                ${patient.phone ? `<div class="info-card"><div class="info-label">📞 TELEFONE</div><div class="info-value">${patient.phone}</div></div>` : ''}
+                                ${patient.address ? `<div class="info-card"><div class="info-label">📍 ENDEREÇO</div><div class="info-value">${patient.address}</div></div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                if (patient.familyPhone || patient.familyAddress) {
+                    contactHtml = `
+                        <div class="medical-section">
+                            <div class="section-title">${t.contactLabel}</div>
+                            <div class="info-grid" style="grid-template-columns: 1fr 1fr;">
+                                ${patient.familyPhone ? `<div class="info-card"><div class="info-label">📞 TELEFONE DA FAMÍLIA</div><div class="info-value">${patient.familyPhone}</div></div>` : ''}
+                                ${patient.familyAddress ? `<div class="info-card"><div class="info-label">📍 ENDEREÇO DA FAMÍLIA</div><div class="info-value">${patient.familyAddress}</div></div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Protocolo policial (opcional)
+            const protocolHtml = patient.protocol ? `
+                <div class="medical-section" style="background: ${mode === 'hospitalar' ? '#fff3e0' : '#3a2e22'}; border-left-color: #dc3545;">
+                    <div class="section-title">${t.protocolLabel}</div>
+                    <div class="section-content"><strong>${patient.protocol}</strong></div>
+                </div>
+            ` : '';
+            
             content.innerHTML = `
                 <div class="patient-card">
                     <div class="patient-photo-section"><div class="polaroid"><img src="${photo}" class="polaroid-image" onerror="this.src='${generateAvatar(patient.initials, patient.color)}'"><div class="polaroid-caption">${patient.name}</div><div class="polaroid-date">${t.dateIcon} ${patient.admissionDate}</div></div></div>
@@ -617,9 +744,11 @@
                     </div>
                     <div class="medical-section"><div class="section-title">${t.diagnosisLabel}</div><div class="section-content">${patient.diagnosis}</div></div>
                     <div class="medical-section"><div class="section-title">${t.historyLabel}</div><div class="section-content">${patient.medicalHistory}</div></div>
-                    ${patient.patientHistory ? `<div class="medical-section"><div class="section-title">📋 HISTÓRICO</div><div class="section-content">${patient.patientHistory}</div></div>` : ''}
+                    ${patient.patientHistory ? `<div class="medical-section"><div class="section-title">📋 HISTÓRICO COMPLETO</div><div class="section-content" style="white-space: pre-line;">${patient.patientHistory}</div></div>` : ''}
+                    ${contactHtml}
+                    ${protocolHtml}
                     <div class="protected-notes"><div class="protected-title">${t.medicalNotesTitle}</div>
-                    ${observationsUnlocked ? `<div class="section-content">${patient.medicalNotes}</div>` : `<div class="password-prompt"><p>${t.unlockMessage}</p><button class="btn-unlock" onclick="showCodeModal()">🔓 Autorizar Acesso</button></div>`}
+                    ${observationsUnlocked ? `<div class="section-content" style="white-space: pre-line;">${patient.medicalNotes}</div>` : `<div class="password-prompt"><p>${t.unlockMessage}</p><button class="btn-unlock" onclick="showCodeModal()">🔓 Autorizar Acesso</button></div>`}
                     </div>
                     <div class="action-buttons"><button class="btn btn-primary" onclick="showFullRecord(${patient.id})">${t.fullRecordLabel}</button><button class="btn btn-secondary" onclick="showExams(${patient.id})">${t.examsLabel}</button></div>
                 </div>
@@ -629,39 +758,63 @@
         function showFullRecord(id) {
             const p = patients.find(p => p.id === id);
             if (!p) return;
+            
+            let contactInfo = '';
+            if (mode === 'hospitalar') {
+                if (p.phone || p.address) {
+                    contactInfo = `<p><strong>📞 Contato:</strong> ${p.phone || 'Não informado'}</p><p><strong>📍 Endereço:</strong> ${p.address || 'Não informado'}</p>`;
+                }
+            } else {
+                if (p.familyPhone || p.familyAddress) {
+                    contactInfo = `<p><strong>📞 Contato da Família:</strong> ${p.familyPhone || 'Não informado'}</p><p><strong>📍 Endereço da Família:</strong> ${p.familyAddress || 'Não informado'}</p>`;
+                }
+            }
+            
+            const protocolInfo = p.protocol ? `<p><strong>📋 Protocolo Policial:</strong> ${p.protocol}</p>` : '';
+            
             document.getElementById('genericModalTitle').innerHTML = `${t.fullRecordLabel} - ${p.name}`;
-            document.getElementById('genericModalBody').innerHTML = `<div><p><strong>Nome:</strong> ${p.name}</p><p><strong>Idade:</strong> ${p.age}</p><p><strong>${mode === 'hospitalar' ? 'Diagnóstico' : 'Causa'}:</strong> ${p.diagnosis}</p>${observationsUnlocked ? `<p><strong>Observações:</strong> ${p.medicalNotes}</p>` : '<p><em>Informações protegidas</em></p>'}</div>`;
+            document.getElementById('genericModalBody').innerHTML = `
+                <div style="line-height: 1.8;">
+                    <p><strong>📋 Nome:</strong> ${p.name}</p>
+                    <p><strong>📊 Idade:</strong> ${p.age} anos</p>
+                    <p><strong>⚥ Gênero:</strong> ${p.gender}</p>
+                    <p><strong>🩸 Tipo Sanguíneo:</strong> ${p.bloodType}</p>
+                    <p><strong>🛏️ Leito:</strong> ${p.room}</p>
+                    <p><strong>📋 ${mode === 'hospitalar' ? 'Diagnóstico' : 'Causa da Morte'}:</strong> ${p.diagnosis}</p>
+                    <p><strong>📜 Histórico:</strong> ${p.medicalHistory}</p>
+                    ${p.patientHistory ? `<p><strong>📋 Histórico Completo:</strong><br><pre style="white-space: pre-line; font-family: inherit;">${p.patientHistory}</pre></p>` : ''}
+                    ${contactInfo}
+                    ${protocolInfo}
+                    <p><strong>💊 ${mode === 'hospitalar' ? 'Medicações' : 'Medicações Prévias'}:</strong> ${p.medications}</p>
+                    <p><strong>⚠️ Alergias:</strong> ${p.allergies}</p>
+                    ${observationsUnlocked ? `<p><strong>${mode === 'hospitalar' ? '🔒 Observações' : '🔒 Laudo'}:</strong><br><pre style="white-space: pre-line; font-family: inherit;">${p.medicalNotes}</pre></p>` : '<p><em>🔒 Informações protegidas. Autorize acesso.</em></p>'}
+                    <p><strong>📅 Última Atualização:</strong> ${p.lastUpdate}</p>
+                </div>
+            `;
             document.getElementById('genericModal').style.display = 'flex';
         }
         
         function showExams(id) {
             const exams = mode === 'hospitalar' ? ["Hemograma: Normal", "Glicemia: 92 mg/dL", "Colesterol: 168 mg/dL"] : ["Necropsia: Em análise", "Toxicologia: Aguardando", "Histopatologia: Em andamento"];
             document.getElementById('genericModalTitle').innerHTML = `${t.examsLabel} - ${patients.find(p=>p.id===id)?.name}`;
-            document.getElementById('genericModalBody').innerHTML = `<ul>${exams.map(e=>`<li>${e}</li>`).join('')}</ul>`;
+            document.getElementById('genericModalBody').innerHTML = `<ul style="margin-left:20px;">${exams.map(e=>`<li>${e}</li>`).join('')}</ul>`;
             document.getElementById('genericModal').style.display = 'flex';
         }
         
-        // ==================== CÓDIGO (SENHA REAL vs SENHA DO CACHE) ====================
+        // ==================== CÓDIGO ====================
         function showCodeModal() {
             if (systemHacked) { observationsUnlocked = true; renderPatientContent(); return; }
             
-            // Limpar campos
             document.getElementById('accessCode').value = '';
             document.getElementById('codeError').style.display = 'none';
             document.getElementById('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
             
-            // MOSTRAR A SENHA SALVA NO CACHE (diferente da senha real)
             if (currentDoctor?.savedPassword && failedAttempts === 0) {
-                // Pré-preenche com a senha salva no cache (ANTIGA/ERRADA)
                 document.getElementById('accessCode').value = currentDoctor.savedPassword;
-                
-                // Mostrar informação de que há uma senha salva
                 const savedInfo = document.getElementById('savedPasswordInfo');
                 if (savedInfo) {
                     savedInfo.innerHTML = `🔑 Senha salva no navegador: ${'•'.repeat(currentDoctor.savedPassword.length)} (${currentDoctor.savedPassword})<br><span style="font-size:0.65rem; color:#856404;">⚠️ Esta pode ser uma senha antiga</span>`;
                 }
-                
-                // Destaque visual
                 setTimeout(() => {
                     const input = document.getElementById('accessCode');
                     input.style.backgroundColor = mode === 'hospitalar' ? '#fff3cd' : '#4a3a2a';
@@ -679,11 +832,10 @@
             if (systemHacked) { observationsUnlocked = true; closeCodeModal(); renderPatientContent(); return; }
             
             const enteredCode = document.getElementById('accessCode').value;
-            const realCode = currentDoctorCode;  // SENHA REAL do sistema
-            const savedCode = currentDoctor?.savedPassword;  // SENHA DO CACHE
+            const realCode = currentDoctorCode;
+            const savedCode = currentDoctor?.savedPassword;
             
             if (enteredCode === realCode) {
-                // Acertou a senha REAL
                 observationsUnlocked = true;
                 failedAttempts = 0;
                 closeCodeModal();
@@ -692,7 +844,6 @@
                 failedAttempts++;
                 const errorDiv = document.getElementById('codeError');
                 
-                // Mensagem diferente se tentou usar a senha do cache
                 if (enteredCode === savedCode && savedCode !== realCode) {
                     errorDiv.innerHTML = `❌ Senha incorreta. Você usou a senha salva no navegador (${savedCode}), mas a senha atual é diferente.<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
                 } else {
