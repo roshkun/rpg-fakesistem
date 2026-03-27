@@ -19,9 +19,6 @@
       font-family: 'Inter', sans-serif;
       color: #e8eef4;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       padding: 2rem;
     }
 
@@ -48,10 +45,6 @@
       display: inline-block;
       font-size: 0.85rem;
       font-weight: bold;
-    }
-
-    .personagem-info i {
-      margin-right: 6px;
     }
 
     .ficha-card {
@@ -85,10 +78,6 @@
       border-bottom: 2px dashed #548eaa;
       outline: none;
       padding: 0.2rem 0;
-    }
-
-    .char-name-input:focus {
-      border-bottom-color: #eccf8b;
     }
 
     .type-badge {
@@ -179,7 +168,6 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 0.5rem;
     }
 
     .focus-input {
@@ -234,10 +222,6 @@
       transition: 0.2s;
     }
 
-    .btn-reset:hover {
-      background: #4e7b63;
-    }
-
     .btn-save {
       background: #3f6e5c;
     }
@@ -247,7 +231,6 @@
       border-radius: 1.5rem;
       border: 1px solid #d4af37;
       overflow: hidden;
-      margin-top: 0.5rem;
     }
 
     .cypher-header {
@@ -331,14 +314,15 @@
     .add-cypher-btn {
       background: #4a6b3c;
       border: none;
-      padding: 6px 12px;
+      padding: 8px 12px;
       border-radius: 20px;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       cursor: pointer;
       color: white;
-      margin-top: 8px;
+      margin-top: 10px;
       width: 100%;
       transition: 0.2s;
+      font-weight: bold;
     }
 
     .add-cypher-btn:hover {
@@ -365,9 +349,9 @@
     .cypher-tag {
       background: #2a5e72;
       display: inline-block;
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 20px;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       margin: 4px 6px 4px 0;
       cursor: pointer;
       transition: 0.1s;
@@ -383,6 +367,9 @@
       font-size: 0.7rem;
       margin-top: 8px;
       text-align: center;
+      padding: 6px;
+      background: #2a2a1a;
+      border-radius: 20px;
     }
 
     footer {
@@ -404,7 +391,7 @@
 <div class="container">
   <div class="personagem-header">
     <div class="personagem-info" id="personagemInfo">
-      <i class="fas fa-dice-d6"></i> <span id="currentIdDisplay">Personagem 1</span>
+      <i class="fas fa-dice-d6"></i> <span id="currentIdDisplay">Carregando...</span>
     </div>
   </div>
 
@@ -418,19 +405,16 @@
       <button class="btn-cypher" id="generateCypherBtn"><i class="fas fa-dice-d20"></i> Gerar Novo Cypher</button>
     </div>
     <div class="cypher-content">
-      <div id="currentCypherDisplay">
-        <div class="cypher-card">
-          <div class="cypher-name">Clique em "Gerar Novo Cypher"</div>
-          <div class="cypher-effect">Um item de poder único será gerado</div>
-        </div>
-      </div>
+      <div id="currentCypherDisplay"></div>
       <div class="inventory-cyphers">
         <div class="cypher-limit-info">
           <span><i class="fas fa-backpack"></i> INVENTÁRIO DE CYPHERS</span>
           <span id="cypherCounter">0 / 0</span>
         </div>
         <div id="cypherInventoryList"></div>
-        <div style="font-size: 0.7rem; color: #9abfd0; margin-top: 6px;">⚠️ Clique em um cypher no inventário para usá-lo (consumo único)</div>
+        <div style="font-size: 0.7rem; color: #9abfd0; margin-top: 8px; text-align: center;">
+          ⚠️ Clique em um cypher para usá-lo (consumo único)
+        </div>
       </div>
     </div>
   </div>
@@ -448,41 +432,37 @@
   };
 
   const cypherDatabase = [
-    { name: "Elixir de Cura Rápida", levelRange: "1d6", effect: "Recupera 1d6+2 pontos de Might ou Speed (escolha).", use: "Ação para consumir." },
+    { name: "Elixir de Cura Rápida", levelRange: "1d6", effect: "Recupera {level}+2 pontos de Might ou Speed (escolha).", use: "Ação para consumir." },
     { name: "Escudo de Energia", levelRange: "1d4", effect: "Ganha +3 de Armadura por 10 minutos ou até sofrer 3 ataques.", use: "Ação para ativar." },
     { name: "Granada de Concussão", levelRange: "1d6+1", effect: "Causa 2d6 de dano em área de 3m (teste de Speed para reduzir à metade).", use: "Ação para arremessar." },
     { name: "Olhos do Vidente", levelRange: "1d4", effect: "Enxerga através de ilusões e invisibilidade por 1 hora.", use: "Ação para ativar." },
     { name: "Pergaminho de Teletransporte", levelRange: "1d8", effect: "Teletransporta você e até 2 aliados até 50m de distância.", use: "Ação para ler." },
     { name: "Soro de Agilidade", levelRange: "1d4", effect: "+2 em testes de Speed e +1 em esquiva por 1 hora.", use: "Ação para injetar." },
-    { name: "Bomba de Fumaça Arcana", levelRange: "1d4", effect: "Cria nuvem de fumaça em área de 6m por 5 minutos, obscurecendo visão.", use: "Ação para arremessar." },
-    { name: "Amuleto de Proteção", levelRange: "1d6", effect: "Resistência +4 contra um tipo de dano (escolha ao ativar). Dura 1 hora.", use: "Ação para ativar." },
+    { name: "Bomba de Fumaça Arcana", levelRange: "1d4", effect: "Cria nuvem de fumaça em área de 6m por 5 minutos.", use: "Ação para arremessar." },
+    { name: "Amuleto de Proteção", levelRange: "1d6", effect: "Resistência +4 contra um tipo de dano por 1 hora.", use: "Ação para ativar." },
     { name: "Pó do Salto", levelRange: "1d4", effect: "Pode saltar até 10m verticalmente ou 20m horizontalmente por 10 minutos.", use: "Ação para consumir." },
-    { name: "Cristal de Foco Mental", levelRange: "1d6", effect: "Recupera 1d6+2 pontos de Intellect. +2 em testes de Intelecto por 10 min.", use: "Ação para quebrar." },
-    { name: "Lâmina Fantasma", levelRange: "1d8", effect: "Invoca uma arma etérea que causa 2d6 de dano e ignora armadura por 1 minuto.", use: "Ação para conjurar." },
+    { name: "Cristal de Foco Mental", levelRange: "1d6", effect: "Recupera {level}+2 pontos de Intellect. +2 em testes de Intelecto por 10 min.", use: "Ação para quebrar." },
+    { name: "Lâmina Fantasma", levelRange: "1d8", effect: "Invoca uma arma etérea que causa 2d6 de dano e ignora armadura.", use: "Ação para conjurar." },
     { name: "Poção de Invisibilidade", levelRange: "1d6", effect: "Fica invisível por 15 minutos. Atacar quebra o efeito.", use: "Ação para beber." },
-    { name: "Glifo de Explosão", levelRange: "1d10", effect: "Causa 4d6 de dano em área de 5m. Quem ativar faz teste de Speed.", use: "Ação para colocar." },
+    { name: "Glifo de Explosão", levelRange: "1d10", effect: "Causa 4d6 de dano em área de 5m. Teste de Speed para reduzir.", use: "Ação para colocar." },
     { name: "Essência de Recuperação", levelRange: "1d4", effect: "Remove uma condição negativa (envenenado, atordoado, etc).", use: "Ação para aplicar." },
     { name: "Capa de Camaleão", levelRange: "1d6", effect: "+4 em Furtividade por 30 minutos.", use: "Ação para vestir." },
     { name: "Orbe Temporal", levelRange: "1d12", effect: "Permite realizar uma ação extra no seu turno. Uso único.", use: "Ação livre." },
     { name: "Pergaminho de Invocação", levelRange: "1d6", effect: "Invoca um aliado animal ou elemental por 10 minutos.", use: "Ação para ler." },
     { name: "Poção de Resistência", levelRange: "1d8", effect: "Resistência a todos os tipos de dano por 5 minutos.", use: "Ação para beber." },
     { name: "Bomba de Luz Cegante", levelRange: "1d4", effect: "Cega todos em área de 4m por 2 rodadas (teste de Speed evita).", use: "Ação para arremessar." },
-    { name: "Cajado de Fogo", levelRange: "1d6", effect: "Dispara uma rajada de fogo que causa 3d6 de dano em linha reta.", use: "Ação para ativar." },
-    { name: "Poção de Respiração Aquática", levelRange: "1d4", effect: "Respira embaixo d'água por 1 hora.", use: "Ação para beber." },
-    { name: "Pó da Verdade", levelRange: "1d4", effect: "Quem inalar não consegue mentir por 10 minutos.", use: "Ação para aplicar." }
+    { name: "Cajado de Fogo", levelRange: "1d6", effect: "Dispara rajada de fogo que causa 3d6 de dano em linha reta.", use: "Ação para ativar." }
   ];
 
   function rollDice(diceStr) {
     if (diceStr.includes('d')) {
       const parts = diceStr.split('d');
       const num = parseInt(parts[0]) || 1;
-      const size = parseInt(parts[1].split('+')[0]);
+      const secondPart = parts[1].split('+');
+      const size = parseInt(secondPart[0]);
       let total = 0;
       for (let i = 0; i < num; i++) total += Math.floor(Math.random() * size) + 1;
-      if (diceStr.includes('+')) {
-        const plus = parseInt(diceStr.split('+')[1]);
-        total += plus;
-      }
+      if (secondPart[1]) total += parseInt(secondPart[1]);
       return total;
     }
     return parseInt(diceStr) || 1;
@@ -492,10 +472,11 @@
     const randomIndex = Math.floor(Math.random() * cypherDatabase.length);
     const base = cypherDatabase[randomIndex];
     const rolledLevel = rollDice(base.levelRange);
+    let effect = base.effect.replace('{level}', rolledLevel);
     return {
       name: base.name,
       level: rolledLevel,
-      effect: base.effect.replace('{level}', rolledLevel),
+      effect: effect,
       use: base.use,
       id: Date.now() + Math.random()
     };
@@ -504,10 +485,10 @@
   const personagens = [
     { id: 1, name: "Kaelen Voss", type: "Vector", descriptor: "Astuto", focus: "Que Luta com Estilo", might: 10, maxMight: 10, speed: 12, maxSpeed: 12, intellect: 11, maxIntellect: 11, effort: 1, xp: 0, abilities: "Treinado em Combate corpo a corpo. +1 em ataques com armas leves. Movimento extra 1x por cena.", equipment: "Espada curta, armadura reforçada, kit de escalada, 3 poções menores.", skills: "Furtividade (treinado), Luta (especializado), Percepção, Atletismo", cyphers: [] },
     { id: 2, name: "Rhea Ashford", type: "Vector", descriptor: "Rápido", focus: "Que Usa Intimidação", might: 11, maxMight: 11, speed: 13, maxSpeed: 13, intellect: 9, maxIntellect: 9, effort: 1, xp: 0, abilities: "Ação rápida: +2 em testes de Iniciativa. Pode usar intimidação em combate como ação menor.", equipment: "Besta leve, adaga, itens de camuflagem, capuz sombrio", skills: "Enganação, Iniciativa, Atletismo, Intimidação", cyphers: [] },
-    { id: 3, name: "Morwen Thorne", type: "Paradox", descriptor: "Enigmático", focus: "Que Manipula Realidades", might: 8, maxMight: 8, speed: 9, maxSpeed: 9, intellect: 14, maxIntellect: 14, effort: 1, xp: 0, abilities: "Traduzir qualquer língua. +2 em testes de tradução de foco. Detecta anomalias estranhas a 10m.", equipment: "Cajado de foco, diário de recursões, cristal estranho, pergaminhos", skills: "Conhecimento (The Strange), Investigação, Idiomas, Ocultismo", cyphers: [] },
-    { id: 4, name: "Orin Vex", type: "Paradox", descriptor: "Visionário", focus: "Que Comanda Energia Estranha", might: 7, maxMight: 7, speed: 10, maxSpeed: 10, intellect: 15, maxIntellect: 15, effort: 1, xp: 0, abilities: "Pequenas distorções: gastando 1 de Intellect, faz um objeto flutuar. +1 em testes de percepção translocal.", equipment: "Amuleto de foco, grimório de notas, óculos especiais, essência prismática", skills: "Ocultismo, Detecção de portais, História das recursões, Raciocínio", cyphers: [] },
-    { id: 5, name: "Lyra Nox", type: "Spinner", descriptor: "Ágil", focus: "Que Esgrime com Duas Armas", might: 9, maxMight: 9, speed: 14, maxSpeed: 14, intellect: 9, maxIntellect: 9, effort: 1, xp: 0, abilities: "Duas armas: ataque duplo com -1 de penalidade. +1 em esquiva quando em movimento. Ação de movimento extra 1/dia.", equipment: "Duas adagas, armadura de couro reforçada, kit de furtividade, corda de seda", skills: "Acrobacia, Furtividade, Iniciativa, Esquiva", cyphers: [] },
-    { id: 6, name: "Jax Korr", type: "Spinner", descriptor: "Ousado", focus: "Que Surge das Sombras", might: 10, maxMight: 10, speed: 13, maxSpeed: 13, intellect: 8, maxIntellect: 8, effort: 1, xp: 0, abilities: "Furtividade em combate: pode se esconder como ação menor. Ataque furtivo +1 de dano. Visão no escuro 10m.", equipment: "Bastão de choque, capuz sombrio, ferramentas de infiltração, adaga oculta", skills: "Furtividade, Ladinagem, Percepção, Jogatina", cyphers: [] }
+    { id: 3, name: "Morwen Thorne", type: "Paradox", descriptor: "Enigmático", focus: "Que Manipula Realidades", might: 8, maxMight: 8, speed: 9, maxSpeed: 9, intellect: 14, maxIntellect: 14, effort: 1, xp: 0, abilities: "Traduzir qualquer língua. +2 em testes de tradução. Detecta anomalias estranhas a 10m.", equipment: "Cajado de foco, diário de recursões, cristal estranho, pergaminhos", skills: "Conhecimento (The Strange), Investigação, Idiomas, Ocultismo", cyphers: [] },
+    { id: 4, name: "Orin Vex", type: "Paradox", descriptor: "Visionário", focus: "Que Comanda Energia Estranha", might: 7, maxMight: 7, speed: 10, maxSpeed: 10, intellect: 15, maxIntellect: 15, effort: 1, xp: 0, abilities: "Pequenas distorções: gastando 1 de Intellect, faz um objeto flutuar. +1 em percepção translocal.", equipment: "Amuleto de foco, grimório de notas, óculos especiais, essência prismática", skills: "Ocultismo, Detecção de portais, História das recursões, Raciocínio", cyphers: [] },
+    { id: 5, name: "Lyra Nox", type: "Spinner", descriptor: "Ágil", focus: "Que Esgrime com Duas Armas", might: 9, maxMight: 9, speed: 14, maxSpeed: 14, intellect: 9, maxIntellect: 9, effort: 1, xp: 0, abilities: "Duas armas: ataque duplo com -1 de penalidade. +1 em esquiva quando em movimento.", equipment: "Duas adagas, armadura de couro reforçada, kit de furtividade, corda de seda", skills: "Acrobacia, Furtividade, Iniciativa, Esquiva", cyphers: [] },
+    { id: 6, name: "Jax Korr", type: "Spinner", descriptor: "Ousado", focus: "Que Surge das Sombras", might: 10, maxMight: 10, speed: 13, maxSpeed: 13, intellect: 8, maxIntellect: 8, effort: 1, xp: 0, abilities: "Furtividade em combate: pode se esconder como ação menor. Ataque furtivo +1 de dano.", equipment: "Bastão de choque, capuz sombrio, ferramentas de infiltração, adaga oculta", skills: "Furtividade, Ladinagem, Percepção, Jogatina", cyphers: [] }
   ];
 
   function loadFromStorage() {
@@ -543,17 +524,12 @@
     return cypherLimits[char.type] || 3;
   }
 
-  function canAddCypher(char) {
-    const limit = getCypherLimitForChar(char);
-    return char.cyphers.length < limit;
-  }
-
   function updateCypherDisplay() {
     const char = personagens.find(c => c.id === currentCharId);
     if (!char) return;
     const limit = getCypherLimitForChar(char);
     const currentCount = char.cyphers.length;
-    const canAdd = canAddCypher(char);
+    const canAdd = currentCount < limit;
     
     const displayDiv = document.getElementById('currentCypherDisplay');
     if (currentGeneratedCypher) {
@@ -563,32 +539,36 @@
             <span><i class="fas fa-gem"></i> ${escapeHtml(currentGeneratedCypher.name)}</span>
             <span class="cypher-level">Nível ${currentGeneratedCypher.level}</span>
           </div>
-          <div class="cypher-effect">${escapeHtml(currentGeneratedCypher.effect)}</div>
+          <div class="cypher-effect">✨ ${escapeHtml(currentGeneratedCypher.effect)}</div>
           <div class="cypher-use">📜 ${escapeHtml(currentGeneratedCypher.use)}</div>
-          ${canAdd ? `<button class="add-cypher-btn" id="addCypherBtn"><i class="fas fa-plus"></i> Adicionar ao inventário (${currentCount}/${limit})</button>` : 
+          ${canAdd ? `<button class="add-cypher-btn" id="addCypherBtn"><i class="fas fa-plus-circle"></i> Adicionar ao inventário (${currentCount}/${limit})</button>` : 
             `<div class="limit-warning"><i class="fas fa-exclamation-triangle"></i> Limite atingido! (${currentCount}/${limit}) - Remova um cypher primeiro</div>`}
         </div>
       `;
       if (canAdd) {
         const addBtn = document.getElementById('addCypherBtn');
-        if (addBtn) addBtn.addEventListener('click', () => addCypherToInventory());
+        if (addBtn) addBtn.onclick = () => addCypherToInventory();
       }
     } else {
       displayDiv.innerHTML = `
         <div class="cypher-card">
-          <div class="cypher-name">Clique em "Gerar Novo Cypher"</div>
-          <div class="cypher-effect">Um item de poder único será gerado</div>
+          <div class="cypher-name"><i class="fas fa-dice-d20"></i> Clique em "Gerar Novo Cypher"</div>
+          <div class="cypher-effect">Um item de poder único será gerado aleatoriamente</div>
         </div>
       `;
     }
   }
 
   function addCypherToInventory() {
-    if (!currentGeneratedCypher) return;
+    if (!currentGeneratedCypher) {
+      alert("Gere um cypher primeiro!");
+      return;
+    }
     const char = personagens.find(c => c.id === currentCharId);
     if (char) {
-      if (!canAddCypher(char)) {
-        alert(`Limite de cyphers atingido! ${char.type} pode carregar no máximo ${getCypherLimitForChar(char)} cyphers.`);
+      const limit = getCypherLimitForChar(char);
+      if (char.cyphers.length >= limit) {
+        alert(`Limite de cyphers atingido! ${char.type} pode carregar no máximo ${limit} cyphers.`);
         return;
       }
       char.cyphers.push({ ...currentGeneratedCypher, invId: Date.now() + Math.random() });
@@ -611,28 +591,29 @@
     }
     
     if (!char || !char.cyphers || char.cyphers.length === 0) {
-      container.innerHTML = '<div style="color:#9abfd0; font-size:0.75rem; padding:0.5rem;">Nenhum cypher no inventário. Gere e adicione!</div>';
+      container.innerHTML = '<div style="color:#9abfd0; font-size:0.75rem; padding:0.8rem; text-align:center;">📦 Nenhum cypher no inventário. Gere e adicione!</div>';
       return;
     }
     
     container.innerHTML = char.cyphers.map((cy, idx) => `
       <div class="cypher-tag" data-cypher-index="${idx}">
-        <i class="fas fa-gem"></i> ${escapeHtml(cy.name)} (Nv.${cy.level})
+        <i class="fas fa-gem"></i> ${escapeHtml(cy.name)} <span style="font-size:0.65rem;">(Nv.${cy.level})</span>
       </div>
     `).join('');
     
     document.querySelectorAll('.cypher-tag').forEach(tag => {
-      tag.addEventListener('click', (e) => {
+      tag.onclick = (e) => {
         const idx = parseInt(tag.getAttribute('data-cypher-index'));
         if (!isNaN(idx) && char.cyphers[idx]) {
-          if (confirm(`Usar "${char.cyphers[idx].name}"?\n\nEfeito: ${char.cyphers[idx].effect}\n\nO cypher será consumido após o uso.`)) {
+          const cypher = char.cyphers[idx];
+          if (confirm(`Usar "${cypher.name}"?\n\nNível: ${cypher.level}\nEfeito: ${cypher.effect}\n\nO cypher será consumido após o uso.`)) {
             char.cyphers.splice(idx, 1);
             saveToStorage(char);
             renderCypherInventory();
             updateCypherDisplay();
           }
         }
-      });
+      };
     });
   }
 
@@ -761,7 +742,7 @@
     const resetBtn = document.getElementById('resetBtn');
     const originalChar = personagens.find(p => p.id === char.id);
     if (resetBtn) {
-      resetBtn.addEventListener('click', () => {
+      resetBtn.onclick = () => {
         char.name = originalChar.name;
         char.descriptor = originalChar.descriptor;
         char.focus = originalChar.focus;
@@ -777,15 +758,15 @@
         saveToStorage(char);
         renderFicha();
         updateCypherDisplay();
-      });
+      };
     }
     
     const saveBtn = document.getElementById('saveBtn');
     if (saveBtn) {
-      saveBtn.addEventListener('click', () => {
+      saveBtn.onclick = () => {
         syncChar();
         alert(`Personagem ${char.name} salvo!`);
-      });
+      };
     }
   }
 
@@ -804,7 +785,7 @@
     
     const generateBtn = document.getElementById('generateCypherBtn');
     if (generateBtn) {
-      generateBtn.addEventListener('click', () => generateNewCypher());
+      generateBtn.onclick = () => generateNewCypher();
     }
   }
 
