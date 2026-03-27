@@ -86,7 +86,7 @@
         .sidebar-header h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
         .sidebar-header p { font-size: 0.8rem; margin-top: 5px; }
         .search-box { margin-top: 12px; position: relative; }
-        .search-box input { width: 100%; padding: 10px 35px 10px 12px; border-radius: 8px; font-size: 0.85rem; outline: none; }
+        .search-box input { width: 100%; padding: 10px 35px 10px 12px; border-radius: 8px; font-size: 0.85rem; outline: none; background: white; border: 1px solid #ddd; }
         .search-box::after { content: "🔍"; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
         .user-info { margin-top: 12px; padding: 12px; border-radius: 10px; }
         .user-info .doctor-name { font-weight: bold; font-size: 0.9rem; display: block; margin-bottom: 5px; }
@@ -94,7 +94,7 @@
         .logout-btn, .toggle-sidebar-btn { background: rgba(255,255,255,0.2); border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; margin-top: 8px; width: 100%; }
         .patients-list-container { flex: 1; overflow-y: auto; padding: 10px; max-height: calc(6 * 85px); }
         .patients-list { display: flex; flex-direction: column; gap: 8px; }
-        .patient-list-item { padding: 12px; border-radius: 10px; cursor: pointer; transition: all 0.2s; position: relative; }
+        .patient-list-item { padding: 12px; border-radius: 10px; cursor: pointer; transition: all 0.2s; position: relative; border: 1px solid; }
         .patient-list-item.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
         .patient-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; padding-right: 30px; }
         .patient-room { font-size: 0.75rem; font-family: monospace; }
@@ -123,7 +123,7 @@
         .protected-notes { margin-top: 25px; padding: 20px; border-radius: 12px; }
         .protected-title { font-weight: bold; font-size: 1rem; margin-bottom: 15px; }
         .password-prompt { background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; }
-        .code-input { width: 100%; max-width: 200px; padding: 10px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1rem; text-align: center; letter-spacing: 3px; margin: 10px 0; }
+        .code-input { width: 100%; max-width: 200px; padding: 10px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1rem; text-align: center; letter-spacing: 3px; margin: 10px 0; background: white; }
         .btn-unlock { background: #28a745; color: white; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; }
         .action-buttons { display: flex; gap: 12px; margin-top: 25px; flex-wrap: wrap; }
         .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s; font-size: 0.9rem; }
@@ -131,17 +131,20 @@
         .modal-content { padding: 35px; border-radius: 20px; max-width: 500px; width: 90%; animation: modalSlideIn 0.3s ease; text-align: center; }
         @keyframes modalSlideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .modal-header { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; }
-        .certificate-select { width: 100%; padding: 12px; border-radius: 10px; font-size: 1rem; margin: 10px 0; cursor: pointer; }
-        .certificate-info { padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 0.85rem; text-align: left; }
-        .btn-login { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 500; margin-top: 10px; transition: all 0.3s; }
-        .login-error { font-size: 0.85rem; margin-top: 10px; display: none; }
-        .error-message { font-size: 0.85rem; text-align: center; padding: 10px; border-radius: 8px; margin: 10px 0; }
+        .certificate-select { width: 100%; padding: 12px; border-radius: 10px; font-size: 1rem; margin: 10px 0; cursor: pointer; background: white; }
+        .certificate-info { padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 0.85rem; text-align: left; background: #f8f9fa; }
+        .btn-login { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 500; margin-top: 10px; transition: all 0.3s; background: #28a745; color: white; }
+        .login-error { font-size: 0.85rem; margin-top: 10px; display: none; color: #dc3545; }
+        .error-message { font-size: 0.85rem; text-align: center; padding: 10px; border-radius: 8px; margin: 10px 0; background: #f8d7da; color: #dc3545; }
         .loading-spinner { text-align: center; padding: 50px; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .main-footer { text-align: center; padding: 15px; font-size: 0.8rem; flex-shrink: 0; }
         .developer-footer { text-align: center; padding: 10px; font-size: 0.7rem; margin-top: 10px; }
         .lgpd-stamp { position: fixed; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); color: #ffd700; padding: 6px 12px; border-radius: 8px; font-size: 0.65rem; z-index: 1500; pointer-events: none; }
+        .error-container { text-align: center; padding: 60px 20px; max-width: 500px; margin: 0 auto; }
+        .error-container h2 { color: #dc3545; margin-bottom: 20px; }
+        .error-container p { margin-bottom: 20px; color: #6c757d; }
         @media (max-width: 768px) { .main-content { flex-direction: column; } .patients-sidebar { width: 100%; max-height: 400px; } .content-area { padding: 15px; } .polaroid { max-width: 150px; } .polaroid-image { width: 126px; height: 126px; } .toggle-sidebar-float { display: none; } }
     </style>
 </head>
@@ -240,7 +243,6 @@
             <div class="modal-body">
                 <p id="codeModalText">Informações protegidas</p>
                 <input type="password" id="accessCode" class="code-input" maxlength="6" placeholder="••••••">
-                <div id="savedPasswordInfo" style="font-size:0.7rem; margin-bottom:5px;"></div>
                 <div id="codeError" class="error-message" style="display: none;"></div>
                 <div id="attemptCounter"></div>
             </div>
@@ -401,152 +403,14 @@
         let searchTerm = '';
         let sidebarVisible = true;
         
-        // DADOS COM OS NOVOS CAMPOS
-        const fallbackData = {
-            hospitalar: {
-                doctors: {
-                    "1": { 
-                        name: "Dr. Carlos Mendes", 
-                        crm: "CRM 12345", 
-                        observationCode: "987654",
-                        savedPassword: "123456",
-                        lastPasswordChange: "15/11/2024 14:30", 
-                        certificate: { status: "Válido" } 
-                    },
-                    "2": { 
-                        name: "Dra. Ana Paula Souza", 
-                        crm: "CRM 67890", 
-                        observationCode: "567890",
-                        savedPassword: "234567",
-                        lastPasswordChange: "16/11/2024 09:15", 
-                        certificate: { status: "Válido" } 
-                    }
-                },
-                patients: [
-                    { 
-                        id: 1, 
-                        name: "Maria Aparecida Silva", 
-                        age: 72, 
-                        gender: "Feminino", 
-                        bloodType: "A+", 
-                        admissionDate: "18/11/2024", 
-                        room: "201-A", 
-                        diagnosis: "Hipertensão arterial descompensada", 
-                        medicalHistory: "Paciente hipertensa há 20 anos. Apresentou melhora significativa após internação.", 
-                        patientHistory: "📅 2015: Diagnóstico inicial de hipertensão\n📅 2018: Início do tratamento com Losartana\n📅 2020: Ajuste de medicação\n📅 2024: Internação por descompensação - melhora inexplicável", 
-                        medications: "Losartana 100mg/dia", 
-                        allergies: "Nenhuma", 
-                        medicalNotes: "🔴 OBSERVAÇÃO CONFIDENCIAL: Paciente apresentou melhora inexplicável dos níveis pressóricos após 48h de internação. Redução de 180/110 para 120/80 sem ajuste significativo na medicação.", 
-                        lastUpdate: "19/11/2024", 
-                        initials: "MS", 
-                        color: "#FF6B6B", 
-                        photoUrl: "",
-                        phone: "(11) 98765-4321",
-                        address: "Rua das Flores, 123 - Jardim América - São Paulo/SP",
-                        protocol: "" 
-                    },
-                    { 
-                        id: 2, 
-                        name: "José Augusto Lima", 
-                        age: 65, 
-                        gender: "Masculino", 
-                        bloodType: "O+", 
-                        admissionDate: "17/11/2024", 
-                        room: "203-B", 
-                        diagnosis: "Pneumonia bacteriana", 
-                        medicalHistory: "Paciente com febre e tosse. Melhora significativa em 36h.", 
-                        patientHistory: "📅 2020: Diagnóstico de DPOC leve\n📅 2022: Pneumonia bacteriana - internado por 10 dias\n📅 2024: Nova internação - recuperação acelerada", 
-                        medications: "Ceftriaxona 1g/dia, Azitromicina 500mg", 
-                        allergies: "Dipirona", 
-                        medicalNotes: "🔴 OBSERVAÇÃO CONFIDENCIAL: Cultura do escarro não identificou bactéria, porém quadro clínico melhorou 100% em 36h.", 
-                        lastUpdate: "19/11/2024", 
-                        initials: "JL", 
-                        color: "#4ECDC4", 
-                        photoUrl: "",
-                        phone: "(11) 91234-5678",
-                        address: "Av. Paulista, 1000 - Bela Vista - São Paulo/SP",
-                        protocol: "" 
-                    }
-                ]
-            },
-            funeraria: {
-                doctors: {
-                    "1": { 
-                        name: "Dr. Carlos Mendes - Legista", 
-                        crm: "CRM 12345", 
-                        observationCode: "987654",
-                        savedPassword: "123456",
-                        lastPasswordChange: "15/11/2024 14:30", 
-                        certificate: { status: "Válido" } 
-                    },
-                    "2": { 
-                        name: "Dra. Ana Paula Souza - Legista", 
-                        crm: "CRM 67890", 
-                        observationCode: "567890",
-                        savedPassword: "234567",
-                        lastPasswordChange: "16/11/2024 09:15", 
-                        certificate: { status: "Válido" } 
-                    }
-                },
-                patients: [
-                    { 
-                        id: 1, 
-                        name: "Mariana Luz", 
-                        age: 35, 
-                        gender: "Feminino", 
-                        bloodType: "A-", 
-                        admissionDate: "10/03/2026", 
-                        room: "305-B", 
-                        diagnosis: "Recuperação Pós-Falência Hepática (Causa Desconhecida)", 
-                        medicalHistory: "Paciente em estado terminal por Insuficiência Hepática Fulminante até 48h atrás.", 
-                        patientHistory: "📅 10/03: Internação em coma hepático (ICN 95%)\n📅 24/03: Estado terminal - Falência múltipla iniciada\n📅 26/03: Paciente desperta lúcida; exames mostram fígado novo e funcionalidade 100%.", 
-                        medications: "Nenhum", 
-                        allergies: "Nenhuma", 
-                        medicalNotes: "🔍 LAUDO PRELIMINAR - LEGISTA: Ao exame externo, não há cicatrizes ou marcas de procedimentos cirúrgicos recentes. A ultrassonografia post-mortem revela estrutura hepática íntegra, incompatível com o histórico de falência.", 
-                        lastUpdate: "26/03/2026", 
-                        initials: "ML", 
-                        color: "#6B94FF", 
-                        photoUrl: "",
-                        familyPhone: "(11) 99999-8888",
-                        familyAddress: "Rua da Saudade, 45 - Centro - São Paulo/SP",
-                        protocol: "PC-2026-001234"
-                    },
-                    { 
-                        id: 2, 
-                        name: "Gustavo Boas", 
-                        age: 29, 
-                        gender: "Masculino", 
-                        bloodType: "O+", 
-                        admissionDate: "05/02/2026", 
-                        room: "202-C", 
-                        diagnosis: "Remissão Total de Miocardite Crônica", 
-                        medicalHistory: "Paciente aguardava transplante cardíaco em regime de UTI.", 
-                        patientHistory: "📅 05/02: Internação com choque cardiogênico\n📅 20/03: Listado como prioridade máxima\n📅 26/03: Coração apresenta vigor de atleta", 
-                        medications: "Nenhum", 
-                        allergies: "Dipirona", 
-                        medicalNotes: "🔍 LAUDO PRELIMINAR - LEGISTA: Ausência de cicatriz de esternotomia ou acesso torácico. Exame anatomopatológico do miocárdio em andamento.", 
-                        lastUpdate: "26/03/2026", 
-                        initials: "GB", 
-                        color: "#FF4E4E", 
-                        photoUrl: "",
-                        familyPhone: "(11) 97777-6666",
-                        familyAddress: "Rua dos Cardeais, 789 - Vila Mariana - São Paulo/SP",
-                        protocol: ""
-                    }
-                ]
-            }
+        // IDs da planilha
+        const SHEET_ID = '2PACX-1vSa0YBbnJctwW1n6htVZIJ7OAuP8kBnk96XaUDM6BVM2K_iVwgwSKQzOYNDT3XfTvtQeG32AcCCr1eN';
+        const GIDS = {
+            hospitalar: { doctors: 0, patients: 764843484 },
+            funeraria: { doctors: 991544728, patients: 694307237 }
         };
         
-        // Funções auxiliares
-        function generateAvatar(initials, color) {
-            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='50%25' y='50%25' font-size='80' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'%3E${initials}%3C/text%3E%3C/svg%3E`;
-        }
-        
-        function getPatientPhoto(patient) {
-            if (patient.photoUrl) return patient.photoUrl;
-            return generateAvatar(patient.initials || '??', patient.color || '#6c757d');
-        }
-        
+        // Função para parsear CSV
         function parseCSV(csvText) {
             if (!csvText || csvText.trim() === '') return [];
             const lines = csvText.split('\n').filter(l => l.trim());
@@ -575,43 +439,65 @@
             return results;
         }
         
+        // Carregar dados APENAS do Google Sheets
         async function loadData() {
-            const sheetId = '2PACX-1vSa0YBbnJctwW1n6htVZIJ7OAuP8kBnk96XaUDM6BVM2K_iVwgwSKQzOYNDT3XfTvtQeG32AcCCr1eN';
-            const gids = { hospitalar: { doctors: 0, patients: 764843484 }, funeraria: { doctors: 991544728, patients: 694307237 } };
-            const gidDoctors = gids[mode].doctors;
-            const gidPatients = gids[mode].patients;
+            const gidDoctors = GIDS[mode].doctors;
+            const gidPatients = GIDS[mode].patients;
+            
             try {
                 const [doctorsRes, patientsRes] = await Promise.all([
-                    fetch(`https://docs.google.com/spreadsheets/d/e/${sheetId}/pub?gid=${gidDoctors}&single=true&output=csv`),
-                    fetch(`https://docs.google.com/spreadsheets/d/e/${sheetId}/pub?gid=${gidPatients}&single=true&output=csv`)
+                    fetch(`https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=${gidDoctors}&single=true&output=csv`),
+                    fetch(`https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=${gidPatients}&single=true&output=csv`)
                 ]);
+                
+                if (!doctorsRes.ok || !patientsRes.ok) {
+                    throw new Error(`HTTP ${doctorsRes.status} / ${patientsRes.status}`);
+                }
+                
                 const doctorsCSV = await doctorsRes.text();
                 const patientsCSV = await patientsRes.text();
-                if (doctorsCSV && doctorsCSV.trim() && patientsCSV && patientsCSV.trim()) {
-                    const doctorsArray = parseCSV(doctorsCSV);
-                    const patientsArray = parseCSV(patientsCSV);
-                    if (doctorsArray.length > 0) {
-                        const doctors = {};
-                        doctorsArray.forEach(d => { 
-                            doctors[d.id] = { 
-                                ...d, 
-                                observationCode: d.observationCode || '000000',
-                                savedPassword: d.savedPassword || d.observationCode || '000000'
-                            }; 
-                        });
-                        doctorsDB = doctors;
-                        patients = patientsArray;
-                        console.log('✅ Dados do Google Sheets carregados');
-                        return true;
-                    }
+                
+                if (!doctorsCSV.trim() || !patientsCSV.trim()) {
+                    throw new Error('Dados vazios');
                 }
-                throw new Error('CSV vazio');
-            } catch (error) {
-                console.warn('Usando fallback:', error);
-                const fb = fallbackData[mode];
-                doctorsDB = fb.doctors;
-                patients = fb.patients;
+                
+                const doctorsArray = parseCSV(doctorsCSV);
+                const patientsArray = parseCSV(patientsCSV);
+                
+                if (doctorsArray.length === 0) {
+                    throw new Error('Nenhum médico encontrado');
+                }
+                
+                // Converter array de médicos para objeto
+                const doctors = {};
+                doctorsArray.forEach(d => {
+                    const id = d.id || Object.keys(doctors).length + 1;
+                    doctors[id] = {
+                        id: id,
+                        name: d.name || 'Nome não informado',
+                        crm: d.crm || 'CRM não informado',
+                        observationCode: d.observationCode || '000000',           // Senha REAL
+                        savedPassword: d.savedPassword || d.observationCode || '000000', // Senha do CACHE
+                        lastPasswordChange: d.lastPasswordChange || new Date().toLocaleString('pt-BR'),
+                        certificate: {
+                            issuer: d.certificate_issuer || 'ICP-Brasil',
+                            serialNumber: d.certificate_serial || 'N/A',
+                            issuedDate: d.certificate_issued || 'N/A',
+                            expirationDate: d.certificate_expiration || 'N/A',
+                            level: d.certificate_level || 'A3',
+                            status: d.certificate_status || 'Válido'
+                        }
+                    };
+                });
+                
+                doctorsDB = doctors;
+                patients = patientsArray;
+                console.log(`✅ Dados carregados: ${Object.keys(doctorsDB).length} médicos, ${patients.length} pacientes`);
                 return true;
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar Google Sheets:', error);
+                return false;
             }
         }
         
@@ -622,7 +508,8 @@
             for (const [id, doc] of Object.entries(doctorsDB)) {
                 const option = document.createElement('option');
                 option.value = id;
-                option.textContent = `${doc.name} - ${doc.crm}`;
+                const statusIcon = doc.certificate?.status === 'Expirado' ? '⚠️' : '✅';
+                option.textContent = `${doc.name} - ${doc.crm} ${statusIcon}`;
                 select.appendChild(option);
             }
         }
@@ -677,24 +564,33 @@
             filtered.forEach(p => {
                 const div = document.createElement('div');
                 div.className = 'patient-list-item';
-                if (p.id === currentPatientId) div.classList.add('active');
+                if (p.id == currentPatientId) div.classList.add('active');
                 div.onclick = () => { currentPatientId = p.id; renderPatientsList(); renderPatientContent(); };
                 div.innerHTML = `<div class="patient-name">${t.patientPrefix}${p.name}</div><div class="patient-room">${t.roomIcon} ${p.room}</div><div class="patient-date">${t.dateIcon} ${p.admissionDate}</div><div class="patient-badge-side">#${p.id}</div>`;
                 container.appendChild(div);
             });
         }
         
+        function generateAvatar(initials, color) {
+            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='50%25' y='50%25' font-size='80' font-weight='bold' fill='white' text-anchor='middle' dy='.3em'%3E${initials}%3C/text%3E%3C/svg%3E`;
+        }
+        
+        function getPatientPhoto(patient) {
+            if (patient.photoUrl) return patient.photoUrl;
+            return generateAvatar(patient.initials || '??', patient.color || '#6c757d');
+        }
+        
         function renderPatientContent() {
             const content = document.getElementById('contentArea');
             if (!content) return;
-            const patient = patients.find(p => p.id === currentPatientId);
+            const patient = patients.find(p => p.id == currentPatientId);
             if (!patient) {
                 content.innerHTML = '<div class="loading-spinner"><p>Selecione um paciente</p></div>';
                 return;
             }
             const photo = getPatientPhoto(patient);
             
-            // Construir seções de contato conforme o modo
+            // Construir seções de contato
             let contactHtml = '';
             if (mode === 'hospitalar') {
                 if (patient.phone || patient.address) {
@@ -722,7 +618,6 @@
                 }
             }
             
-            // Protocolo policial (opcional)
             const protocolHtml = patient.protocol ? `
                 <div class="medical-section" style="background: ${mode === 'hospitalar' ? '#fff3e0' : '#3a2e22'}; border-left-color: #dc3545;">
                     <div class="section-title">${t.protocolLabel}</div>
@@ -756,7 +651,7 @@
         }
         
         function showFullRecord(id) {
-            const p = patients.find(p => p.id === id);
+            const p = patients.find(p => p.id == id);
             if (!p) return;
             
             let contactInfo = '';
@@ -774,7 +669,7 @@
             
             document.getElementById('genericModalTitle').innerHTML = `${t.fullRecordLabel} - ${p.name}`;
             document.getElementById('genericModalBody').innerHTML = `
-                <div style="line-height: 1.8;">
+                <div style="line-height: 1.8; text-align: left;">
                     <p><strong>📋 Nome:</strong> ${p.name}</p>
                     <p><strong>📊 Idade:</strong> ${p.age} anos</p>
                     <p><strong>⚥ Gênero:</strong> ${p.gender}</p>
@@ -796,7 +691,7 @@
         
         function showExams(id) {
             const exams = mode === 'hospitalar' ? ["Hemograma: Normal", "Glicemia: 92 mg/dL", "Colesterol: 168 mg/dL"] : ["Necropsia: Em análise", "Toxicologia: Aguardando", "Histopatologia: Em andamento"];
-            document.getElementById('genericModalTitle').innerHTML = `${t.examsLabel} - ${patients.find(p=>p.id===id)?.name}`;
+            document.getElementById('genericModalTitle').innerHTML = `${t.examsLabel} - ${patients.find(p=>p.id==id)?.name}`;
             document.getElementById('genericModalBody').innerHTML = `<ul style="margin-left:20px;">${exams.map(e=>`<li>${e}</li>`).join('')}</ul>`;
             document.getElementById('genericModal').style.display = 'flex';
         }
@@ -809,20 +704,14 @@
             document.getElementById('codeError').style.display = 'none';
             document.getElementById('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
             
+            // Pré-preenche com a senha salva (se existir)
             if (currentDoctor?.savedPassword && failedAttempts === 0) {
                 document.getElementById('accessCode').value = currentDoctor.savedPassword;
-                const savedInfo = document.getElementById('savedPasswordInfo');
-                if (savedInfo) {
-                    savedInfo.innerHTML = `🔑 Senha salva no navegador: ${'•'.repeat(currentDoctor.savedPassword.length)} (${currentDoctor.savedPassword})<br><span style="font-size:0.65rem; color:#856404;">⚠️ Esta pode ser uma senha antiga</span>`;
-                }
                 setTimeout(() => {
                     const input = document.getElementById('accessCode');
                     input.style.backgroundColor = mode === 'hospitalar' ? '#fff3cd' : '#4a3a2a';
                     setTimeout(() => { input.style.backgroundColor = ''; }, 1500);
                 }, 100);
-            } else {
-                const savedInfo = document.getElementById('savedPasswordInfo');
-                if (savedInfo) savedInfo.innerHTML = '';
             }
             
             document.getElementById('codeModal').style.display = 'flex';
@@ -845,7 +734,7 @@
                 const errorDiv = document.getElementById('codeError');
                 
                 if (enteredCode === savedCode && savedCode !== realCode) {
-                    errorDiv.innerHTML = `❌ Senha incorreta. Você usou a senha salva no navegador (${savedCode}), mas a senha atual é diferente.<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
+                    errorDiv.innerHTML = `❌ Senha incorreta. Você usou a senha salva no navegador, mas a senha atual é diferente.<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
                 } else {
                     errorDiv.innerHTML = `❌ Código incorreto. Tentativa ${failedAttempts}/3<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
                 }
@@ -903,7 +792,21 @@
         // ==================== INICIAR ====================
         async function init() {
             updateDate();
-            await loadData();
+            const success = await loadData();
+            
+            if (!success) {
+                document.getElementById('contentArea').innerHTML = `
+                    <div class="error-container">
+                        <div class="error-icon" style="font-size:3rem;">⚠️</div>
+                        <h2>Sistema Indisponível</h2>
+                        <p>Não foi possível carregar os dados do Google Sheets.</p>
+                        <p>Verifique sua conexão com a internet e tente novamente.</p>
+                        <button class="btn btn-primary" onclick="location.reload()" style="margin-top:20px;">🔄 Tentar Novamente</button>
+                    </div>
+                `;
+                return;
+            }
+            
             updateDoctorSelect();
             setupSearch();
             document.getElementById('loginModal').style.display = 'flex';
