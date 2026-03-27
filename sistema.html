@@ -240,6 +240,7 @@
             <div class="modal-body">
                 <p id="codeModalText">Informações protegidas</p>
                 <input type="password" id="accessCode" class="code-input" maxlength="6" placeholder="••••••">
+                <div id="savedPasswordInfo" style="font-size:0.7rem; color:#6c757d; margin-bottom:5px;"></div>
                 <div id="codeError" class="error-message" style="display: none;"></div>
                 <div id="attemptCounter"></div>
             </div>
@@ -394,11 +395,28 @@
         let searchTerm = '';
         let sidebarVisible = true;
         
-        // Dados de fallback
+        // DADOS COM SENHAS DIFERENTES:
+        // observationCode = senha REAL do sistema
+        // savedPassword = senha que aparece no cache (pode ser diferente)
         const fallbackData = {
             hospitalar: {
                 doctors: {
-                    "1": { name: "Dr. Carlos Mendes", crm: "CRM 12345", observationCode: "123456", savedPassword: "123456", lastPasswordChange: "15/11/2024 14:30", certificate: { status: "Válido" } }
+                    "1": { 
+                        name: "Dr. Carlos Mendes", 
+                        crm: "CRM 12345", 
+                        observationCode: "987654",  // SENHA REAL
+                        savedPassword: "123456",    // SENHA DO CACHE (antiga/errada)
+                        lastPasswordChange: "15/11/2024 14:30", 
+                        certificate: { status: "Válido" } 
+                    },
+                    "2": { 
+                        name: "Dra. Ana Paula Souza", 
+                        crm: "CRM 67890", 
+                        observationCode: "567890",  // SENHA REAL
+                        savedPassword: "234567",    // SENHA DO CACHE (antiga/errada)
+                        lastPasswordChange: "16/11/2024 09:15", 
+                        certificate: { status: "Válido" } 
+                    }
                 },
                 patients: [
                     { id: 1, name: "Maria Aparecida Silva", age: 72, gender: "Feminino", bloodType: "A+", admissionDate: "18/11/2024", room: "201-A", diagnosis: "Hipertensão arterial", medicalHistory: "Paciente hipertensa há 20 anos.", patientHistory: "📅 2015: Diagnóstico", medications: "Losartana 100mg", allergies: "Nenhuma", medicalNotes: "🔴 Melhora inexplicável.", lastUpdate: "19/11/2024", initials: "MS", color: "#FF6B6B", photoUrl: "" }
@@ -406,7 +424,22 @@
             },
             funeraria: {
                 doctors: {
-                    "1": { name: "Dr. Carlos Mendes - Legista", crm: "CRM 12345", observationCode: "123456", savedPassword: "123456", lastPasswordChange: "15/11/2024 14:30", certificate: { status: "Válido" } }
+                    "1": { 
+                        name: "Dr. Carlos Mendes - Legista", 
+                        crm: "CRM 12345", 
+                        observationCode: "987654",  // SENHA REAL
+                        savedPassword: "123456",    // SENHA DO CACHE (antiga/errada)
+                        lastPasswordChange: "15/11/2024 14:30", 
+                        certificate: { status: "Válido" } 
+                    },
+                    "2": { 
+                        name: "Dra. Ana Paula Souza - Legista", 
+                        crm: "CRM 67890", 
+                        observationCode: "567890",  // SENHA REAL
+                        savedPassword: "234567",    // SENHA DO CACHE (antiga/errada)
+                        lastPasswordChange: "16/11/2024 09:15", 
+                        certificate: { status: "Válido" } 
+                    }
                 },
                 patients: [
                     { id: 1, name: "Mariana Luz", age: 35, gender: "Feminino", bloodType: "A-", admissionDate: "10/03/2026", room: "305-B", diagnosis: "Óbito por falência hepática", medicalHistory: "Paciente em estado terminal.", patientHistory: "📅 10/03: Internação\n📅 26/03: Óbito", medications: "Nenhum", allergies: "Nenhuma", medicalNotes: "🔍 LAUDO: Exame externo sem cicatrizes.", lastUpdate: "26/03/2026", initials: "ML", color: "#6B94FF", photoUrl: "" }
@@ -469,7 +502,13 @@
                     const patientsArray = parseCSV(patientsCSV);
                     if (doctorsArray.length > 0) {
                         const doctors = {};
-                        doctorsArray.forEach(d => { doctors[d.id] = { ...d, savedPassword: d.observationCode }; });
+                        doctorsArray.forEach(d => { 
+                            doctors[d.id] = { 
+                                ...d, 
+                                observationCode: d.observationCode || '000000',  // Senha REAL do sistema
+                                savedPassword: d.savedPassword || d.observationCode || '000000'  // Senha do cache (pode ser diferente)
+                            }; 
+                        });
                         doctorsDB = doctors;
                         patients = patientsArray;
                         console.log('✅ Dados do Google Sheets carregados');
@@ -508,7 +547,7 @@
             }
             currentDoctor = doctorsDB[doctorId];
             if (!currentDoctor) return;
-            currentDoctorCode = currentDoctor.observationCode;
+            currentDoctorCode = currentDoctor.observationCode;  // SENHA REAL do sistema
             
             document.getElementById('loginModal').style.display = 'none';
             document.getElementById('appContainer').style.display = 'flex';
@@ -522,6 +561,7 @@
         function logout() {
             currentDoctor = null;
             observationsUnlocked = false;
+            failedAttempts = 0;
             document.getElementById('appContainer').style.display = 'none';
             document.getElementById('loginModal').style.display = 'flex';
             document.getElementById('certificateSelect').value = '';
@@ -601,22 +641,49 @@
             document.getElementById('genericModal').style.display = 'flex';
         }
         
-        // ==================== CÓDIGO ====================
+        // ==================== CÓDIGO (SENHA REAL vs SENHA DO CACHE) ====================
         function showCodeModal() {
             if (systemHacked) { observationsUnlocked = true; renderPatientContent(); return; }
+            
+            // Limpar campos
             document.getElementById('accessCode').value = '';
             document.getElementById('codeError').style.display = 'none';
-            document.getElementById('attemptCounter').innerHTML = `Tentativas: ${3 - failedAttempts}`;
+            document.getElementById('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
+            
+            // MOSTRAR A SENHA SALVA NO CACHE (diferente da senha real)
             if (currentDoctor?.savedPassword && failedAttempts === 0) {
+                // Pré-preenche com a senha salva no cache (ANTIGA/ERRADA)
                 document.getElementById('accessCode').value = currentDoctor.savedPassword;
+                
+                // Mostrar informação de que há uma senha salva
+                const savedInfo = document.getElementById('savedPasswordInfo');
+                if (savedInfo) {
+                    savedInfo.innerHTML = `🔑 Senha salva no navegador: ${'•'.repeat(currentDoctor.savedPassword.length)} (${currentDoctor.savedPassword})<br><span style="font-size:0.65rem; color:#856404;">⚠️ Esta pode ser uma senha antiga</span>`;
+                }
+                
+                // Destaque visual
+                setTimeout(() => {
+                    const input = document.getElementById('accessCode');
+                    input.style.backgroundColor = mode === 'hospitalar' ? '#fff3cd' : '#4a3a2a';
+                    setTimeout(() => { input.style.backgroundColor = ''; }, 1500);
+                }, 100);
+            } else {
+                const savedInfo = document.getElementById('savedPasswordInfo');
+                if (savedInfo) savedInfo.innerHTML = '';
             }
+            
             document.getElementById('codeModal').style.display = 'flex';
         }
         
         function verifyCode() {
             if (systemHacked) { observationsUnlocked = true; closeCodeModal(); renderPatientContent(); return; }
-            const code = document.getElementById('accessCode').value;
-            if (code === currentDoctorCode) {
+            
+            const enteredCode = document.getElementById('accessCode').value;
+            const realCode = currentDoctorCode;  // SENHA REAL do sistema
+            const savedCode = currentDoctor?.savedPassword;  // SENHA DO CACHE
+            
+            if (enteredCode === realCode) {
+                // Acertou a senha REAL
                 observationsUnlocked = true;
                 failedAttempts = 0;
                 closeCodeModal();
@@ -624,18 +691,24 @@
             } else {
                 failedAttempts++;
                 const errorDiv = document.getElementById('codeError');
-                if (failedAttempts >= 3) {
-                    errorDiv.style.display = 'block';
+                
+                // Mensagem diferente se tentou usar a senha do cache
+                if (enteredCode === savedCode && savedCode !== realCode) {
+                    errorDiv.innerHTML = `❌ Senha incorreta. Você usou a senha salva no navegador (${savedCode}), mas a senha atual é diferente.<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
+                } else {
                     errorDiv.innerHTML = `❌ Código incorreto. Tentativa ${failedAttempts}/3<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
+                }
+                
+                errorDiv.style.display = 'block';
+                document.getElementById('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
+                document.getElementById('accessCode').value = '';
+                
+                if (failedAttempts >= 3) {
+                    document.getElementById('attemptCounter').innerHTML = `Tentativas esgotadas! Sistema bloqueado.`;
                     setTimeout(() => {
                         document.getElementById('codeModal').style.display = 'none';
                         document.getElementById('errorModal').style.display = 'flex';
                     }, 1500);
-                } else {
-                    errorDiv.style.display = 'block';
-                    errorDiv.innerHTML = `❌ Código incorreto. Tentativa ${failedAttempts}/3<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
-                    document.getElementById('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
-                    document.getElementById('accessCode').value = '';
                 }
             }
         }
