@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>The Strange | Fichas Interativas - Personagens Nível 1</title>
+  <title>The Strange | Fichas Interativas - Gerador de Cyphers</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -26,62 +26,26 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 750px;
       width: 100%;
       margin: 0 auto;
     }
 
-    /* Navegação entre personagens */
-    .nav-personagens {
+    .personagem-header {
       background: #0f1820cc;
       backdrop-filter: blur(8px);
       border-radius: 60px;
-      padding: 0.8rem 1.2rem;
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
+      padding: 0.8rem 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
       border: 1px solid #2f6d7a;
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-    }
-
-    .nav-btn {
-      background: #1e2a32;
-      border: none;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: #bbd4e3;
-      cursor: pointer;
-      transition: 0.2s;
-      font-family: 'Cinzel', serif;
-    }
-
-    .nav-btn:hover {
-      background: #3f7e9c;
-      color: white;
-      transform: scale(1.05);
-    }
-
-    .nav-btn.active {
-      background: #4a9bc2;
-      color: white;
-      box-shadow: 0 0 8px #5fa3c2;
     }
 
     .personagem-info {
       background: #1e3a44;
       padding: 0.4rem 1rem;
       border-radius: 40px;
+      display: inline-block;
       font-size: 0.85rem;
       font-weight: bold;
     }
@@ -90,14 +54,13 @@
       margin-right: 6px;
     }
 
-    /* Card da ficha */
     .ficha-card {
       background: linear-gradient(145deg, #151e24 0%, #0d131a 100%);
       border-radius: 2rem;
       border: 1px solid #2f5e6e;
       overflow: hidden;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-      transition: 0.2s;
+      margin-bottom: 1.5rem;
     }
 
     .card-header {
@@ -164,12 +127,6 @@
       text-transform: uppercase;
       color: #9abfd0;
       letter-spacing: 1px;
-    }
-
-    .stat-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #eccf8b;
     }
 
     input.stat-input {
@@ -285,21 +242,154 @@
       background: #3f6e5c;
     }
 
+    .cypher-section {
+      background: linear-gradient(145deg, #1a252f 0%, #0f1a22 100%);
+      border-radius: 1.5rem;
+      border: 1px solid #d4af37;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .cypher-header {
+      background: #2a3a2c;
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid #d4af37;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .cypher-header h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: #f5d87a;
+    }
+
+    .btn-cypher {
+      background: #b47c2e;
+      border: none;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-weight: bold;
+      color: #1e1a0f;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'Cinzel', serif;
+    }
+
+    .btn-cypher:hover {
+      background: #d69d48;
+      transform: scale(1.02);
+    }
+
+    .cypher-content {
+      padding: 1rem 1.2rem;
+    }
+
+    .cypher-card {
+      background: #0f191f;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      border-left: 4px solid #d4af37;
+      margin-bottom: 0.5rem;
+    }
+
+    .cypher-name {
+      font-weight: bold;
+      font-size: 1rem;
+      color: #f5d87a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .cypher-level {
+      background: #4a6b3c;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+    }
+
+    .cypher-effect {
+      font-size: 0.8rem;
+      margin-top: 6px;
+      color: #c7e2f0;
+      line-height: 1.4;
+    }
+
+    .cypher-use {
+      font-size: 0.7rem;
+      margin-top: 8px;
+      color: #9abfd0;
+      font-style: italic;
+    }
+
+    .add-cypher-btn {
+      background: #4a6b3c;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: white;
+      margin-top: 8px;
+      width: 100%;
+      transition: 0.2s;
+    }
+
+    .add-cypher-btn:hover {
+      background: #6a9b5c;
+    }
+
+    .inventory-cyphers {
+      margin-top: 1rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #3f6d5c;
+    }
+
+    .cypher-limit-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+      background: #0c141c;
+      padding: 0.4rem 0.8rem;
+      border-radius: 30px;
+    }
+
+    .cypher-tag {
+      background: #2a5e72;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      margin: 4px 6px 4px 0;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .cypher-tag:hover {
+      background: #c97e2a;
+      text-decoration: line-through;
+    }
+
+    .limit-warning {
+      color: #ffaa66;
+      font-size: 0.7rem;
+      margin-top: 8px;
+      text-align: center;
+    }
+
     footer {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       text-align: center;
       font-size: 0.7rem;
       color: #6e8c9b;
-    }
-
-    .aviso-url {
-      background: #1a2f38;
-      border-radius: 30px;
-      padding: 0.4rem 1rem;
-      font-size: 0.7rem;
-      text-align: center;
-      margin-top: 1rem;
-      font-family: monospace;
     }
 
     @media (max-width: 550px) {
@@ -312,118 +402,114 @@
 </head>
 <body>
 <div class="container">
-  <div class="nav-personagens">
-    <div class="nav-buttons" id="navButtons">
-      <!-- botões 1 a 6 gerados via js -->
-    </div>
+  <div class="personagem-header">
     <div class="personagem-info" id="personagemInfo">
       <i class="fas fa-dice-d6"></i> <span id="currentIdDisplay">Personagem 1</span>
     </div>
   </div>
 
   <div id="fichaContainer" class="ficha-card">
-    <!-- a ficha será injetada aqui -->
     <div style="text-align: center; padding: 3rem;">Carregando...</div>
   </div>
-  <div class="aviso-url">
-    <i class="fas fa-link"></i> Dica: use <strong>?personagem=1</strong> até <strong>?personagem=6</strong> na URL para abrir direto
+
+  <div class="cypher-section">
+    <div class="cypher-header">
+      <h3><i class="fas fa-gem"></i> GERADOR DE CYPHERS (Cifras)</h3>
+      <button class="btn-cypher" id="generateCypherBtn"><i class="fas fa-dice-d20"></i> Gerar Novo Cypher</button>
+    </div>
+    <div class="cypher-content">
+      <div id="currentCypherDisplay">
+        <div class="cypher-card">
+          <div class="cypher-name">Clique em "Gerar Novo Cypher"</div>
+          <div class="cypher-effect">Um item de poder único será gerado</div>
+        </div>
+      </div>
+      <div class="inventory-cyphers">
+        <div class="cypher-limit-info">
+          <span><i class="fas fa-backpack"></i> INVENTÁRIO DE CYPHERS</span>
+          <span id="cypherCounter">0 / 0</span>
+        </div>
+        <div id="cypherInventoryList"></div>
+        <div style="font-size: 0.7rem; color: #9abfd0; margin-top: 6px;">⚠️ Clique em um cypher no inventário para usá-lo (consumo único)</div>
+      </div>
+    </div>
   </div>
+
   <footer>
-    <i class="fas fa-portal-enter"></i> The Strange — Fichas Nível 1 (2 Vectors · 2 Paradox · 2 Spinners) — Edite tudo e persiste na sessão
+    <i class="fas fa-portal-enter"></i> The Strange — Limites: Vector (3) | Paradox (2) | Spinner (4)
   </footer>
 </div>
 
 <script>
-  // ===================== DADOS DOS 6 PERSONAGENS =====================
-  // ID 1 a 6 (index 0 a 5)
-  const personagens = [
-    { // 1 - Vector
-      id: 1,
-      name: "Kaelen Voss",
-      type: "Vector",
-      descriptor: "Astuto",
-      focus: "Que Luta com Estilo",
-      might: 10, maxMight: 10,
-      speed: 12, maxSpeed: 12,
-      intellect: 11, maxIntellect: 11,
-      effort: 1, xp: 0,
-      abilities: "Treinado em Combate corpo a corpo. +1 em ataques com armas leves. Movimento extra 1x por cena.",
-      equipment: "Espada curta, armadura reforçada, kit de escalada, 3 poções menores.",
-      skills: "Furtividade (treinado), Luta (especializado), Percepção, Atletismo"
-    },
-    { // 2 - Vector
-      id: 2,
-      name: "Rhea Ashford",
-      type: "Vector",
-      descriptor: "Rápido",
-      focus: "Que Usa Intimidação",
-      might: 11, maxMight: 11,
-      speed: 13, maxSpeed: 13,
-      intellect: 9, maxIntellect: 9,
-      effort: 1, xp: 0,
-      abilities: "Ação rápida: +2 em testes de Iniciativa. Pode usar intimidação em combate como ação menor.",
-      equipment: "Besta leve, adaga, itens de camuflagem, capuz sombrio",
-      skills: "Enganação, Iniciativa, Atletismo, Intimidação"
-    },
-    { // 3 - Paradox
-      id: 3,
-      name: "Morwen Thorne",
-      type: "Paradox",
-      descriptor: "Enigmático",
-      focus: "Que Manipula Realidades",
-      might: 8, maxMight: 8,
-      speed: 9, maxSpeed: 9,
-      intellect: 14, maxIntellect: 14,
-      effort: 1, xp: 0,
-      abilities: "Traduzir qualquer língua. +2 em testes de tradução de foco. Detecta anomalias estranhas a 10m.",
-      equipment: "Cajado de foco, diário de recursões, cristal estranho, pergaminhos",
-      skills: "Conhecimento (The Strange), Investigação, Idiomas, Ocultismo"
-    },
-    { // 4 - Paradox
-      id: 4,
-      name: "Orin Vex",
-      type: "Paradox",
-      descriptor: "Visionário",
-      focus: "Que Comanda Energia Estranha",
-      might: 7, maxMight: 7,
-      speed: 10, maxSpeed: 10,
-      intellect: 15, maxIntellect: 15,
-      effort: 1, xp: 0,
-      abilities: "Pequenas distorções: gastando 1 de Intellect, faz um objeto flutuar. +1 em testes de percepção translocal.",
-      equipment: "Amuleto de foco, grimório de notas, óculos especiais, essência prismática",
-      skills: "Ocultismo, Detecção de portais, História das recursões, Raciocínio"
-    },
-    { // 5 - Spinner
-      id: 5,
-      name: "Lyra Nox",
-      type: "Spinner",
-      descriptor: "Ágil",
-      focus: "Que Esgrime com Duas Armas",
-      might: 9, maxMight: 9,
-      speed: 14, maxSpeed: 14,
-      intellect: 9, maxIntellect: 9,
-      effort: 1, xp: 0,
-      abilities: "Duas armas: ataque duplo com -1 de penalidade. +1 em esquiva quando em movimento. Ação de movimento extra 1/dia.",
-      equipment: "Duas adagas, armadura de couro reforçada, kit de furtividade, corda de seda",
-      skills: "Acrobacia, Furtividade, Iniciativa, Esquiva"
-    },
-    { // 6 - Spinner
-      id: 6,
-      name: "Jax Korr",
-      type: "Spinner",
-      descriptor: "Ousado",
-      focus: "Que Surge das Sombras",
-      might: 10, maxMight: 10,
-      speed: 13, maxSpeed: 13,
-      intellect: 8, maxIntellect: 8,
-      effort: 1, xp: 0,
-      abilities: "Furtividade em combate: pode se esconder como ação menor. Ataque furtivo +1 de dano. Visão no escuro 10m.",
-      equipment: "Bastão de choque, capuz sombrio, ferramentas de infiltração, adaga oculta",
-      skills: "Furtividade, Ladinagem, Percepção, Jogatina"
-    }
+  const cypherLimits = {
+    "Vector": 3,
+    "Paradox": 2,
+    "Spinner": 4
+  };
+
+  const cypherDatabase = [
+    { name: "Elixir de Cura Rápida", levelRange: "1d6", effect: "Recupera 1d6+2 pontos de Might ou Speed (escolha).", use: "Ação para consumir." },
+    { name: "Escudo de Energia", levelRange: "1d4", effect: "Ganha +3 de Armadura por 10 minutos ou até sofrer 3 ataques.", use: "Ação para ativar." },
+    { name: "Granada de Concussão", levelRange: "1d6+1", effect: "Causa 2d6 de dano em área de 3m (teste de Speed para reduzir à metade).", use: "Ação para arremessar." },
+    { name: "Olhos do Vidente", levelRange: "1d4", effect: "Enxerga através de ilusões e invisibilidade por 1 hora.", use: "Ação para ativar." },
+    { name: "Pergaminho de Teletransporte", levelRange: "1d8", effect: "Teletransporta você e até 2 aliados até 50m de distância.", use: "Ação para ler." },
+    { name: "Soro de Agilidade", levelRange: "1d4", effect: "+2 em testes de Speed e +1 em esquiva por 1 hora.", use: "Ação para injetar." },
+    { name: "Bomba de Fumaça Arcana", levelRange: "1d4", effect: "Cria nuvem de fumaça em área de 6m por 5 minutos, obscurecendo visão.", use: "Ação para arremessar." },
+    { name: "Amuleto de Proteção", levelRange: "1d6", effect: "Resistência +4 contra um tipo de dano (escolha ao ativar). Dura 1 hora.", use: "Ação para ativar." },
+    { name: "Pó do Salto", levelRange: "1d4", effect: "Pode saltar até 10m verticalmente ou 20m horizontalmente por 10 minutos.", use: "Ação para consumir." },
+    { name: "Cristal de Foco Mental", levelRange: "1d6", effect: "Recupera 1d6+2 pontos de Intellect. +2 em testes de Intelecto por 10 min.", use: "Ação para quebrar." },
+    { name: "Lâmina Fantasma", levelRange: "1d8", effect: "Invoca uma arma etérea que causa 2d6 de dano e ignora armadura por 1 minuto.", use: "Ação para conjurar." },
+    { name: "Poção de Invisibilidade", levelRange: "1d6", effect: "Fica invisível por 15 minutos. Atacar quebra o efeito.", use: "Ação para beber." },
+    { name: "Glifo de Explosão", levelRange: "1d10", effect: "Causa 4d6 de dano em área de 5m. Quem ativar faz teste de Speed.", use: "Ação para colocar." },
+    { name: "Essência de Recuperação", levelRange: "1d4", effect: "Remove uma condição negativa (envenenado, atordoado, etc).", use: "Ação para aplicar." },
+    { name: "Capa de Camaleão", levelRange: "1d6", effect: "+4 em Furtividade por 30 minutos.", use: "Ação para vestir." },
+    { name: "Orbe Temporal", levelRange: "1d12", effect: "Permite realizar uma ação extra no seu turno. Uso único.", use: "Ação livre." },
+    { name: "Pergaminho de Invocação", levelRange: "1d6", effect: "Invoca um aliado animal ou elemental por 10 minutos.", use: "Ação para ler." },
+    { name: "Poção de Resistência", levelRange: "1d8", effect: "Resistência a todos os tipos de dano por 5 minutos.", use: "Ação para beber." },
+    { name: "Bomba de Luz Cegante", levelRange: "1d4", effect: "Cega todos em área de 4m por 2 rodadas (teste de Speed evita).", use: "Ação para arremessar." },
+    { name: "Cajado de Fogo", levelRange: "1d6", effect: "Dispara uma rajada de fogo que causa 3d6 de dano em linha reta.", use: "Ação para ativar." },
+    { name: "Poção de Respiração Aquática", levelRange: "1d4", effect: "Respira embaixo d'água por 1 hora.", use: "Ação para beber." },
+    { name: "Pó da Verdade", levelRange: "1d4", effect: "Quem inalar não consegue mentir por 10 minutos.", use: "Ação para aplicar." }
   ];
 
-  // carrega dados salvos no localStorage (persistência)
+  function rollDice(diceStr) {
+    if (diceStr.includes('d')) {
+      const parts = diceStr.split('d');
+      const num = parseInt(parts[0]) || 1;
+      const size = parseInt(parts[1].split('+')[0]);
+      let total = 0;
+      for (let i = 0; i < num; i++) total += Math.floor(Math.random() * size) + 1;
+      if (diceStr.includes('+')) {
+        const plus = parseInt(diceStr.split('+')[1]);
+        total += plus;
+      }
+      return total;
+    }
+    return parseInt(diceStr) || 1;
+  }
+
+  function generateRandomCypher() {
+    const randomIndex = Math.floor(Math.random() * cypherDatabase.length);
+    const base = cypherDatabase[randomIndex];
+    const rolledLevel = rollDice(base.levelRange);
+    return {
+      name: base.name,
+      level: rolledLevel,
+      effect: base.effect.replace('{level}', rolledLevel),
+      use: base.use,
+      id: Date.now() + Math.random()
+    };
+  }
+
+  const personagens = [
+    { id: 1, name: "Kaelen Voss", type: "Vector", descriptor: "Astuto", focus: "Que Luta com Estilo", might: 10, maxMight: 10, speed: 12, maxSpeed: 12, intellect: 11, maxIntellect: 11, effort: 1, xp: 0, abilities: "Treinado em Combate corpo a corpo. +1 em ataques com armas leves. Movimento extra 1x por cena.", equipment: "Espada curta, armadura reforçada, kit de escalada, 3 poções menores.", skills: "Furtividade (treinado), Luta (especializado), Percepção, Atletismo", cyphers: [] },
+    { id: 2, name: "Rhea Ashford", type: "Vector", descriptor: "Rápido", focus: "Que Usa Intimidação", might: 11, maxMight: 11, speed: 13, maxSpeed: 13, intellect: 9, maxIntellect: 9, effort: 1, xp: 0, abilities: "Ação rápida: +2 em testes de Iniciativa. Pode usar intimidação em combate como ação menor.", equipment: "Besta leve, adaga, itens de camuflagem, capuz sombrio", skills: "Enganação, Iniciativa, Atletismo, Intimidação", cyphers: [] },
+    { id: 3, name: "Morwen Thorne", type: "Paradox", descriptor: "Enigmático", focus: "Que Manipula Realidades", might: 8, maxMight: 8, speed: 9, maxSpeed: 9, intellect: 14, maxIntellect: 14, effort: 1, xp: 0, abilities: "Traduzir qualquer língua. +2 em testes de tradução de foco. Detecta anomalias estranhas a 10m.", equipment: "Cajado de foco, diário de recursões, cristal estranho, pergaminhos", skills: "Conhecimento (The Strange), Investigação, Idiomas, Ocultismo", cyphers: [] },
+    { id: 4, name: "Orin Vex", type: "Paradox", descriptor: "Visionário", focus: "Que Comanda Energia Estranha", might: 7, maxMight: 7, speed: 10, maxSpeed: 10, intellect: 15, maxIntellect: 15, effort: 1, xp: 0, abilities: "Pequenas distorções: gastando 1 de Intellect, faz um objeto flutuar. +1 em testes de percepção translocal.", equipment: "Amuleto de foco, grimório de notas, óculos especiais, essência prismática", skills: "Ocultismo, Detecção de portais, História das recursões, Raciocínio", cyphers: [] },
+    { id: 5, name: "Lyra Nox", type: "Spinner", descriptor: "Ágil", focus: "Que Esgrime com Duas Armas", might: 9, maxMight: 9, speed: 14, maxSpeed: 14, intellect: 9, maxIntellect: 9, effort: 1, xp: 0, abilities: "Duas armas: ataque duplo com -1 de penalidade. +1 em esquiva quando em movimento. Ação de movimento extra 1/dia.", equipment: "Duas adagas, armadura de couro reforçada, kit de furtividade, corda de seda", skills: "Acrobacia, Furtividade, Iniciativa, Esquiva", cyphers: [] },
+    { id: 6, name: "Jax Korr", type: "Spinner", descriptor: "Ousado", focus: "Que Surge das Sombras", might: 10, maxMight: 10, speed: 13, maxSpeed: 13, intellect: 8, maxIntellect: 8, effort: 1, xp: 0, abilities: "Furtividade em combate: pode se esconder como ação menor. Ataque furtivo +1 de dano. Visão no escuro 10m.", equipment: "Bastão de choque, capuz sombrio, ferramentas de infiltração, adaga oculta", skills: "Furtividade, Ladinagem, Percepção, Jogatina", cyphers: [] }
+  ];
+
   function loadFromStorage() {
     for (let i = 0; i < personagens.length; i++) {
       const saved = localStorage.getItem(`thestrange_char_${personagens[i].id}`);
@@ -440,8 +526,120 @@
     localStorage.setItem(`thestrange_char_${char.id}`, JSON.stringify(char));
   }
 
-  // renderiza a ficha do personagem ativo (id de 1 a 6)
   let currentCharId = 1;
+  let currentGeneratedCypher = null;
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  function getCypherLimitForChar(char) {
+    return cypherLimits[char.type] || 3;
+  }
+
+  function canAddCypher(char) {
+    const limit = getCypherLimitForChar(char);
+    return char.cyphers.length < limit;
+  }
+
+  function updateCypherDisplay() {
+    const char = personagens.find(c => c.id === currentCharId);
+    if (!char) return;
+    const limit = getCypherLimitForChar(char);
+    const currentCount = char.cyphers.length;
+    const canAdd = canAddCypher(char);
+    
+    const displayDiv = document.getElementById('currentCypherDisplay');
+    if (currentGeneratedCypher) {
+      displayDiv.innerHTML = `
+        <div class="cypher-card">
+          <div class="cypher-name">
+            <span><i class="fas fa-gem"></i> ${escapeHtml(currentGeneratedCypher.name)}</span>
+            <span class="cypher-level">Nível ${currentGeneratedCypher.level}</span>
+          </div>
+          <div class="cypher-effect">${escapeHtml(currentGeneratedCypher.effect)}</div>
+          <div class="cypher-use">📜 ${escapeHtml(currentGeneratedCypher.use)}</div>
+          ${canAdd ? `<button class="add-cypher-btn" id="addCypherBtn"><i class="fas fa-plus"></i> Adicionar ao inventário (${currentCount}/${limit})</button>` : 
+            `<div class="limit-warning"><i class="fas fa-exclamation-triangle"></i> Limite atingido! (${currentCount}/${limit}) - Remova um cypher primeiro</div>`}
+        </div>
+      `;
+      if (canAdd) {
+        const addBtn = document.getElementById('addCypherBtn');
+        if (addBtn) addBtn.addEventListener('click', () => addCypherToInventory());
+      }
+    } else {
+      displayDiv.innerHTML = `
+        <div class="cypher-card">
+          <div class="cypher-name">Clique em "Gerar Novo Cypher"</div>
+          <div class="cypher-effect">Um item de poder único será gerado</div>
+        </div>
+      `;
+    }
+  }
+
+  function addCypherToInventory() {
+    if (!currentGeneratedCypher) return;
+    const char = personagens.find(c => c.id === currentCharId);
+    if (char) {
+      if (!canAddCypher(char)) {
+        alert(`Limite de cyphers atingido! ${char.type} pode carregar no máximo ${getCypherLimitForChar(char)} cyphers.`);
+        return;
+      }
+      char.cyphers.push({ ...currentGeneratedCypher, invId: Date.now() + Math.random() });
+      saveToStorage(char);
+      renderCypherInventory();
+      updateCypherDisplay();
+    }
+  }
+
+  function renderCypherInventory() {
+    const char = personagens.find(c => c.id === currentCharId);
+    const container = document.getElementById('cypherInventoryList');
+    const limit = getCypherLimitForChar(char);
+    const currentCount = char?.cyphers?.length || 0;
+    
+    const counterSpan = document.getElementById('cypherCounter');
+    if (counterSpan) {
+      counterSpan.innerHTML = `${currentCount} / ${limit}`;
+      counterSpan.style.color = currentCount >= limit ? '#ffaa66' : '#9abfd0';
+    }
+    
+    if (!char || !char.cyphers || char.cyphers.length === 0) {
+      container.innerHTML = '<div style="color:#9abfd0; font-size:0.75rem; padding:0.5rem;">Nenhum cypher no inventário. Gere e adicione!</div>';
+      return;
+    }
+    
+    container.innerHTML = char.cyphers.map((cy, idx) => `
+      <div class="cypher-tag" data-cypher-index="${idx}">
+        <i class="fas fa-gem"></i> ${escapeHtml(cy.name)} (Nv.${cy.level})
+      </div>
+    `).join('');
+    
+    document.querySelectorAll('.cypher-tag').forEach(tag => {
+      tag.addEventListener('click', (e) => {
+        const idx = parseInt(tag.getAttribute('data-cypher-index'));
+        if (!isNaN(idx) && char.cyphers[idx]) {
+          if (confirm(`Usar "${char.cyphers[idx].name}"?\n\nEfeito: ${char.cyphers[idx].effect}\n\nO cypher será consumido após o uso.`)) {
+            char.cyphers.splice(idx, 1);
+            saveToStorage(char);
+            renderCypherInventory();
+            updateCypherDisplay();
+          }
+        }
+      });
+    });
+  }
+
+  function generateNewCypher() {
+    currentGeneratedCypher = generateRandomCypher();
+    updateCypherDisplay();
+  }
 
   function renderFicha() {
     const char = personagens.find(c => c.id === currentCharId);
@@ -450,22 +648,22 @@
     const container = document.getElementById('fichaContainer');
     container.innerHTML = `
       <div class="card-header">
-        <input type="text" class="char-name-input" id="charName" value="${escapeHtml(char.name)}" placeholder="Nome do personagem">
+        <input type="text" class="char-name-input" id="charName" value="${escapeHtml(char.name)}">
         <span class="type-badge"><i class="fas ${char.type === 'Vector' ? 'fa-shield-alt' : (char.type === 'Paradox' ? 'fa-brain' : 'fa-bolt')}"></i> ${char.type} · NÍVEL 1</span>
       </div>
       <div class="card-body">
         <div class="stat-row">
           <div class="stat-box">
             <div class="stat-label">💪 FORÇA (Might)</div>
-            <input type="number" class="stat-input" id="mightVal" value="${char.might}" step="1"> / <span id="maxMightSpan">${char.maxMight}</span>
+            <input type="number" class="stat-input" id="mightVal" value="${char.might}" step="1"> / ${char.maxMight}
           </div>
           <div class="stat-box">
             <div class="stat-label">⚡ DESTREZA (Speed)</div>
-            <input type="number" class="stat-input" id="speedVal" value="${char.speed}" step="1"> / <span id="maxSpeedSpan">${char.maxSpeed}</span>
+            <input type="number" class="stat-input" id="speedVal" value="${char.speed}" step="1"> / ${char.maxSpeed}
           </div>
           <div class="stat-box">
             <div class="stat-label">🧠 INTELECTO (Intellect)</div>
-            <input type="number" class="stat-input" id="intellectVal" value="${char.intellect}" step="1"> / <span id="maxIntellectSpan">${char.maxIntellect}</span>
+            <input type="number" class="stat-input" id="intellectVal" value="${char.intellect}" step="1"> / ${char.maxIntellect}
           </div>
         </div>
         
@@ -498,19 +696,18 @@
 
         <div class="button-group">
           <button class="btn-reset" id="resetBtn"><i class="fas fa-undo-alt"></i> Restaurar original</button>
-          <button class="btn-reset btn-save" id="saveBtn"><i class="fas fa-save"></i> Salvar alterações</button>
+          <button class="btn-reset btn-save" id="saveBtn"><i class="fas fa-save"></i> Salvar</button>
         </div>
       </div>
     `;
 
-    // eventos após renderizar
     attachEvents(char);
     document.getElementById('personagemInfo').innerHTML = `<i class="fas fa-user"></i> ${char.name} · ${char.type} · ID ${char.id}`;
     document.getElementById('currentIdDisplay').innerText = `Personagem ${char.id}`;
+    renderCypherInventory();
   }
 
   function attachEvents(char) {
-    // campos editáveis
     const nameInput = document.getElementById('charName');
     const mightInput = document.getElementById('mightVal');
     const speedInput = document.getElementById('speedVal');
@@ -561,7 +758,6 @@
       if (inp && inp.tagName !== 'TEXTAREA') inp.addEventListener('input', syncChar);
     });
     
-    // botão reset (restaura valores originais do array base, mas mantém apenas os defaults)
     const resetBtn = document.getElementById('resetBtn');
     const originalChar = personagens.find(p => p.id === char.id);
     if (resetBtn) {
@@ -577,8 +773,10 @@
         char.abilities = originalChar.abilities;
         char.equipment = originalChar.equipment;
         char.skills = originalChar.skills;
+        char.cyphers = [];
         saveToStorage(char);
-        renderFicha(); // re-render
+        renderFicha();
+        updateCypherDisplay();
       });
     }
     
@@ -591,54 +789,6 @@
     }
   }
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-      return c;
-    });
-  }
-
-  // navegação pelos personagens
-  function setPersonagem(id) {
-    if (id < 1) id = 1;
-    if (id > 6) id = 6;
-    currentCharId = id;
-    renderFicha();
-    updateActiveButton();
-    // atualiza URL sem recarregar
-    const url = new URL(window.location);
-    url.searchParams.set('personagem', id);
-    window.history.pushState({}, '', url);
-  }
-
-  function updateActiveButton() {
-    const btns = document.querySelectorAll('.nav-btn');
-    btns.forEach(btn => {
-      const btnId = parseInt(btn.getAttribute('data-id'));
-      if (btnId === currentCharId) btn.classList.add('active');
-      else btn.classList.remove('active');
-    });
-  }
-
-  function createNavButtons() {
-    const navDiv = document.getElementById('navButtons');
-    navDiv.innerHTML = '';
-    for (let i = 1; i <= 6; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'nav-btn';
-      btn.textContent = i;
-      btn.setAttribute('data-id', i);
-      btn.addEventListener('click', () => setPersonagem(i));
-      navDiv.appendChild(btn);
-    }
-  }
-
-  // inicialização: lê parâmetro URL
   function initFromUrl() {
     const params = new URLSearchParams(window.location.search);
     let paramId = params.get('personagem');
@@ -646,16 +796,16 @@
       let idNum = parseInt(paramId);
       if (!isNaN(idNum) && idNum >= 1 && idNum <= 6) {
         currentCharId = idNum;
-      } else {
-        currentCharId = 1;
       }
-    } else {
-      currentCharId = 1;
     }
     loadFromStorage();
-    createNavButtons();
     renderFicha();
-    updateActiveButton();
+    generateNewCypher();
+    
+    const generateBtn = document.getElementById('generateCypherBtn');
+    if (generateBtn) {
+      generateBtn.addEventListener('click', () => generateNewCypher());
+    }
   }
 
   initFromUrl();
