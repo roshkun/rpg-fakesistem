@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Criptex Arcano - Edição Cinematográfica</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body {
+            background: radial-gradient(circle at center, #1a0b2e 0%, #05010a 100%);
+            transition: background 1.5s ease-in-out;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            font-family: 'Times New Roman', serif;
+        }
+        #background-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        #canvas-container {
+            position: relative; width: 650px; height: 650px; max-width: 95vw; max-height: 95vw;
+            display: flex; justify-content: center; align-items: center; cursor: grab; z-index: 2;
+        }
+        #canvas-container:active { cursor: grabbing; }
+        canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+
+    <canvas id="background-canvas"></canvas>
+    <div id="canvas-container">
+        <canvas id="puzzleCanvas" width="650" height="650"></canvas>
+    </div>
+
+    <script>
+        // --- MOTOR DE ÁUDIO ---
+        let audioCtx = null;
+        function initAudio() {
+            try {
+                if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            } catch (e) {}
+        }
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'tick') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+                    gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now); osc.stop(now + 0.05);
+                } else if (type === 'lock') {
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                    gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now); osc.stop(now + 0.3);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+                    gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now); osc.stop(now + 0.3);
+                } else if (type === 'magic') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1); osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.3, now + 0.1); gain.gain.linearRampToValueAtTime(0, now + 0.8);
+                    osc.start(now); osc.stop(now + 0.8);
+                } else if (type === 'engage') {
+                    osc.type = 'square'; osc.frequency.setValueAtTime(100, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now); osc.stop(now + 0.2);
+                }
+            } catch (e) {}
+        }
+
+        // --- DICIONÁRIO E ESTADO ---
+        const runicAlphabet = {
+            'A': 'ᚨ', 'B': 'ᛒ', 'C': 'ᚲ', 'D': 'ᛞ', 'E': 'ᛖ', 'F': 'ᚠ', 'G': 'ᚷ',
+            'H': 'ᚺ', 'I': 'ᛁ', 'J': 'ᛃ', 'K': 'ᚴ', 'L': 'ᛚ', 'M': 'ᛗ', 'N': 'ᚾ',
+            'O': 'ᛟ', 'P': 'ᛈ', 'Q': 'ᛢ', 'R': 'ᚱ', 'S': 'ᛊ', 'T': 'ᛏ', 'U': 'ᚢ',
+            'V': 'ᚡ', 'W': 'ᚹ', 'X': 'ᛪ', 'Y': 'ᚣ', 'Z': 'ᛉ'
+        };
+        const allRunes = Object.values(runicAlphabet);
+        const runeToLatin = {};
+        for (const letter in runicAlphabet) runeToLatin[runicAlphabet[letter]] = letter;
+
+        const stagesWords = ["COMBATER", "DOMINACAO", "SOBREVIVENCIA"];
+        const easterEggs = ["LUZ", "TREVAS", "FOGO", "NORMAL", "IDIOMA"];
+        
+        let currentStageIndex = 0, currentTheme = "DEFAULT", useLatinAlphabet = false;
+        let unlockedThemes = { 'LUZ': false, 'TREVAS': false, 'FOGO': false };
+        const pedestals = [
+            { theme: 'LUZ', x: 40, y: 600, color: '#ffd700', activeColor: '#ffffff', rune: 'ᛚ' }, 
+            { theme: 'TREVAS', x: 100, y: 600, color: '#aa00ff', activeColor: '#ffffff', rune: 'ᛏ' },
+            { theme: 'FOGO', x: 160, y: 600, color: '#ff4400', activeColor: '#ffffaa', rune: 'ᚠ' } 
+        ];
+
+        const SAVE_KEY = 'criptexStateSafe_v10';
+        function saveState() {
+            try {
+                const state = { stage: currentStageIndex, theme: currentTheme, latin: useLatinAlphabet, unlocked: unlockedThemes };
+                localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+            } catch (e) {}
+        }
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(SAVE_KEY);
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    currentStageIndex = (state.stage !== undefined) ? state.stage : 0;
+                    currentTheme = state.theme || "DEFAULT"; useLatinAlphabet = state.latin || false;
+                    if (state.unlocked) unlockedThemes = state.unlocked;
+                    if (currentStageIndex > 2) currentStageIndex = 0; 
+                }
+            } catch (e) { currentStageIndex = 0; }
+        }
+        loadState();
+
+        let flashAlpha = 0, flashColor = '#ffffff', lastInteractionTime = Date.now();
+        const getHintText = (word) => word.split('').map(c => useLatinAlphabet ? c : runicAlphabet[c]).join(' ');
+
+        // --- BACKGROUND CANVAS & AMBIENTE ---
+        const bgCanvas = document.getElementById('background-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let bgSymbols = [], particles = [];
+        const TOTAL_BG_SYMBOLS = 75;
+
+        function resizeCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+        function drawEnvironment(ctx, width, height) {
+            let themeColor = 'rgba(0, 212, 255, 0.06)'; 
+            if (currentTheme === "LUZ") themeColor = 'rgba(180, 130, 60, 0.15)'; 
+            if (currentTheme === "TREVAS") themeColor = 'rgba(170, 0, 255, 0.12)';
+            if (currentTheme === "FOGO") themeColor = 'rgba(255, 68, 0, 0.12)';
+
+            const CX = width / 2, CY = height / 2;
+            ctx.save(); ctx.strokeStyle = themeColor; ctx.fillStyle = themeColor; ctx.lineWidth = 1.5;
+
+            ctx.save(); ctx.translate(CX, CY); ctx.rotate(Date.now() * 0.00008);
+            ctx.beginPath(); ctx.arc(0, 0, 360, 0, Math.PI * 1.93); ctx.stroke();
+            ctx.translate(Math.cos(Math.PI * 1.93) * 360, Math.sin(Math.PI * 1.93) * 360); ctx.rotate(Math.PI * 1.93);
+            ctx.beginPath(); ctx.moveTo(-15, -20); ctx.lineTo(25, 0); ctx.lineTo(-15, 20); ctx.closePath(); ctx.stroke(); ctx.fill();
+            ctx.restore();
+
+            const pyX = Math.max(CX + 250, width - 250);
+            if (currentTheme === "LUZ") {
+                ctx.save(); ctx.translate(pyX, height);
+                const shadowGrad = ctx.createLinearGradient(0, 0, -300, 150);
+                shadowGrad.addColorStop(0, 'rgba(120, 70, 30, 0.12)'); shadowGrad.addColorStop(1, 'rgba(120, 70, 30, 0)');
+                ctx.fillStyle = shadowGrad; ctx.beginPath(); ctx.moveTo(120, -250); ctx.lineTo(240, 0); ctx.lineTo(-400, 200); ctx.lineTo(-200, -250); ctx.closePath(); ctx.fill();
+                ctx.restore();
+
+                if (currentStageIndex === 2) {
+                    ctx.save(); ctx.fillStyle = 'rgba(90, 50, 20, 0.85)'; ctx.shadowBlur = 0; ctx.textAlign = 'right'; ctx.font = 'bold 22px "Times New Roman"';
+                    ctx.fillText(getHintText("SOBREVIVENCIA"), width - 40, height - 120); ctx.restore();
+                }
+            }
+
+            ctx.save(); ctx.translate(pyX, height); ctx.lineWidth = 1.5; ctx.strokeStyle = themeColor;
+            ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(120, -250); ctx.lineTo(240, 0); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(120, -250); ctx.lineTo(150, 0); ctx.stroke();
+            for(let i=1; i<6; i++) { let y = -250 + (250/6)*i; ctx.beginPath(); ctx.moveTo((120/6)*i, y); ctx.lineTo(240 - (120/6)*i, y); ctx.stroke(); }
+            ctx.beginPath(); ctx.moveTo(-90, 0); ctx.lineTo(-20, -140); ctx.lineTo(50, 0); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(-20, -140); ctx.lineTo(0, 0); ctx.stroke();
+            ctx.restore();
+
+            const doorX = Math.min(CX - 250, 250);
+            ctx.save(); ctx.translate(doorX, height); ctx.lineWidth = 2; ctx.strokeStyle = themeColor;
+            ctx.beginPath(); ctx.moveTo(-70, 0); ctx.lineTo(-70, -220); ctx.arc(0, -220, 70, Math.PI, 0); ctx.lineTo(70, 0); ctx.stroke();
+            ctx.beginPath(); ctx.arc(0, -220, 55, Math.PI, 0); ctx.stroke();
+            ctx.font = "24px 'Times New Roman'"; ctx.textAlign = "center"; ctx.globalAlpha = 0.5; ctx.fillStyle = themeColor;
+            getHintText("IDIOMA").split(' ').forEach((r, idx) => ctx.fillText(r, 0, -260 + (idx * 45))); ctx.restore();
+
+            if (currentTheme === "LUZ") {
+                ctx.save(); ctx.translate(CX, CY); for(let i=0; i<8; i++) { ctx.rotate(Math.PI / 4); ctx.beginPath(); ctx.moveTo(380, 0); ctx.lineTo(width, 0); ctx.stroke(); } ctx.restore();
+            } else if (currentTheme === "FOGO") {
+                ctx.fillStyle = 'rgba(255, 68, 0, 0.05)'; ctx.fillRect(0, height - 150, width, 150);
+                if (currentStageIndex === 0) {
+                    ctx.save(); ctx.fillStyle = 'rgba(255, 255, 255, 0.95)'; ctx.shadowBlur = 20; ctx.shadowColor = '#ff4400';
+                    ctx.textAlign = 'center'; ctx.font = 'bold 24px "Times New Roman"'; ctx.fillText(getHintText("COMBATER"), CX, height - 90); ctx.restore();
+                }
+            } else if (currentTheme === "TREVAS" && currentStageIndex === 1) {
+                ctx.save(); ctx.fillStyle = 'rgba(255, 255, 255, 0.95)'; ctx.shadowBlur = 25; ctx.shadowColor = '#aa00ff';
+                ctx.textAlign = 'center'; ctx.font = 'bold 28px "Times New Roman"'; ctx.fillText(getHintText("DOMINACAO"), CX, height - 90); ctx.restore();
+            }
+
+            if (currentStageIndex > 2) {
+                ctx.save(); ctx.fillStyle = '#ffffff'; ctx.shadowBlur = 30; ctx.shadowColor = '#00d4ff';
+                ctx.textAlign = 'center'; ctx.font = 'bold 36px "Times New Roman"'; ctx.fillText(getHintText("DENDAR"), CX, height - 90); ctx.restore();
+            }
+            ctx.restore();
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; const angle = Math.random() * Math.PI * 2; const speed = Math.random() * 8 + 2;
+                this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed; this.life = 1.0; this.decay = Math.random() * 0.02 + 0.015;
+                this.color = color; this.size = Math.random() * 4 + 2;
+            }
+            update() { this.x += this.vx; this.y += this.vy; this.life -= this.decay; this.size *= 0.96; }
+            draw(ctx) { ctx.save(); ctx.globalAlpha = Math.max(0, this.life); ctx.fillStyle = this.color; ctx.shadowBlur = 12; ctx.shadowColor = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+        }
+
+        class FloatingSymbol {
+            constructor() { this.reset(); this.x = Math.random() * bgCanvas.width; this.y = Math.random() * bgCanvas.height; }
+            reset() {
+                this.x = Math.random() * bgCanvas.width; this.y = bgCanvas.height + 50;
+                this.char = allRunes[Math.floor(Math.random() * allRunes.length)];
+                this.size = Math.random() * 16 + 14; this.speedX = (Math.random() - 0.5) * 0.4; this.speedY = -(Math.random() * 0.4 + 0.2);
+                this.rotation = Math.random() * Math.PI * 2; this.rotSpeed = (Math.random() - 0.5) * 0.01; this.opacity = Math.random() * 0.2 + 0.05; this.isDead = false;
+            }
+            update(isPuzzleComplete) {
+                if (this.isDead) return;
+                if (isPuzzleComplete) {
+                    const targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
+                    const dx = targetX - this.x, dy = targetY - this.y; const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance > 15) { this.x += (dx / distance) * 9; this.y += (dy / distance) * 9; this.rotation += 0.15; this.size *= 0.98; } 
+                    else { this.isDead = true; const finalColors = ['#00d4ff', '#ff007f', '#ff3300']; for(let i=0; i<6; i++) particles.push(new Particle(targetX, targetY, finalColors[Math.floor(Math.random()*3)])); }
+                } else {
+                    let sY = this.speedY; if (currentTheme === "FOGO") sY = this.speedY * 4; if (currentTheme === "LUZ") sY = this.speedY * 0.5;
+                    this.x += this.speedX; this.y += sY; this.rotation += this.rotSpeed;
+                    if (this.y < -40 || this.x < -40 || this.x > bgCanvas.width + 40) this.reset();
+                }
+            }
+            draw(isPuzzleComplete, activeStageColor) {
+                if (this.isDead) return;
+                bgCtx.save(); bgCtx.translate(this.x, this.y); bgCtx.rotate(this.rotation);
+                if (isPuzzleComplete) { bgCtx.fillStyle = 'rgba(255, 255, 255, 0.9)'; bgCtx.shadowBlur = 20; bgCtx.shadowColor = activeStageColor; } 
+                else {
+                    let baseColor = '150, 140, 160'; if (currentTheme === "LUZ") baseColor = '184, 134, 11'; if (currentTheme === "FOGO") baseColor = '255, 100, 0'; if (currentTheme === "TREVAS") baseColor = '170, 0, 255';
+                    bgCtx.fillStyle = `rgba(${baseColor}, ${this.opacity})`; bgCtx.shadowBlur = (currentTheme === "TREVAS" || currentTheme === "FOGO" || currentTheme === "LUZ") ? 10 : 0; bgCtx.shadowColor = `rgba(${baseColor}, 1)`;
+                }
+                bgCtx.font = `${this.size}px 'Times New Roman', serif`; bgCtx.textAlign = 'center'; bgCtx.textBaseline = 'middle';
+                let displayChar = this.char; if (useLatinAlphabet && runeToLatin[displayChar]) displayChar = runeToLatin[displayChar];
+                bgCtx.fillText(displayChar, 0, 0); bgCtx.restore();
+            }
+        }
+
+        function initBgSymbols() { bgSymbols = []; for (let i = 0; i < TOTAL_BG_SYMBOLS; i++) bgSymbols.push(new FloatingSymbol()); }
+
+        // --- SISTEMA DE CÂMARA CINEMATOGRÁFICA ---
+        const canvas = document.getElementById('puzzleCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+
+        const CENTER_X = 325, CENTER_Y = 325, MAX_RADIUS = 290, MIN_RADIUS = 45; 
+        let rings = [], NUM_RINGS = 0;
+        let activeRingIndex = -1, isDragging = false, startAngle = 0, currentRingStartAngle = 0;
+        let isTransitioning = false, isScramblingErrors = false, transitionDelay = 0, transitionFrames = 0;
+        let scrambleStartAngles = [], scrambleTargetAngles = [], allSymbolsSucked = false; 
+        
+        // Variáveis de Estado de Câmara
+        let isPuzzleEngaged = false; // Se false: Visão Geral. Se true: Zoom no topo do puzzle.
+        let animScale = 0.85;        // Começa em Overview
+        let animCenterYOffset = 100; // Começa empurrado para baixo
+
+        function updateCamera() {
+            // Se o puzzle está engajado, escala 1.35x e empurra o eixo Y para o fundo (+180px),
+            // fazendo o topo do puzzle preencher o ecrã.
+            const targetScale = isPuzzleEngaged ? 1.38 : 0.85;
+            const targetCenterY = isPuzzleEngaged ? 200 : 100;
+            
+            animScale += (targetScale - animScale) * 0.08;
+            animCenterYOffset += (targetCenterY - animCenterYOffset) * 0.08;
+        }
+
+        function updateThemeBackground() {
+            const body = document.body;
+            if (currentTheme === "LUZ") body.style.background = 'radial-gradient(circle at center, #fff9e6 0%, #f4e8d0 100%)';
+            else if (currentTheme === "TREVAS") body.style.background = '#020005';
+            else if (currentTheme === "FOGO") body.style.background = 'radial-gradient(circle at center, #2a0000 0%, #0a0000 100%)';
+            else body.style.background = 'radial-gradient(circle at center, #1a0b2e 0%, #05010a 100%)';
+        }
+
+        function initStage(stageIndex) {
+            updateThemeBackground();
+            isPuzzleEngaged = false; // Começa a fase na visão panorâmica
+            if (stageIndex > 2) return;
+            rings = [];
+            const targetWord = stagesWords[stageIndex];
+            NUM_RINGS = targetWord.length;
+            const ringWidth = (MAX_RADIUS - MIN_RADIUS) / NUM_RINGS;
+
+            for (let i = 0; i < NUM_RINGS; i++) {
+                const targetRune = runicAlphabet[targetWord[i]];
+                let requiredRunes = new Set([targetRune]);
+                easterEggs.forEach(egg => { if (i < egg.length) requiredRunes.add(runicAlphabet[egg[i]]); });
+
+                let symbols = new Array(16).fill(null);
+                const targetSlot = Math.floor(Math.random() * 16); symbols[targetSlot] = targetRune; requiredRunes.delete(targetRune); 
+                
+                requiredRunes.forEach(rune => {
+                    let placed = false; while(!placed) { let rSlot = Math.floor(Math.random() * 16); if (symbols[rSlot] === null) { symbols[rSlot] = rune; placed = true; } }
+                });
+                
+                for(let j=0; j<16; j++) {
+                    if (symbols[j] === null) {
+                        let randomRune; do { randomRune = allRunes[Math.floor(Math.random() * allRunes.length)]; } while (symbols.includes(randomRune) && Math.random() > 0.1); 
+                        symbols[j] = randomRune;
+                    }
+                }
+
+                const targetAngle = (360 - (targetSlot * 22.5)) % 360;
+                let startAngle; do { startAngle = Math.floor(Math.random() * 16) * 22.5; } while (startAngle === targetAngle);
+                rings.push({ radius: MAX_RADIUS - (i * ringWidth), width: ringWidth, symbols: symbols, targetAngle: targetAngle, currentAngle: startAngle });
+            }
+        }
+
+        function getActiveColor() {
+            if (currentStageIndex === 0) return '#00d4ff'; if (currentStageIndex === 1) return '#ff00aa'; return '#ff2200'; 
+        }
+
+        function getCurrentlyAlignedWord() {
+            let word = "";
+            for (let i = 0; i < NUM_RINGS; i++) {
+                const currentNorm = ((rings[i].currentAngle % 360) + 360) % 360;
+                const targetJAngle = (360 - currentNorm) % 360;
+                const j = Math.round(targetJAngle / 22.5) % 16;
+                word += runeToLatin[rings[i].symbols[j]] || "?";
+            }
+            return word;
+        }
+
+        function toggleTheme(themeName) {
+            if (currentTheme === themeName) { currentTheme = "DEFAULT"; flashColor = '#00d4ff'; } 
+            else { currentTheme = themeName; if (themeName === 'LUZ') flashColor = '#fff5cc'; if (themeName === 'TREVAS') flashColor = '#aa00ff'; if (themeName === 'FOGO') flashColor = '#ff4400'; }
+            updateThemeBackground(); flashAlpha = 1.0; playSound('magic'); saveState();
+        }
+
+        function validatePuzzle() {
+            if (isTransitioning || currentStageIndex > 2) return;
+            const alignedWord = getCurrentlyAlignedWord();
+            
+            if (alignedWord.startsWith("IDIOMA")) { useLatinAlphabet = !useLatinAlphabet; flashColor = '#00ffcc'; flashAlpha = 1.0; playSound('magic'); saveState(); isPuzzleEngaged = false; return; }
+            
+            const themeDetected = ["LUZ", "FOGO", "TREVAS", "NORMAL"].find(t => alignedWord.startsWith(t));
+            if (themeDetected) {
+                if (themeDetected === "NORMAL") {
+                    if (currentTheme !== "DEFAULT") { currentTheme = "DEFAULT"; updateThemeBackground(); flashColor = '#00d4ff'; flashAlpha = 1.0; playSound('magic'); saveState(); }
+                } else { unlockedThemes[themeDetected] = true; toggleTheme(themeDetected); }
+                isPuzzleEngaged = false; // Afasta a câmara para ver o efeito ambiental
+                return;
+            }
+
+            let allCorrect = true;
+            for (let i = 0; i < NUM_RINGS; i++) {
+                const currentNorm = ((rings[i].currentAngle % 360) + 360) % 360;
+                const targetNorm = ((rings[i].targetAngle % 360) + 360) % 360;
+                if (Math.abs(currentNorm - targetNorm) > 3 && Math.abs(currentNorm - targetNorm) < 357) { allCorrect = false; break; }
+            }
+
+            if (allCorrect) { triggerStageComplete(); } 
+            else {
+                isTransitioning = true; isScramblingErrors = true; transitionDelay = 0; transitionFrames = 75; playSound('error');
+                isPuzzleEngaged = false; // Afasta para mostrar o embaralhamento e a punição
+
+                scrambleStartAngles = rings.map(r => r.currentAngle);
+                scrambleTargetAngles = scrambleStartAngles.map((startAngle) => {
+                    const extraSpins = Math.floor(Math.random() * 2) + 1; const offset = Math.floor(Math.random() * 16) * 22.5; 
+                    return startAngle + (360 * extraSpins) + offset;
+                });
+            }
+            saveState();
+        }
+
+        function triggerStageComplete() {
+            isTransitioning = true; isScramblingErrors = false; playSound('magic');
+            isPuzzleEngaged = false; // Afasta para ver a transição
+            for(let i=0; i<NUM_RINGS; i++) rings[i].currentAngle = rings[i].targetAngle;
+            
+            if (currentStageIndex === 2) {
+                transitionDelay = 40; setTimeout(() => { currentStageIndex = 3; isTransitioning = false; currentTheme = "DEFAULT"; updateThemeBackground(); saveState(); }, 600);
+            } else {
+                transitionDelay = 60; transitionFrames = 80; 
+                scrambleStartAngles = rings.map(r => r.currentAngle);
+                scrambleTargetAngles = rings.map((r) => r.currentAngle + 720);
+            }
+        }
+
+        function drawPuzzle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            updateCamera();
+
+            const stageColor = (currentTheme === "LUZ") ? '#ffd700' : (currentStageIndex > 2 ? '#ff2200' : getActiveColor());
+            const isStageCompleteFlash = (isTransitioning && !isScramblingErrors && transitionDelay > 0);
+            let themeRingColor = stageColor; let strokeR=255, strokeG=255, strokeB=255;
+            if (currentTheme === "LUZ") { themeRingColor = '#b8860b'; strokeR = 139; strokeG = 90; strokeB = 43; } 
+            else if (currentTheme === "FOGO") { themeRingColor = '#ff4400'; strokeR = 255; strokeG = 80; strokeB = 0; } 
+            else if (currentTheme === "TREVAS") { themeRingColor = '#aa00ff'; strokeR = 0; strokeG = 0; strokeB = 0; }
+
+            // --- DESENHO DOS PEDESTAIS (Fora do escalonamento da câmara) ---
+            pedestals.forEach(p => {
+                if (!unlockedThemes[p.theme]) return;
+                const isActive = (currentTheme === p.theme);
+                const pGlow = isActive ? 15 + Math.sin(Date.now() * 0.005) * 5 : 0;
+                const pAlpha = isActive ? 1.0 : 0.3;
+                const floatY = isActive ? Math.sin(Date.now() * 0.003) * 5 - 15 : -10;
+
+                ctx.save(); ctx.translate(p.x, p.y);
+                ctx.fillStyle = `rgba(30, 30, 40, ${pAlpha + 0.2})`; ctx.beginPath();
+                ctx.moveTo(-15, 25); ctx.lineTo(15, 25); ctx.lineTo(10, -5); ctx.lineTo(-10, -5); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = isActive ? p.activeColor : p.color; ctx.shadowBlur = pGlow; ctx.shadowColor = p.color; ctx.globalAlpha = pAlpha;
+                ctx.beginPath(); ctx.arc(0, floatY, 12, 0, Math.PI * 2); ctx.fill();
+                ctx.shadowBlur = 0; ctx.fillStyle = isActive ? '#000' : '#fff'; ctx.font = 'bold 14px "Times New Roman"'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                let dispRune = p.rune; if (useLatinAlphabet && runeToLatin[dispRune]) dispRune = runeToLatin[dispRune];
+                ctx.fillText(dispRune, 0, floatY); ctx.restore();
+            });
+
+            // Progressão (Diamantes) - Também fora da câmara
+            if (currentStageIndex <= 2) {
+                ctx.save(); ctx.translate(CENTER_X, canvas.height - 25);
+                for(let s=0; s<3; s++) {
+                    ctx.beginPath(); ctx.moveTo(-30 + (s*30), -5); ctx.lineTo(-25 + (s*30), 0); ctx.lineTo(-30 + (s*30), 5); ctx.lineTo(-35 + (s*30), 0); ctx.closePath();
+                    ctx.fillStyle = s < currentStageIndex ? getActiveColor() : 'rgba(255,255,255,0.1)';
+                    ctx.shadowBlur = s < currentStageIndex ? 15 : 0; ctx.shadowColor = getActiveColor(); ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            // --- APLICAÇÃO DA CÂMARA ---
+            ctx.save();
+            ctx.translate(CENTER_X, CENTER_Y + animCenterYOffset);
+            ctx.scale(animScale, animScale);
+
+            if(NUM_RINGS === 0) { ctx.restore(); return; }
+
+            if (isScramblingErrors && transitionFrames > 0) { const shake = (Math.random() - 0.5) * 6; ctx.translate(shake, shake); }
+
+            if (currentStageIndex > 2) {
+                for (let i = 0; i < NUM_RINGS; i++) { rings[i].currentAngle += (i % 2 === 0 ? 0.5 + (i * 0.05) : -(0.5 + (i * 0.05))); }
+            }
+
+            // Indicador Norte Escalonado
+            if (currentStageIndex <= 2) {
+                ctx.fillStyle = isStageCompleteFlash ? '#fff' : (currentTheme === "LUZ" ? '#ffd700' : themeRingColor);
+                ctx.shadowBlur = (currentTheme === "TREVAS" ? 30 : (currentTheme === "LUZ" ? 25 : 15));
+                ctx.shadowColor = (currentTheme === "LUZ" ? '#ffd700' : themeRingColor);
+                ctx.beginPath();
+                ctx.moveTo(0, - MAX_RADIUS + 5); 
+                ctx.lineTo(-12, - MAX_RADIUS - 18);
+                ctx.lineTo(12, - MAX_RADIUS - 18);
+                ctx.fill();
+                ctx.fillRect(-3, - MAX_RADIUS - 28, 6, 8);
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = (currentTheme === "LUZ") ? 'rgba(255, 215, 0, 0.05)' : `rgba(255, 255, 255, 0.02)`;
+                ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, MAX_RADIUS, -Math.PI/2 - 0.15, -Math.PI/2 + 0.15); ctx.fill();
+            }
+
+            for (let i = 0; i < NUM_RINGS; i++) {
+                const ring = rings[i];
+                const angleRad = (ring.currentAngle * Math.PI) / 180;
+                let ringColor = themeRingColor;
+                if (currentStageIndex > 2) {
+                    if (i < NUM_RINGS/3) ringColor = '#00d4ff'; else if (i < (NUM_RINGS/3)*2) ringColor = '#ff00aa'; else ringColor = '#ff2200';
+                }
+
+                ctx.save(); ctx.rotate(angleRad);
+                let alpha = 1; if (isTransitioning && !isScramblingErrors && transitionDelay <= 0) alpha = transitionFrames / 75; 
+
+                if (i === activeRingIndex) {
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.9 * alpha})`; ctx.lineWidth = 3; ctx.shadowBlur = 10; ctx.shadowColor = themeRingColor; ctx.setLineDash([]); 
+                } else {
+                    ctx.setLineDash([4, 6]); 
+                    if (currentStageIndex > 2 || isStageCompleteFlash) {
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; ctx.shadowBlur = currentStageIndex > 2 ? 15 : 0; ctx.shadowColor = ringColor; ctx.lineWidth = 2.5;
+                    } else {
+                        ctx.strokeStyle = currentTheme === "TREVAS" ? `rgba(0,0,0,0)` : (currentTheme === "LUZ" ? `rgba(139, 90, 43, ${0.15 * alpha})` : `rgba(${strokeR}, ${strokeG}, ${strokeB}, ${0.15 * alpha})`);
+                        ctx.shadowBlur = 0; ctx.lineWidth = 1.2;
+                    }
+                }
+                
+                ctx.beginPath(); ctx.arc(0, 0, ring.radius, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(0, 0, ring.radius - ring.width, 0, Math.PI * 2); ctx.stroke();
+                ctx.setLineDash([]);
+
+                let fontSize = NUM_RINGS > 10 ? ring.width * 0.65 : ring.width * 0.55;
+                ctx.font = `${fontSize}px 'Times New Roman', serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+                for (let j = 0; j < 16; j++) {
+                    const symAngle = (j * (360 / 16) * Math.PI) / 180;
+                    ctx.save(); ctx.rotate(symAngle);
+                    
+                    let runeAlpha = (currentTheme === "LUZ") ? 0.7 : 0.5;
+                    
+                    if (currentStageIndex > 2 || isStageCompleteFlash) {
+                        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                    } else {
+                        if (currentTheme === "LUZ") ctx.fillStyle = `rgba(139, 90, 43, ${runeAlpha * alpha})`; 
+                        else if (currentTheme === "TREVAS") ctx.fillStyle = `rgba(255, 255, 255, ${0.6 * alpha})`;
+                        else if (currentTheme === "FOGO") ctx.fillStyle = `rgba(255, 100, 0, ${runeAlpha * alpha})`;
+                        else ctx.fillStyle = `rgba(255, 255, 255, ${runeAlpha * alpha})`;
+                    }
+
+                    let displayChar = ring.symbols[j];
+                    if (useLatinAlphabet && runeToLatin[displayChar]) displayChar = runeToLatin[displayChar];
+                    
+                    ctx.translate(0, -(ring.radius - (ring.width / 2))); ctx.fillText(displayChar, 0, 0); ctx.restore();
+                }
+                ctx.restore();
+            }
+
+            const isClickable = (currentStageIndex <= 2 && !isTransitioning);
+            ctx.save(); ctx.rotate(Date.now() * 0.001);
+            ctx.strokeStyle = currentTheme === "TREVAS" ? 'rgba(0,0,0,0)' : `rgba(${strokeR}, ${strokeG}, ${strokeB}, ${isClickable ? 0.4 : 0.1})`;
+            ctx.lineWidth = 2; ctx.setLineDash([8, 12]);
+            ctx.beginPath(); ctx.arc(0, 0, MIN_RADIUS - 5, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+
+            // Lógica do Botão: Pulsa MUITO forte se o puzzle ainda NÃO estiver engajado, para convidar ao clique
+            let corePulse = 0;
+            if (!isPuzzleEngaged && isClickable) corePulse = Math.sin(Date.now() * 0.005) * 6; // Pulso Chamativo
+            else if (isPuzzleEngaged && isClickable) corePulse = Math.sin(Date.now() * 0.008) * 1.5; // Pulso Ocupado
+
+            const coreRadius = isClickable ? MIN_RADIUS/1.8 + corePulse : MIN_RADIUS/2.2;
+            
+            // Fica dourado ou branco vivo se pedir interação
+            ctx.fillStyle = (currentTheme === "LUZ") ? '#ffd700' : (!isPuzzleEngaged || currentStageIndex > 2 || isStageCompleteFlash) ? '#ffffff' : `rgba(20, 20, 35, 0.95)`;
+            ctx.shadowBlur = isClickable ? (!isPuzzleEngaged ? 35 + (corePulse*3) : 20) : 5; 
+            ctx.shadowColor = (currentTheme === "LUZ") ? '#ffd700' : themeRingColor;
+            
+            ctx.beginPath(); ctx.arc(0, 0, coreRadius, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = (currentTheme === "LUZ") ? '#b8860b' : themeRingColor; ctx.lineWidth = 2; ctx.stroke();
+
+            ctx.restore(); // Fim do Contexto de Câmara
+
+            if (flashAlpha > 0) {
+                ctx.fillStyle = flashColor; ctx.globalAlpha = flashAlpha; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.globalAlpha = 1.0; flashAlpha -= 0.02;
+            }
+        }
+
+        // --- SISTEMA DE INTERAÇÃO INVERSA (CÂMARA) ---
+        function getAngleFromCenter(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            // Inverte a translação da câmara para o ângulo
+            const x = clientX - rect.left - CENTER_X;
+            const y = clientY - rect.top - (CENTER_Y + animCenterYOffset);
+            return Math.atan2(y, x) * (180 / Math.PI);
+        }
+        
+        function getRingIndexAt(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            const scale = canvas.width / rect.width;
+            const xRaw = (clientX - rect.left) * scale;
+            const yRaw = (clientY - rect.top) * scale;
+            
+            // Verifica Pedestais (Coordenadas Reais do Ecrã)
+            for (let p of pedestals) {
+                if (unlockedThemes[p.theme]) {
+                    const dist = Math.sqrt((xRaw - p.x)**2 + (yRaw - p.y)**2);
+                    if (dist <= 25) return `PEDESTAL_${p.theme}`;
+                }
+            }
+
+            // Inverte a câmara para verificar Botão e Anéis
+            const localX = (xRaw - CENTER_X) / animScale;
+            const localY = (yRaw - (CENTER_Y + animCenterYOffset)) / animScale;
+            const distCenter = Math.sqrt(localX*localX + localY*localY);
+            
+            if (distCenter <= MIN_RADIUS) return "CENTER";
+
+            for (let i = 0; i < NUM_RINGS; i++) {
+                if (distCenter <= rings[i].radius && distCenter >= (rings[i].radius - rings[i].width)) return i;
+            }
+            return -1;
+        }
+
+        function handleStart(clientX, clientY) {
+            initAudio(); lastInteractionTime = Date.now();
+            if (currentStageIndex > 2 || isTransitioning) return; 
+
+            const target = getRingIndexAt(clientX, clientY);
+            
+            if (typeof target === 'string' && target.startsWith("PEDESTAL_")) {
+                toggleTheme(target.split("_")[1]); return;
+            }
+
+            if (target === "CENTER") { 
+                if (!isPuzzleEngaged) {
+                    isPuzzleEngaged = true; // Activa o Zoom
+                    playSound('engage');
+                } else {
+                    validatePuzzle(); // Valida a resposta
+                }
+                return; 
+            }
+
+            if (target !== -1 && isPuzzleEngaged) {
+                activeRingIndex = target; isDragging = true;
+                startAngle = getAngleFromCenter(clientX, clientY); currentRingStartAngle = rings[activeRingIndex].currentAngle;
+            }
+        }
+
+        let dragTickCounter = 0;
+        function handleMove(clientX, clientY) {
+            lastInteractionTime = Date.now();
+            if (!isDragging || activeRingIndex === -1 || isTransitioning || !isPuzzleEngaged) return;
+            const currentAngle = getAngleFromCenter(clientX, clientY);
+            rings[activeRingIndex].currentAngle = currentRingStartAngle + (currentAngle - startAngle);
+            dragTickCounter += Math.abs(currentAngle - startAngle);
+            if(dragTickCounter > 15) { playSound('tick'); dragTickCounter = 0; startAngle = currentAngle; currentRingStartAngle = rings[activeRingIndex].currentAngle; }
+        }
+
+        function handleEnd() {
+            lastInteractionTime = Date.now();
+            if (!isDragging || isTransitioning) return;
+            if (activeRingIndex !== -1) {
+                const ring = rings[activeRingIndex];
+                const normalizedAngle = ((ring.currentAngle % 360) + 360) % 360;
+                ring.currentAngle = Math.round(normalizedAngle / 22.5) * 22.5;
+            }
+            isDragging = false; activeRingIndex = -1;
+        }
+
+        container.addEventListener('mousedown', (e) => handleStart(e.clientX, e.clientY));
+        window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+        window.addEventListener('mouseup', handleEnd);
+        container.addEventListener('touchstart', (e) => { if (e.touches.length === 1) handleStart(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+        window.addEventListener('touchmove', (e) => { if (e.touches.length === 1) handleMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+        window.addEventListener('touchend', handleEnd);
+
+        function loop() {
+            if (currentTheme === "LUZ") bgCtx.fillStyle = 'rgba(255, 249, 230, 0.3)';
+            else if (currentTheme === "TREVAS") bgCtx.fillStyle = 'rgba(2, 0, 5, 0.4)';
+            else if (currentTheme === "FOGO") bgCtx.fillStyle = 'rgba(42, 0, 0, 0.4)';
+            else bgCtx.fillStyle = 'rgba(10, 5, 20, 0.4)';
+            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+            
+            drawEnvironment(bgCtx, bgCanvas.width, bgCanvas.height);
+
+            if (isTransitioning) {
+                if (transitionDelay > 0) transitionDelay--;
+                else if (transitionFrames > 0) {
+                    transitionFrames--;
+                    const t = 1 - (transitionFrames / (isScramblingErrors ? 60 : 75));
+                    const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+                    for(let i=0; i<NUM_RINGS; i++) {
+                        rings[i].currentAngle = scrambleStartAngles[i] + (scrambleTargetAngles[i] - scrambleStartAngles[i]) * ease;
+                    }
+                    if (transitionFrames === 0) {
+                        isTransitioning = false;
+                        if (!isScramblingErrors) {
+                            currentStageIndex++; saveState();
+                            if (currentStageIndex <= 2) initStage(currentStageIndex);
+                        } else {
+                            for(let i=0; i<NUM_RINGS; i++) {
+                                rings[i].currentAngle = rings[i].currentAngle % 360;
+                                if(rings[i].currentAngle < 0) rings[i].currentAngle += 360;
+                            }
+                            // Após ser punido com o embaralhamento, re-engaja o puzzle automaticamente
+                            isPuzzleEngaged = true;
+                        }
+                    }
+                }
+            }
+
+            const activeStageColor = getActiveColor();
+            let aliveSymbolsCount = 0;
+            for (let i = 0; i < bgSymbols.length; i++) {
+                bgSymbols[i].update(currentStageIndex > 2); bgSymbols[i].draw(currentStageIndex > 2, activeStageColor);
+                if (!bgSymbols[i].isDead) aliveSymbolsCount++;
+            }
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update(); particles[i].draw(bgCtx);
+                if (particles[i].life <= 0) particles.splice(i, 1);
+            }
+            if (currentStageIndex > 2 && aliveSymbolsCount === 0) allSymbolsSucked = true;
+
+            drawPuzzle(); requestAnimationFrame(loop);
+        }
+
+        initBgSymbols(); initStage(currentStageIndex); loop();
+    </script>
+</body>
+</html>
