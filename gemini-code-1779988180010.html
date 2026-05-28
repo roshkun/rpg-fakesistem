@@ -336,7 +336,7 @@
             if (isTransitioning || currentStageIndex > 2) return;
             const alignedWord = getCurrentlyAlignedWord();
             
-            if (alignedWord.startsWith("IDIOMA")) { useLatinAlphabet = !useLatinAlphabet; flashColor = '#00000'; flashAlpha = 1.0; playSound('magic'); saveState(); isPuzzleEngaged = false; return; }
+            if (alignedWord.startsWith("IDIOMA")) { useLatinAlphabet = !useLatinAlphabet; flashColor = '#fff'; flashAlpha = 1.0; playSound('magic'); saveState(); isPuzzleEngaged = false; return; }
             
             const themeDetected = ["LUZ", "FOGO", "TREVAS", "NORMAL"].find(t => alignedWord.startsWith(t));
             if (themeDetected) {
