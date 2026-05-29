@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>O Criptex Arcano - Conhecimento Desperto</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; touch-action: none; }
+        body { background: #05010a; height: 100vh; width: 100vw; overflow: hidden; font-family: 'Times New Roman', serif; }
+        canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; }
+        #bgCanvas { z-index: 1; }
+        #mainCanvas { z-index: 2; cursor: grab; }
+        #mainCanvas:active { cursor: grabbing; }
+
+        /* ==========================================
+           TEXTO DE HISTÓRIA (LORE) - FASE FINAL
+           ========================================== */
+        #lore-container {
+            position: absolute;
+            top: 50%; left: 5vw;
+            transform: translateY(-50%);
+            width: 35vw; max-width: 500px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 22px; line-height: 1.6;
+            z-index: 15; pointer-events: none;
+            display: none;
+        }
+        .lore-paragraph {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeLore 2s forwards;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px #00d4ff, 0 0 20px #aa00ff;
+        }
+        @keyframes fadeLore {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            #lore-container {
+                top: 10vh; transform: none; width: 90vw;
+                font-size: 16px; background: rgba(0,0,0,0.6);
+                padding: 20px; border-radius: 10px; border: 1px solid #aa00ff;
+            }
+        }
+
+        /* ==========================================
+           UI ARCANA (BOTÕES E MODAIS)
+           ========================================== */
+        #ui-container { position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; gap: 15px; }
+        .icon-btn {
+            background: rgba(10, 5, 20, 0.8); border: 1px solid #00d4ff; color: #00d4ff;
+            font-size: 24px; padding: 12px; border-radius: 8px; cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); transition: all 0.3s ease;
+        }
+        .icon-btn:hover { background: rgba(0, 212, 255, 0.2); box-shadow: 0 0 20px #00d4ff; transform: scale(1.05); }
+
+        .modal {
+            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(10, 5, 20, 0.95); border: 2px solid #00d4ff; box-shadow: 0 0 30px #00d4ff;
+            z-index: 20; color: white; padding: 25px; border-radius: 12px; width: 320px; backdrop-filter: blur(5px);
+        }
+        .modal.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translate(-50%, -45%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(0, 212, 255, 0.3); padding-bottom: 10px; }
+        .modal-title { font-size: 20px; color: #00d4ff; text-transform: uppercase; letter-spacing: 2px; }
+        .close-btn { background: none; border: none; color: #ff4400; font-size: 24px; cursor: pointer; }
+        
+        .dict-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-height: 300px; overflow-y: auto; padding-right: 5px; }
+        .dict-item { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px 0; text-align: center; border-radius: 5px; }
+        .dict-latin { font-size: 14px; color: #aaa; margin-bottom: 5px; }
+        .dict-rune { font-size: 22px; color: #ffd700; text-shadow: 0 0 5px #ffd700; }
+
+        .trans-input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #00d4ff; color: #fff; padding: 12px; font-size: 16px; font-family: inherit; border-radius: 5px; margin-bottom: 15px; outline: none; text-transform: uppercase; }
+        .trans-output { min-height: 60px; background: rgba(255,255,255,0.05); border-radius: 5px; padding: 15px; text-align: center; font-size: 32px; color: #ffd700; text-shadow: 0 0 10px #ffd700; margin-bottom: 20px; word-wrap: break-word; }
+        .escrever-btn { width: 100%; background: #00d4ff; border: none; color: #000; font-weight: bold; font-size: 18px; padding: 15px; border-radius: 5px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 15px #00d4ff; transition: all 0.2s; }
+        .escrever-btn:hover { background: #fff; box-shadow: 0 0 25px #fff; }
+        .escrever-btn:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+    <canvas id="bgCanvas"></canvas>
+    <canvas id="mainCanvas"></canvas>
+
+    <div id="lore-container"></div>
+
+    <div id="ui-container">
+        <button class="icon-btn" id="btn-book" title="Grimório">📖</button>
+        <button class="icon-btn" id="btn-feather" title="Pena Arcana">✒️</button>
+    </div>
+
+    <div class="modal" id="modal-book">
+        <div class="modal-header">
+            <h2 class="modal-title">Grimório</h2>
+            <button class="close-btn" id="close-book">✖</button>
+        </div>
+        <div class="dict-grid" id="dict-grid"></div>
+    </div>
+
+    <div class="modal" id="modal-feather">
+        <div class="modal-header">
+            <h2 class="modal-title">Conjuração</h2>
+            <button class="close-btn" id="close-feather">✖</button>
+        </div>
+        <input type="text" class="trans-input" id="trans-input" placeholder="Digite uma palavra..." autocomplete="off">
+        <div class="trans-output" id="trans-output">...</div>
+        <button class="escrever-btn" id="btn-escrever">Escrever Mágica</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d');
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+
+        // ==========================================
+        // 1. CONFIGURAÇÕES E ESTADO GLOBAL
+        // ==========================================
+        let width, height, CENTER_X, CENTER_Y;
+        let isPuzzleEngaged = false, animScale = 1.0, animCenterYOffset = 0;
+        let hintHitbox = null, idiomaHitbox = null; 
+        let loreTriggered = false;
+
+        function resizeCanvas() { 
+            width = bgCanvas.width = canvas.width = window.innerWidth; 
+            height = bgCanvas.height = canvas.height = window.innerHeight;
+            CENTER_X = width / 2; CENTER_Y = height / 2;
+        }
+        window.addEventListener('resize', resizeCanvas); 
+        resizeCanvas();
+
+        const MAX_RADIUS = 290, MIN_RADIUS = 45; 
+        
+        // ==========================================
+        // 2. DICIONÁRIO E REGRAS
+        // ==========================================
+        const runicAlphabet = {
+            'A': 'ᚨ', 'B': 'ᛒ', 'C': 'ᚲ', 'D': 'ᛞ', 'E': 'ᛖ', 'F': 'ᚠ', 'G': 'ᚷ',
+            'H': 'ᚺ', 'I': 'ᛁ', 'J': 'ᛃ', 'K': 'ᚴ', 'L': 'ᛚ', 'M': 'ᛗ', 'N': 'ᚾ',
+            'O': 'ᛟ', 'P': 'ᛈ', 'Q': 'ᛢ', 'R': 'ᚱ', 'S': 'ᛊ', 'T': 'ᛏ', 'U': 'ᚢ',
+            'V': 'ᚡ', 'W': 'ᚹ', 'X': 'ᛪ', 'Y': 'ᚣ', 'Z': 'ᛉ'
+        };
+        const allRunes = Object.values(runicAlphabet);
+        const runeToLatin = {}; 
+        for (const letter in runicAlphabet) runeToLatin[runicAlphabet[letter]] = letter;
+
+        const stagesWords = ["COMBATER", "DOMINACAO", "VIDA"];
+        const easterEggs = ["LUZ", "TREVAS", "FOGO", "NORMAL", "IDIOMA", "RESETAR"];
+        
+        let currentStageIndex = 0, currentTheme = "DEFAULT", useLatinAlphabet = false;
+        let unlockedThemes = { 'LUZ': false, 'TREVAS': false, 'FOGO': false };
+        let idiomaUnlocked = false; 
+        
+        const pedestalsDef = [
+            { theme: 'LUZ', offsetX: -80, color: '#ffd700', activeColor: '#ffffff', rune: 'ᛚ' }, 
+            { theme: 'TREVAS', offsetX: 0, color: '#aa00ff', activeColor: '#ffffff', rune: 'ᛏ' },
+            { theme: 'FOGO', offsetX: 80, color: '#ff4400', activeColor: '#ffffaa', rune: 'ᚠ' } 
+        ];
+
+        let flashAlpha = 0, flashColor = '#ffffff', lastInteractionTime = Date.now();
+
+        // Chave de Segurança Nova
+        const SAVE_KEY = 'criptexStateSafe_v25'; 
+        function saveState() {
+            try { localStorage.setItem(SAVE_KEY, JSON.stringify({ stage: currentStageIndex, theme: currentTheme, latin: useLatinAlphabet, unlocked: unlockedThemes, idiomaUnlocked: idiomaUnlocked })); } catch (e) {}
+        }
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(SAVE_KEY);
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    currentStageIndex = (state.stage !== undefined) ? state.stage : 0;
+                    currentTheme = state.theme || "DEFAULT"; useLatinAlphabet = state.latin || false;
+                    idiomaUnlocked = state.idiomaUnlocked || false;
+                    if (state.unlocked) unlockedThemes = state.unlocked;
+                    if (currentStageIndex > 2) currentStageIndex = 0; 
+                }
+            } catch (e) { currentStageIndex = 0; }
+        }
+        function hardResetGame() {
+            localStorage.removeItem(SAVE_KEY);
+            currentStageIndex = 0; currentTheme = "DEFAULT"; useLatinAlphabet = false; idiomaUnlocked = false;
+            unlockedThemes = { 'LUZ': false, 'TREVAS': false, 'FOGO': false };
+            flashColor = '#ffffff'; flashAlpha = 1.0; playSound('magic');
+            
+            loreTriggered = false;
+            knowledgeParticles = [];
+            document.getElementById('lore-container').style.display = 'none';
+
+            updateThemeBackground(); initStage(0);
+        }
+        loadState();
+
+        // ==========================================
+        // 3. UI E MAGIA DE CONJURAÇÃO AUTOMÁTICA
+        // ==========================================
+        const dictGrid = document.getElementById('dict-grid');
+        for (const [latin, rune] of Object.entries(runicAlphabet)) {
+            dictGrid.innerHTML += `<div class="dict-item"><div class="dict-latin">${latin}</div><div class="dict-rune">${rune}</div></div>`;
+        }
+
+        const modalBook = document.getElementById('modal-book');
+        const modalFeather = document.getElementById('modal-feather');
+        const transInput = document.getElementById('trans-input');
+        const transOutput = document.getElementById('trans-output');
+
+        function closeModals() { modalBook.classList.remove('active'); modalFeather.classList.remove('active'); }
+        
+        document.getElementById('btn-book').addEventListener('click', () => { closeModals(); modalBook.classList.add('active'); playSound('tick'); });
+        document.getElementById('btn-feather').addEventListener('click', () => { closeModals(); modalFeather.classList.add('active'); transInput.focus(); playSound('tick'); });
+        document.getElementById('close-book').addEventListener('click', closeModals);
+        document.getElementById('close-feather').addEventListener('click', closeModals);
+        
+        modalBook.addEventListener('mousedown', e => e.stopPropagation()); modalBook.addEventListener('touchstart', e => e.stopPropagation());
+        modalFeather.addEventListener('mousedown', e => e.stopPropagation()); modalFeather.addEventListener('touchstart', e => e.stopPropagation());
+
+        transInput.addEventListener('input', (e) => {
+            const val = e.target.value.toUpperCase(); let res = '';
+            for(let char of val) { res += runicAlphabet[char] || char; }
+            transOutput.innerText = res || '...';
+        });
+
+        document.getElementById('btn-escrever').addEventListener('click', () => {
+            const val = transInput.value.toUpperCase().trim();
+            if(!val) return; 
+            closeModals();
+            
+            if (currentStageIndex > 2) {
+                transInput.value = ''; transOutput.innerText = '...';
+                return;
+            }
+            
+            const isTargetWord = (val === stagesWords[currentStageIndex]);
+            const isEasterEgg = easterEggs.includes(val);
+            
+            if (isTargetWord || isEasterEgg) {
+                playSound('magic');
+                let customTargets = [];
+                for(let i=0; i < NUM_RINGS; i++) {
+                    if (i < val.length) {
+                        const targetRune = runicAlphabet[val[i]];
+                        const slot = rings[i].symbols.indexOf(targetRune);
+                        if(slot !== -1) customTargets.push((360 - (slot * 22.5)) % 360);
+                        else customTargets.push(rings[i].currentAngle); 
+                    } else customTargets.push(rings[i].currentAngle);
+                }
+                
+                isTransitioning = true; isAutoSolving = true; isScramblingErrors = false; 
+                transitionDelay = 0; transitionFrames = 90; isPuzzleEngaged = true; 
+                scrambleStartAngles = rings.map(r => r.currentAngle);
+                scrambleTargetAngles = rings.map((r, i) => {
+                    const currentNorm = ((r.currentAngle % 360) + 360) % 360; const targetNorm = customTargets[i];
+                    let diff = targetNorm - currentNorm; if (diff <= 0) diff += 360; 
+                    return r.currentAngle + diff + (360 * 2); 
+                });
+            } else {
+                if (useLatinAlphabet) useLatinAlphabet = false; 
+                playSound('error');
+                isTransitioning = true; isScramblingErrors = true; isAutoSolving = false; 
+                transitionDelay = 0; transitionFrames = 75; isPuzzleEngaged = false;
+                scrambleStartAngles = rings.map(r => r.currentAngle);
+                scrambleTargetAngles = scrambleStartAngles.map((startAngle) => { return startAngle + (360 * (Math.floor(Math.random() * 2) + 1)) + (Math.floor(Math.random() * 16) * 22.5); });
+            }
+            transInput.value = ''; transOutput.innerText = '...';
+        });
+
+        // ==========================================
+        // 4. AUDIO E PARTÍCULAS
+        // ==========================================
+        let audioCtx = null;
+        function initAudio() { try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {} }
+        function playSound(type) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination); const now = audioCtx.currentTime;
+                if (type === 'tick') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.05); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05); osc.start(now); osc.stop(now + 0.05); } 
+                else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.linearRampToValueAtTime(100, now + 0.3); gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.3); osc.start(now); osc.stop(now + 0.3); } 
+                else if (type === 'magic') { osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1); osc.frequency.setValueAtTime(783.99, now + 0.2); gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.3, now + 0.1); gain.gain.linearRampToValueAtTime(0, now + 0.8); osc.start(now); osc.stop(now + 0.8); } 
+                else if (type === 'engage') { osc.type = 'square'; osc.frequency.setValueAtTime(100, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.2); gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.2); osc.start(now); osc.stop(now + 0.2); }
+            } catch (e) {}
+        }
+
+        const TOTAL_BG_SYMBOLS = 250; 
+        let bgSymbols = [];
+
+        class FloatingSymbol {
+            constructor() { this.reset(true); }
+            reset(randomY = false) {
+                this.x = Math.random() * width; this.y = randomY ? Math.random() * height : height + 50; this.char = allRunes[Math.floor(Math.random() * allRunes.length)]; 
+                this.size = Math.random() * 20 + 10; this.speedX = (Math.random() - 0.5) * 0.8; this.speedY = -(Math.random() * 0.8 + 0.2); 
+                this.rotation = Math.random() * Math.PI * 2; this.rotSpeed = (Math.random() - 0.5) * 0.02; this.opacity = Math.random() * 0.35 + 0.05; 
+            }
+            update() { 
+                let sY = this.speedY; if (currentTheme === "FOGO") sY *= 3.5; if (currentTheme === "LUZ") sY *= 0.5;  
+                this.x += this.speedX; this.y += sY; this.rotation += this.rotSpeed; if (this.y < -50 || this.x < -50 || this.x > width + 50) this.reset(); 
+            }
+            draw(ctx) { 
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation); 
+                let baseColor = '150, 140, 160'; if (currentTheme === "LUZ") baseColor = '184, 134, 11'; if (currentTheme === "FOGO") baseColor = '255, 100, 0'; if (currentTheme === "TREVAS") baseColor = '170, 0, 255'; 
+                ctx.fillStyle = `rgba(${baseColor}, ${this.opacity})`; ctx.shadowBlur = (currentTheme !== "DEFAULT") ? 10 : 0; ctx.shadowColor = `rgba(${baseColor}, 1)`; 
+                ctx.font = `${this.size}px 'Times New Roman', serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; 
+                let displayChar = this.char; if (useLatinAlphabet && runeToLatin[displayChar]) displayChar = runeToLatin[displayChar]; ctx.fillText(displayChar, 0, 0); ctx.restore(); 
+            }
+        }
+
+        const idiomaWord = ["I", "D", "I", "O", "M", "A"];
+        let nextHintIndex = 0; let activeHintRune = null; let hintSpawnTimer = 0;
+
+        class HintRune {
+            constructor(letter) {
+                this.x = (width * 0.2) + Math.random() * (width * 0.6); this.y = height + 50; this.char = runicAlphabet[letter];
+                this.size = Math.random() * 20 + 40; this.speedX = (Math.random() - 0.5) * 1.5; this.speedY = -(Math.random() * 1.5 + 1.5); 
+                this.rotation = Math.random() * Math.PI * 2; this.rotSpeed = (Math.random() - 0.5) * 0.02; this.life = 0; this.isDead = false;
+            }
+            update() { this.x += this.speedX + Math.sin(this.life) * 2.0; this.y += this.speedY; this.rotation += this.rotSpeed; this.life += 0.05; if (this.y < -50 || this.x < -50 || this.x > width + 50) this.isDead = true; }
+            draw(ctx) {
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation);
+                const pulse = Math.abs(Math.sin(this.life)); ctx.shadowBlur = 15 + pulse * 30; ctx.shadowColor = '#00ffcc';
+                ctx.fillStyle = `rgba(255, 255, 255, ${0.7 + pulse * 0.3})`; ctx.font = `bold ${this.size}px 'Times New Roman', serif`;
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(this.char, 0, 0); ctx.restore();
+            }
+        }
+
+        function initBgSymbols() { bgSymbols = []; for (let i = 0; i < TOTAL_BG_SYMBOLS; i++) bgSymbols.push(new FloatingSymbol()); }
+
+        // ==========================================
+        // SISTEMA DE PARTÍCULAS DO CONHECIMENTO
+        // ==========================================
+        const mathSymbols = ["∫", "∑", "Δ", "π", "∞", "Ω", "θ", "λ", "μ", "E=mc²", "φ", "ψ", "√"];
+        let knowledgeParticles = [];
+
+        class KnowledgeParticle {
+            constructor() {
+                this.x = 0; this.y = 0;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 4 + 1.5; 
+                this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed;
+                this.life = 1.0; this.decay = Math.random() * 0.01 + 0.005; 
+                this.rotation = Math.random() * Math.PI * 2; this.rotSpeed = (Math.random() - 0.5) * 0.05;
+                this.size = Math.random() * 20 + 15;
+                this.isShape = Math.random() > 0.5;
+                this.char = mathSymbols[Math.floor(Math.random() * mathSymbols.length)];
+                this.sides = Math.floor(Math.random() * 4) + 3; 
+                this.color = `hsl(${Math.random()*60 + 180}, 100%, 70%)`; 
+            }
+            update() { this.x += this.vx; this.y += this.vy; this.rotation += this.rotSpeed; this.life -= this.decay; }
+            draw(ctx) {
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation);
+                ctx.globalAlpha = Math.max(0, this.life); ctx.shadowBlur = 20; ctx.shadowColor = this.color;
+                ctx.strokeStyle = this.color; ctx.fillStyle = this.color; ctx.lineWidth = 2;
+
+                if (this.isShape) {
+                    ctx.beginPath();
+                    for (let i = 0; i < this.sides; i++) {
+                        const ang = (i * Math.PI * 2) / this.sides;
+                        const px = Math.cos(ang) * this.size; const py = Math.sin(ang) * this.size;
+                        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                    }
+                    ctx.closePath(); ctx.stroke();
+                } else {
+                    ctx.font = `${this.size}px 'Times New Roman', serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(this.char, 0, 0);
+                }
+                ctx.restore();
+            }
+        }
+
+        function triggerLore() {
+            if (loreTriggered) return;
+            loreTriggered = true;
+            const container = document.getElementById('lore-container');
+            container.style.display = 'block';
+
+            if (container.children.length === 0) {
+                const defaultLore = [
+                    "O antigo mecanismo cede, revelando o verdadeiro núcleo do Criptex.",
+                    "Fórmulas arcanas e geometrias primordiais escapam do selo, inundando a câmara.",
+                    "Sua mente expande-se enquanto os segredos da criação fluem diretamente para a sua consciência.",
+                    "Você domina a linguagem oculta. O verdadeiro poder agora está nas suas mãos."
+                ];
+                defaultLore.forEach((text, i) => {
+                    const p = document.createElement('p');
+                    p.className = 'lore-paragraph';
+                    p.innerText = text;
+                    p.style.animationDelay = `${i * 3}s`; 
+                    container.appendChild(p);
+                });
+            } else {
+                const paragraphs = container.querySelectorAll('p');
+                paragraphs.forEach((p, i) => {
+                    p.className = 'lore-paragraph';
+                    p.style.animationDelay = `${i * 3}s`;
+                });
+            }
+        }
+
+        // ==========================================
+        // 5. LÓGICA DO PUZZLE
+        // ==========================================
+        let rings = [], NUM_RINGS = 0;
+        let activeRingIndex = -1, isDragging = false, startAngle = 0, currentRingStartAngle = 0;
+        let isTransitioning = false, isScramblingErrors = false, isAutoSolving = false;
+        let transitionDelay = 0, transitionFrames = 0;
+        let scrambleStartAngles = [], scrambleTargetAngles = []; 
+
+        function updateThemeBackground() {
+            const body = document.body;
+            if (currentTheme === "LUZ") body.style.background = 'radial-gradient(circle at center, #fff9e6 0%, #f4e8d0 100%)';
+            else if (currentTheme === "TREVAS") body.style.background = '#020005';
+            else if (currentTheme === "FOGO") body.style.background = 'radial-gradient(circle at center, #2a0000 0%, #0a0000 100%)';
+            else body.style.background = 'radial-gradient(circle at center, #1a0b2e 0%, #05010a 100%)';
+        }
+
+        function getHintText(word) { return word.split('').map(c => useLatinAlphabet ? c : runicAlphabet[c]).join(' '); }
+
+        function initStage(stageIndex) {
+            updateThemeBackground(); isPuzzleEngaged = false; 
+            if (stageIndex > 2) return;
+            rings = []; const targetWord = stagesWords[stageIndex]; NUM_RINGS = targetWord.length;
+            const ringWidth = (MAX_RADIUS - MIN_RADIUS) / NUM_RINGS;
+
+            for (let i = 0; i < NUM_RINGS; i++) {
+                const targetRune = runicAlphabet[targetWord[i]];
+                let requiredRunes = new Set([targetRune]); 
+                easterEggs.forEach(egg => { if (i < egg.length) requiredRunes.add(runicAlphabet[egg[i]]); });
+
+                let symbols = new Array(16).fill(null);
+                const targetSlot = Math.floor(Math.random() * 16); symbols[targetSlot] = targetRune; requiredRunes.delete(targetRune); 
+                
+                requiredRunes.forEach(rune => { let placed = false; while(!placed) { let rSlot = Math.floor(Math.random() * 16); if (symbols[rSlot] === null) { symbols[rSlot] = rune; placed = true; } } });
+                for(let j=0; j<16; j++) { if (symbols[j] === null) { let randomRune; do { randomRune = allRunes[Math.floor(Math.random() * allRunes.length)]; } while (symbols.includes(randomRune) && Math.random() > 0.1); symbols[j] = randomRune; } }
+
+                const targetAngle = (360 - (targetSlot * 22.5)) % 360;
+                let startAngle; do { startAngle = Math.floor(Math.random() * 16) * 22.5; } while (startAngle === targetAngle);
+                
+                rings.push({ radius: MAX_RADIUS - (i * ringWidth), width: ringWidth, symbols: symbols, targetAngle: targetAngle, currentAngle: startAngle });
+            }
+        }
+
+        function getCurrentlyAlignedWord() {
+            let word = "";
+            for (let i = 0; i < NUM_RINGS; i++) {
+                const currentNorm = ((rings[i].currentAngle % 360) + 360) % 360;
+                const targetJAngle = (360 - currentNorm) % 360;
+                const j = Math.round(targetJAngle / 22.5) % 16;
+                word += runeToLatin[rings[i].symbols[j]] || "?";
+            }
+            return word;
+        }
+
+        function triggerStageComplete() {
+            isTransitioning = true; isScramblingErrors = false; isAutoSolving = false; playSound('magic'); isPuzzleEngaged = false; 
+            for(let i=0; i<NUM_RINGS; i++) rings[i].currentAngle = rings[i].targetAngle;
+            
+            transitionDelay = 60; transitionFrames = 80; 
+            scrambleStartAngles = rings.map(r => r.currentAngle); scrambleTargetAngles = rings.map((r) => r.currentAngle + 720); 
+        }
+
+        function toggleTheme(themeName) {
+            if (currentTheme === themeName) { currentTheme = "DEFAULT"; flashColor = '#00d4ff'; } 
+            else { currentTheme = themeName; if (themeName === 'LUZ') flashColor = '#fff5cc'; if (themeName === 'TREVAS') flashColor = '#aa00ff'; if (themeName === 'FOGO') flashColor = '#ff4400'; }
+            updateThemeBackground(); flashAlpha = 1.0; playSound('magic'); saveState();
+        }
+
+        function validatePuzzle() {
+            if (isTransitioning || currentStageIndex > 2) return;
+            const alignedWord = getCurrentlyAlignedWord();
+            
+            if (alignedWord.startsWith("RESETAR")) { hardResetGame(); return; }
+            if (alignedWord.startsWith("IDIOMA")) { 
+                useLatinAlphabet = !useLatinAlphabet; idiomaUnlocked = true;
+                flashColor = '#00ffcc'; flashAlpha = 1.0; playSound('magic'); saveState(); isPuzzleEngaged = false; return; 
+            }
+            
+            const themeDetected = ["LUZ", "FOGO", "TREVAS", "NORMAL"].find(t => alignedWord.startsWith(t));
+            if (themeDetected) {
+                if (themeDetected === "NORMAL") { 
+                    if (currentTheme !== "DEFAULT") { currentTheme = "DEFAULT"; updateThemeBackground(); flashColor = '#00d4ff'; flashAlpha = 1.0; playSound('magic'); saveState(); } 
+                } else { unlockedThemes[themeDetected] = true; toggleTheme(themeDetected); }
+                isPuzzleEngaged = false; return;
+            }
+
+            let allCorrect = true;
+            for (let i = 0; i < NUM_RINGS; i++) {
+                const currentNorm = ((rings[i].currentAngle % 360) + 360) % 360; const targetNorm = ((rings[i].targetAngle % 360) + 360) % 360;
+                if (Math.abs(currentNorm - targetNorm) > 3 && Math.abs(currentNorm - targetNorm) < 357) { allCorrect = false; break; }
+            }
+
+            if (allCorrect) { triggerStageComplete(); } 
+            else {
+                if (useLatinAlphabet) useLatinAlphabet = false;
+                isTransitioning = true; isScramblingErrors = true; isAutoSolving = false; transitionDelay = 0; transitionFrames = 75; playSound('error'); isPuzzleEngaged = false;
+                scrambleStartAngles = rings.map(r => r.currentAngle);
+                scrambleTargetAngles = scrambleStartAngles.map((startAngle) => { return startAngle + (360 * (Math.floor(Math.random() * 2) + 1)) + (Math.floor(Math.random() * 16) * 22.5); });
+            }
+            saveState();
+        }
+
+        // Função de Auto-Resolver Reintegrada (CORREÇÃO DO BUG)
+        function autoSolveStage() {
+            playSound('magic'); isTransitioning = true; isAutoSolving = true; isScramblingErrors = false; transitionDelay = 0; transitionFrames = 90; isPuzzleEngaged = true; 
+            scrambleStartAngles = rings.map(r => r.currentAngle);
+            scrambleTargetAngles = rings.map(r => {
+                const currentNorm = ((r.currentAngle % 360) + 360) % 360; const targetNorm = ((r.targetAngle % 360) + 360) % 360;
+                let diff = targetNorm - currentNorm; if (diff <= 0) diff += 360; 
+                return r.currentAngle + diff + (360 * 2); 
+            });
+        }
+
+        // ==========================================
+        // 6. RENDERIZAÇÃO
+        // ==========================================
+        function getActiveColor() { if (currentStageIndex === 0) return '#00d4ff'; if (currentStageIndex === 1) return '#ff00aa'; return '#ff2200'; }
+
+        function updateCamera() {
+            const isMobile = window.innerWidth <= 768;
+            const baseScale = isMobile ? (window.innerWidth / 650) * 0.95 : Math.min(1.1, window.innerWidth / 700);
+            const zoomScale = isMobile ? baseScale * 2.2 : 1.8; 
+            const baseOffset = isMobile ? -30 : 20; const zoomOffset = isMobile ? 320 : 380; 
+
+            const targetScale = isPuzzleEngaged ? zoomScale : baseScale;
+            const targetCenterY = isPuzzleEngaged ? zoomOffset : baseOffset;
+            
+            if(!isNaN(targetScale)) animScale += (targetScale - animScale) * 0.08;
+            if(!isNaN(targetCenterY)) animCenterYOffset += (targetCenterY - animCenterYOffset) * 0.08;
+        }
+
+        function drawInteractiveHint(ctx, word, x, y, align, glowColor, textColor = 'rgba(255, 255, 255, 0.6)') {
+            const text = getHintText(word); ctx.save(); ctx.font = '24px "Times New Roman"';
+            const tWidth = ctx.measureText(text).width;
+            
+            let bX = x; if (align === 'center') bX = x - tWidth/2 - 20; if (align === 'right') bX = x - tWidth - 20;
+            const bY = y - 25; const bW = tWidth + 40; const bH = 40;
+
+            if (useLatinAlphabet) { hintHitbox = { x: bX, y: bY, w: bW, h: bH }; }
+
+            ctx.shadowBlur = useLatinAlphabet ? 15 : 8; ctx.shadowColor = glowColor;
+            ctx.fillStyle = textColor; ctx.textAlign = align; ctx.textBaseline = 'middle'; 
+            ctx.fillText(text, x, y - 5); ctx.restore();
+        }
+
+        function drawEnvironment() {
+            hintHitbox = null; idiomaHitbox = null; 
+
+            let themeColor = 'rgba(0, 212, 255, 0.06)'; 
+            if (currentTheme === "LUZ") themeColor = 'rgba(180, 130, 60, 0.15)'; 
+            if (currentTheme === "TREVAS") themeColor = 'rgba(170, 0, 255, 0.12)';
+            if (currentTheme === "FOGO") themeColor = 'rgba(255, 68, 0, 0.12)';
+
+            if (currentTheme === "LUZ") bgCtx.fillStyle = 'rgba(255, 249, 230, 0.03)'; 
+            else if (currentTheme === "TREVAS") bgCtx.fillStyle = 'rgba(2, 0, 5, 0.2)'; 
+            else if (currentTheme === "FOGO") bgCtx.fillStyle = 'rgba(42, 0, 0, 0.2)'; 
+            else bgCtx.fillStyle = 'rgba(10, 5, 20, 0.3)';
+            bgCtx.fillRect(0, 0, width, height);
+
+            bgCtx.save(); bgCtx.strokeStyle = themeColor; bgCtx.fillStyle = themeColor; bgCtx.lineWidth = 1.5;
+
+            bgCtx.save(); bgCtx.translate(CENTER_X, CENTER_Y); bgCtx.rotate(Date.now() * 0.00008);
+            bgCtx.beginPath(); bgCtx.arc(0, 0, Math.min(width, height)*0.45 + 50, 0, Math.PI * 1.93); bgCtx.stroke();
+            bgCtx.translate(Math.cos(Math.PI * 1.93) * (Math.min(width, height)*0.45 + 50), Math.sin(Math.PI * 1.93) * (Math.min(width, height)*0.45 + 50)); 
+            bgCtx.rotate(Math.PI * 1.93);
+            bgCtx.beginPath(); bgCtx.moveTo(-15, -20); bgCtx.lineTo(25, 0); bgCtx.lineTo(-15, 20); bgCtx.closePath(); bgCtx.stroke(); bgCtx.fill(); 
+            bgCtx.restore();
+
+            const pyX = width > 768 ? width - 250 : width - 100;
+            const doorX = width > 768 ? 250 : 100;
+
+            if (currentTheme === "LUZ") {
+                bgCtx.save(); bgCtx.translate(pyX, height);
+                const shadowGrad = bgCtx.createLinearGradient(0, 0, -300, 150);
+                shadowGrad.addColorStop(0, 'rgba(120, 70, 30, 0.12)'); shadowGrad.addColorStop(1, 'rgba(120, 70, 30, 0)');
+                bgCtx.fillStyle = shadowGrad; bgCtx.beginPath(); bgCtx.moveTo(120, -250); bgCtx.lineTo(240, 0); bgCtx.lineTo(-400, 200); bgCtx.lineTo(-200, -250); bgCtx.closePath(); bgCtx.fill(); bgCtx.restore();
+
+                if (currentStageIndex === 2) drawInteractiveHint(bgCtx, "VIDA", width - 40, height - 120, 'right', '#ffd700', 'rgba(255, 255, 255, 0.6)');
+            }
+
+            bgCtx.save(); bgCtx.translate(pyX, height); bgCtx.lineWidth = 1.5; bgCtx.strokeStyle = themeColor;
+            bgCtx.beginPath(); bgCtx.moveTo(0, 0); bgCtx.lineTo(120, -250); bgCtx.lineTo(240, 0); bgCtx.stroke();
+            bgCtx.beginPath(); bgCtx.moveTo(120, -250); bgCtx.lineTo(150, 0); bgCtx.stroke();
+            for(let i=1; i<6; i++) { let y = -250 + (250/6)*i; bgCtx.beginPath(); bgCtx.moveTo((120/6)*i, y); bgCtx.lineTo(240 - (120/6)*i, y); bgCtx.stroke(); }
+            bgCtx.beginPath(); bgCtx.moveTo(-90, 0); bgCtx.lineTo(-20, -140); bgCtx.lineTo(50, 0); bgCtx.stroke();
+            bgCtx.beginPath(); bgCtx.moveTo(-20, -140); bgCtx.lineTo(0, 0); bgCtx.stroke(); bgCtx.restore();
+
+            bgCtx.save(); bgCtx.translate(doorX, height); bgCtx.lineWidth = 2; bgCtx.strokeStyle = themeColor;
+            bgCtx.beginPath(); bgCtx.moveTo(-70, 0); bgCtx.lineTo(-70, -220); bgCtx.arc(0, -220, 70, Math.PI, 0); bgCtx.lineTo(70, 0); bgCtx.stroke();
+            bgCtx.beginPath(); bgCtx.arc(0, -220, 55, Math.PI, 0); bgCtx.stroke();
+            
+            const idiomaHint = getHintText("IDIOMA").split(' ');
+            const boxW = 80, boxH = 45 * idiomaHint.length + 20, boxY = -310;
+            
+            if (idiomaUnlocked) {
+                bgCtx.shadowBlur = 8; 
+                bgCtx.shadowColor = (currentTheme === "TREVAS") ? '#aa00ff' : ((currentTheme === "LUZ") ? '#ffd700' : '#00d4ff');
+                bgCtx.font = "24px 'Times New Roman'"; bgCtx.textAlign = "center"; bgCtx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
+                idiomaHint.forEach((r, idx) => bgCtx.fillText(r, 0, boxY + 40 + (idx * 45))); 
+                idiomaHitbox = { x: doorX - 40, y: height + boxY, w: boxW, h: boxH }; 
+            } else {
+                bgCtx.shadowBlur = 0; bgCtx.font = "24px 'Times New Roman'"; bgCtx.textAlign = "center"; 
+                let textColor = 'rgba(0, 212, 255, 0.3)'; 
+                if (currentTheme === "LUZ") textColor = 'rgba(200, 150, 80, 0.4)'; if (currentTheme === "TREVAS") textColor = 'rgba(170, 0, 255, 0.35)'; if (currentTheme === "FOGO") textColor = 'rgba(255, 100, 0, 0.3)';
+                bgCtx.fillStyle = textColor; bgCtx.globalAlpha = 1.0;
+                idiomaHint.forEach((r, idx) => bgCtx.fillText(r, 0, boxY + 40 + (idx * 45))); 
+                idiomaHitbox = null; 
+            }
+            bgCtx.restore();
+
+            if (currentTheme === "LUZ") {
+                bgCtx.save(); bgCtx.translate(CENTER_X, CENTER_Y); for(let i=0; i<8; i++) { bgCtx.rotate(Math.PI / 4); bgCtx.beginPath(); bgCtx.moveTo(380, 0); bgCtx.lineTo(width, 0); bgCtx.stroke(); } bgCtx.restore();
+            } else if (currentTheme === "FOGO") {
+                bgCtx.fillStyle = 'rgba(255, 68, 0, 0.05)'; bgCtx.fillRect(0, height - 150, width, 150);
+                if (currentStageIndex === 0) drawInteractiveHint(bgCtx, "COMBATER", CENTER_X, height - 150, 'center', '#ff4400', 'rgba(255, 255, 255, 0.6)');
+            } else if (currentTheme === "TREVAS" && currentStageIndex === 1) {
+                drawInteractiveHint(bgCtx, "DOMINACAO", CENTER_X, height - 150, 'center', '#aa00ff', 'rgba(255, 255, 255, 0.6)');
+            }
+            bgCtx.restore();
+
+            bgSymbols.forEach(sym => { sym.update(); sym.draw(bgCtx); });
+
+            if (!idiomaUnlocked) {
+                if (!activeHintRune) {
+                    hintSpawnTimer--;
+                    if (hintSpawnTimer <= 0) {
+                        activeHintRune = new HintRune(idiomaWord[nextHintIndex]);
+                        nextHintIndex = (nextHintIndex + 1) % idiomaWord.length;
+                        hintSpawnTimer = Math.floor(Math.random() * 50) + 30; 
+                    }
+                } else {
+                    activeHintRune.update(); activeHintRune.draw(bgCtx);
+                    if (activeHintRune.isDead) activeHintRune = null;
+                }
+            }
+        }
+
+        function drawPuzzle() {
+            ctx.clearRect(0, 0, width, height); 
+            updateCamera();
+
+            const stageColor = (currentTheme === "LUZ") ? '#ffd700' : (currentStageIndex > 2 ? '#00d4ff' : getActiveColor());
+            const isStageCompleteFlash = (isTransitioning && !isScramblingErrors && !isAutoSolving && transitionDelay > 0);
+            let themeRingColor = stageColor; 
+            
+            if (currentTheme === "LUZ") { themeRingColor = '#b8860b'; } 
+            else if (currentTheme === "FOGO") { themeRingColor = '#ff4400'; } 
+            else if (currentTheme === "TREVAS") { themeRingColor = '#aa00ff'; }
+
+            const pedY = height - 60;
+            pedestalsDef.forEach(p => {
+                if (!unlockedThemes[p.theme]) return;
+                const isActive = (currentTheme === p.theme);
+                const pGlow = isActive ? 15 + Math.sin(Date.now() * 0.005) * 5 : 0;
+                const pAlpha = isActive ? 1.0 : 0.3;
+                const floatY = isActive ? Math.sin(Date.now() * 0.003) * 5 - 15 : -10;
+
+                ctx.save(); ctx.translate(CENTER_X + p.offsetX, pedY);
+                ctx.fillStyle = `rgba(30, 30, 40, ${pAlpha + 0.2})`; ctx.beginPath();
+                ctx.moveTo(-15, 25); ctx.lineTo(15, 25); ctx.lineTo(10, -5); ctx.lineTo(-10, -5); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = isActive ? p.activeColor : p.color; ctx.shadowBlur = pGlow; ctx.shadowColor = p.color; ctx.globalAlpha = pAlpha;
+                ctx.beginPath(); ctx.arc(0, floatY, 12, 0, Math.PI * 2); ctx.fill();
+                ctx.shadowBlur = 0; ctx.fillStyle = isActive ? '#000' : '#fff'; ctx.font = 'bold 14px "Times New Roman"'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                let dispRune = p.rune; if (useLatinAlphabet && runeToLatin[dispRune]) dispRune = runeToLatin[dispRune];
+                ctx.fillText(dispRune, 0, floatY); ctx.restore();
+            });
+
+            if (currentStageIndex <= 2) {
+                ctx.save(); ctx.translate(CENTER_X, height - 110);
+                for(let s=0; s<3; s++) {
+                    ctx.beginPath(); ctx.moveTo(-30 + (s*30), -5); ctx.lineTo(-25 + (s*30), 0); ctx.lineTo(-30 + (s*30), 5); ctx.lineTo(-35 + (s*30), 0); ctx.closePath();
+                    ctx.fillStyle = s < currentStageIndex ? getActiveColor() : 'rgba(255,255,255,0.1)'; ctx.shadowBlur = s < currentStageIndex ? 15 : 0; ctx.shadowColor = getActiveColor(); ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            ctx.save(); 
+            ctx.translate(CENTER_X, CENTER_Y + animCenterYOffset); 
+            ctx.scale(animScale, animScale);
+
+            if(NUM_RINGS > 0) {
+                if (isScramblingErrors && transitionFrames > 0) { const shake = (Math.random() - 0.5) * 6; ctx.translate(shake, shake); }
+                if (currentStageIndex > 2) { for (let i = 0; i < NUM_RINGS; i++) { rings[i].currentAngle += (i % 2 === 0 ? 0.5 + (i * 0.05) : -(0.5 + (i * 0.05))); } }
+
+                if (currentStageIndex <= 2) {
+                    ctx.fillStyle = isStageCompleteFlash ? '#fff' : (currentTheme === "LUZ" ? '#ffd700' : themeRingColor);
+                    ctx.shadowBlur = (currentTheme === "TREVAS" ? 30 : (currentTheme === "LUZ" ? 25 : 15)); ctx.shadowColor = (currentTheme === "LUZ" ? '#ffd700' : themeRingColor);
+                    ctx.beginPath(); ctx.moveTo(0, - MAX_RADIUS + 5); ctx.lineTo(-12, - MAX_RADIUS - 18); ctx.lineTo(12, - MAX_RADIUS - 18); ctx.fill();
+                    ctx.fillRect(-3, - MAX_RADIUS - 28, 6, 8); ctx.shadowBlur = 0;
+                    ctx.fillStyle = (currentTheme === "LUZ") ? 'rgba(255, 215, 0, 0.05)' : `rgba(255, 255, 255, 0.02)`;
+                    ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, MAX_RADIUS, -Math.PI/2 - 0.15, -Math.PI/2 + 0.15); ctx.fill();
+                }
+
+                for (let i = 0; i < NUM_RINGS; i++) {
+                    const ring = rings[i]; const angleRad = (ring.currentAngle * Math.PI) / 180;
+                    let ringColor = themeRingColor; 
+                    if (currentStageIndex > 2) { if (i < NUM_RINGS/3) ringColor = '#00d4ff'; else if (i < (NUM_RINGS/3)*2) ringColor = '#ff00aa'; else ringColor = '#ff2200'; }
+
+                    ctx.save(); ctx.rotate(angleRad);
+                    let alpha = 1; if (isTransitioning && !isScramblingErrors && transitionDelay <= 0) alpha = transitionFrames / (isAutoSolving ? 90 : 80); 
+
+                    if (i === activeRingIndex) {
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.9 * alpha})`; ctx.lineWidth = 3; ctx.shadowBlur = 15; ctx.shadowColor = themeRingColor; ctx.setLineDash([]); 
+                    } else {
+                        ctx.setLineDash([4, 6]); 
+                        if (currentStageIndex > 2 || isStageCompleteFlash) { ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; ctx.shadowBlur = currentStageIndex > 2 ? 15 : 0; ctx.shadowColor = ringColor; ctx.lineWidth = 2.5; } 
+                        else { 
+                            ctx.strokeStyle = currentTheme === "TREVAS" ? `rgba(40,40,40, ${0.5 * alpha})` : (currentTheme === "LUZ" ? `rgba(139, 90, 43, ${0.15 * alpha})` : `rgba(255, 255, 255, ${0.15 * alpha})`); 
+                            ctx.shadowBlur = 0; ctx.lineWidth = 1.2; 
+                        }
+                    }
+                    
+                    ctx.beginPath(); ctx.arc(0, 0, ring.radius, 0, Math.PI * 2); ctx.stroke(); 
+                    ctx.beginPath(); ctx.arc(0, 0, ring.radius - ring.width, 0, Math.PI * 2); ctx.stroke(); 
+                    ctx.setLineDash([]);
+
+                    let fontSize = NUM_RINGS > 10 ? ring.width * 0.65 : ring.width * 0.55;
+                    ctx.font = `${fontSize}px 'Times New Roman', serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+                    for (let j = 0; j < 16; j++) {
+                        const symAngle = (j * (360 / 16) * Math.PI) / 180;
+                        ctx.save(); ctx.rotate(symAngle);
+                        
+                        let runeAlpha = (currentTheme === "LUZ") ? 0.8 : 0.5;
+                        let isTargetRune = (currentStageIndex <= 2 && ring.symbols[j] === runicAlphabet[stagesWords[currentStageIndex][i]]);
+                        
+                        let glowArcana = false; 
+                        if ((Date.now() - lastInteractionTime) > 60000 && isTargetRune) glowArcana = (Math.sin(Date.now() * 0.003 + i) > 0.8);
+
+                        if (currentStageIndex > 2 || isStageCompleteFlash) { 
+                            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`; 
+                        } 
+                        else {
+                            if (glowArcana) { ctx.fillStyle = (currentTheme === "LUZ") ? `rgba(184, 134, 11, ${0.9 * alpha})` : `rgba(0, 255, 255, ${0.9 * alpha})`; ctx.shadowBlur = 10; ctx.shadowColor = (currentTheme === "LUZ") ? '#b8860b' : '#00ffff'; } 
+                            else {
+                                if (currentTheme === "LUZ") ctx.fillStyle = `rgba(139, 90, 43, ${runeAlpha * alpha})`; 
+                                else if (currentTheme === "TREVAS") ctx.fillStyle = `rgba(255, 255, 255, ${0.8 * alpha})`; 
+                                else if (currentTheme === "FOGO") ctx.fillStyle = `rgba(255, 100, 0, ${runeAlpha * alpha})`;
+                                else ctx.fillStyle = `rgba(255, 255, 255, ${runeAlpha * alpha})`;
+                            }
+                        }
+
+                        let displayChar = ring.symbols[j]; if (useLatinAlphabet && runeToLatin[displayChar]) displayChar = runeToLatin[displayChar];
+                        ctx.translate(0, -(ring.radius - (ring.width / 2))); ctx.fillText(displayChar, 0, 0); ctx.restore();
+                    }
+                    ctx.restore();
+                }
+
+                if (currentStageIndex > 2) {
+                    if (Math.random() > 0.3) knowledgeParticles.push(new KnowledgeParticle());
+                    for (let i = knowledgeParticles.length - 1; i >= 0; i--) {
+                        const kp = knowledgeParticles[i]; kp.update(); kp.draw(ctx);
+                        if (kp.life <= 0) knowledgeParticles.splice(i, 1);
+                    }
+                    triggerLore();
+                }
+
+                const isClickable = (currentStageIndex <= 2 && !isTransitioning);
+                ctx.save(); ctx.rotate(Date.now() * 0.001);
+                ctx.strokeStyle = currentTheme === "TREVAS" ? 'rgba(0,0,0,0)' : `rgba(255, 255, 255, ${isClickable ? 0.4 : 0.1})`;
+                ctx.lineWidth = 2; ctx.setLineDash([8, 12]); ctx.beginPath(); ctx.arc(0, 0, MIN_RADIUS - 5, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+
+                let corePulse = 0;
+                if (!isPuzzleEngaged && isClickable) corePulse = Math.sin(Date.now() * 0.005) * 6; else if (isPuzzleEngaged && isClickable) corePulse = Math.sin(Date.now() * 0.008) * 1.5; 
+
+                const coreRadius = isClickable ? MIN_RADIUS/1.8 + corePulse : MIN_RADIUS/2.2;
+                ctx.fillStyle = (currentTheme === "LUZ") ? '#ffd700' : (!isPuzzleEngaged || currentStageIndex > 2 || isStageCompleteFlash) ? '#ffffff' : `rgba(20, 20, 35, 0.95)`;
+                ctx.shadowBlur = isClickable ? (!isPuzzleEngaged ? 35 + (corePulse*3) : 20) : 5; ctx.shadowColor = (currentTheme === "LUZ") ? '#ffd700' : themeRingColor;
+                
+                ctx.beginPath(); ctx.arc(0, 0, coreRadius, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = (currentTheme === "LUZ") ? '#b8860b' : themeRingColor; ctx.lineWidth = 2; ctx.stroke();
+            }
+            ctx.restore(); 
+
+            if (flashAlpha > 0) { ctx.fillStyle = flashColor; ctx.globalAlpha = flashAlpha; ctx.fillRect(0, 0, width, height); ctx.globalAlpha = 1.0; flashAlpha -= 0.02; }
+        }
+
+        // ==========================================
+        // 7. EVENTOS DE INTERAÇÃO (BLINDADOS)
+        // ==========================================
+        function getAngleFromCenter(clientX, clientY) { 
+            const x = clientX - CENTER_X; const y = clientY - (CENTER_Y + animCenterYOffset); 
+            return Math.atan2(y, x) * (180 / Math.PI); 
+        }
+        
+        function getRingIndexAt(clientX, clientY) {
+            if (useLatinAlphabet && hintHitbox) { if (clientX >= hintHitbox.x && clientX <= hintHitbox.x + hintHitbox.w && clientY >= hintHitbox.y && clientY <= hintHitbox.y + hintHitbox.h) return "HINT_BUTTON"; }
+            if (idiomaHitbox) { if (clientX >= idiomaHitbox.x && clientX <= idiomaHitbox.x + idiomaHitbox.w && clientY >= idiomaHitbox.y && clientY <= idiomaHitbox.y + idiomaHitbox.h) return "TOGGLE_LANGUAGE"; }
+            
+            const pedY = height - 60;
+            for (let p of pedestalsDef) { if (unlockedThemes[p.theme]) { const pedX = CENTER_X + p.offsetX; const dist = Math.sqrt((clientX - pedX)**2 + (clientY - pedY)**2); if (dist <= 30) return `PEDESTAL_${p.theme}`; } }
+            
+            const localX = (clientX - CENTER_X) / animScale; const localY = (clientY - (CENTER_Y + animCenterYOffset)) / animScale; const distCenter = Math.sqrt(localX*localX + localY*localY);
+            if (distCenter <= MIN_RADIUS) return "CENTER";
+            for (let i = 0; i < NUM_RINGS; i++) { if (distCenter <= rings[i].radius && distCenter >= (rings[i].radius - rings[i].width)) return i; }
+            return -1;
+        }
+
+        function handleStart(e) {
+            // FIX: Proteção absoluta contra toques fora do canvas (no UI ou fundo)
+            if (e.target && typeof e.target.closest === 'function' && (e.target.closest('.modal') || e.target.closest('#ui-container'))) return;
+
+            initAudio(); lastInteractionTime = Date.now();
+            let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            if (currentStageIndex > 2 || isTransitioning) return; 
+            const target = getRingIndexAt(clientX, clientY);
+            
+            if (target === "HINT_BUTTON") { autoSolveStage(); return; }
+            if (target === "TOGGLE_LANGUAGE") { useLatinAlphabet = !useLatinAlphabet; playSound('magic'); return; }
+            if (typeof target === 'string' && target.startsWith("PEDESTAL_")) { toggleTheme(target.split("_")[1]); return; }
+            if (target === "CENTER") { if (!isPuzzleEngaged) { isPuzzleEngaged = true; playSound('engage'); } else { validatePuzzle(); } return; }
+
+            if (target !== -1 && isPuzzleEngaged) { activeRingIndex = target; isDragging = true; startAngle = getAngleFromCenter(clientX, clientY); currentRingStartAngle = rings[activeRingIndex].currentAngle; }
+        }
+
+        let dragTickCounter = 0;
+        function handleMove(e) {
+            lastInteractionTime = Date.now();
+            if (!isDragging || activeRingIndex === -1 || isTransitioning || !isPuzzleEngaged) return;
+            let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const currentAngle = getAngleFromCenter(clientX, clientY); rings[activeRingIndex].currentAngle = currentRingStartAngle + (currentAngle - startAngle);
+            dragTickCounter += Math.abs(currentAngle - startAngle);
+            if(dragTickCounter > 15) { playSound('tick'); dragTickCounter = 0; startAngle = currentAngle; currentRingStartAngle = rings[activeRingIndex].currentAngle; }
+        }
+
+        function handleEnd() {
+            lastInteractionTime = Date.now();
+            if (!isDragging || isTransitioning) return;
+            if (activeRingIndex !== -1) { const ring = rings[activeRingIndex]; const normalizedAngle = ((ring.currentAngle % 360) + 360) % 360; ring.currentAngle = Math.round(normalizedAngle / 22.5) * 22.5; }
+            isDragging = false; activeRingIndex = -1;
+        }
+
+        window.addEventListener('mousedown', handleStart); 
+        window.addEventListener('mousemove', handleMove); 
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchstart', handleStart, { passive: true });
+        window.addEventListener('touchmove', handleMove, { passive: false }); 
+        window.addEventListener('touchend', handleEnd);
+
+        // ==========================================
+        // 8. LOOP PRINCIPAL E TRANSIÇÕES
+        // ==========================================
+        function loop() {
+            drawEnvironment();
+
+            if (isTransitioning) {
+                if (transitionDelay > 0) transitionDelay--;
+                else if (transitionFrames > 0) {
+                    transitionFrames--; 
+                    const totalFrames = isAutoSolving ? 90 : (isScramblingErrors ? 75 : 80); 
+                    const t = 1 - (transitionFrames / totalFrames); 
+                    const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+                    for(let i=0; i<NUM_RINGS; i++) { rings[i].currentAngle = scrambleStartAngles[i] + (scrambleTargetAngles[i] - scrambleStartAngles[i]) * ease; }
+                    
+                    if (transitionFrames === 0) {
+                        isTransitioning = false;
+                        if (isAutoSolving) { 
+                            isAutoSolving = false; 
+                            for(let i=0; i<NUM_RINGS; i++) {
+                                const normalizedAngle = ((rings[i].currentAngle % 360) + 360) % 360;
+                                rings[i].currentAngle = Math.round(normalizedAngle / 22.5) * 22.5;
+                            }
+                            validatePuzzle(); 
+                        } 
+                        else if (!isScramblingErrors) { 
+                            // FIX: Avanço de nível blindado contra Race Conditions
+                            currentStageIndex++; saveState(); 
+                            if (currentStageIndex <= 2) {
+                                initStage(currentStageIndex); 
+                            } else {
+                                currentTheme = "DEFAULT"; 
+                                updateThemeBackground();
+                            }
+                        } 
+                        else { 
+                            for(let i=0; i<NUM_RINGS; i++) { 
+                                rings[i].currentAngle = rings[i].currentAngle % 360; 
+                                if(rings[i].currentAngle < 0) rings[i].currentAngle += 360; 
+                            } 
+                            isPuzzleEngaged = true; 
+                        }
+                    }
+                }
+            }
+            drawPuzzle(); requestAnimationFrame(loop);
+        }
+
+        // Iniciar
+        initBgSymbols();
+        initStage(currentStageIndex); 
+        requestAnimationFrame(loop);
+    </script>
+</body>
+</html>
