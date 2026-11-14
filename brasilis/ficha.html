@@ -33,7 +33,7 @@ body{ background:#1d1424; color:var(--ink); font-family:Georgia,"Times New Roman
 .photo::before{ left:-14%; top:6%; transform:rotate(-45deg); }
 .photo::after{ right:-14%; bottom:6%; transform:rotate(-45deg); }
 .head .t{ flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; }
-.head .t img.logo{ width:min(100%,260px); height:auto; align-self:flex-start; }
+.head .t img.logo{ width:min(100%,250px); height:auto; align-self:flex-start; }
 .head .t img.tit{ width:min(100%,360px); }
 .emb{ position:absolute; right:0; top:-8px; width:34px; opacity:.85; display:none; }
 
@@ -48,6 +48,14 @@ body{ background:#1d1424; color:var(--ink); font-family:Georgia,"Times New Roman
 .sec{ margin:0 0 20px; }
 .sec img.h{ height:24px; width:auto; max-width:100%; display:block; margin:0 0 7px; }
 .sec img.h.lg{ height:32px; }
+
+.hd{ display:block; font:700 20px/1.1 "Cormorant Garamond","EB Garamond",Garamond,Georgia,serif; font-variant:small-caps; text-transform:lowercase; letter-spacing:.07em; color:var(--purple); margin:0 0 7px; text-shadow:.4px 0 0 var(--purple); }
+.hd.lg{ font-size:30px; letter-spacing:.12em; }
+.hd::first-letter{ font-size:1.18em; }
+.lbl{ font:700 15px/1.1 "Cormorant Garamond","EB Garamond",Garamond,Georgia,serif; font-variant:small-caps; letter-spacing:.06em; color:var(--purple); }
+.tit{ display:block; font:700 clamp(16px,4.6vw,26px)/1.1 "Cormorant Garamond","EB Garamond",Garamond,Georgia,serif; font-variant:small-caps; letter-spacing:.07em; color:var(--purple); text-transform:lowercase; }
+.fad span,.cx span{ opacity:.3; } .fad span.on,.cx span.on{ opacity:1; text-decoration:underline; text-underline-offset:4px; }
+.sec .hd{ margin-bottom:7px; }
 .sec .help{ font:12.5px/1.4 system-ui,sans-serif; color:#5b4668; margin:-2px 0 8px; }
 .box{ border:2px solid var(--line); border-radius:3px; background:rgba(255,255,255,.28); padding:9px 11px; }
 label.lb{ display:block; font:700 11px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:#5b4668; margin:0 0 4px; }
@@ -129,8 +137,8 @@ details.pick .in{ padding:4px 10px 12px; }
   <div class="head">
     <div class="photo"><div class="in"><img id="foto" alt=""></div></div>
     <div class="t">
-      <img class="logo" src="assets/ui/logo-etmos.webp" alt="Etmos RPG">
-      <img class="tit" src="assets/ui/titulo-ficha.webp" alt="Ficha de personagem">
+      <img class="logo" src="assets/ui/logo-etmos.svg" alt="Etmos RPG">
+      <span class="tit">Ficha de Personagem</span>
     </div>
   </div>
 
@@ -151,30 +159,30 @@ details.pick .in{ padding:4px 10px 12px; }
         <div><label class="lb">Idade</label><input type="text" data-k="idade"></div>
       </div>
     </div>
-    <div class="sec"><img class="h lg" src="assets/ui/conceito.webp" alt="Conceito">
+    <div class="sec"><span class="hd lg">Conceito</span>
       <div class="grid2" style="margin-top:6px">
-        <div class="span2"><img class="h" src="assets/ui/basico.webp" alt="Básico"><textarea data-k="basico" style="min-height:72px"></textarea></div>
-        <div class="span2"><img class="h" src="assets/ui/aparencia.webp" alt="Aparência"><textarea data-k="aparencia" style="min-height:96px"></textarea></div>
+        <div class="span2"><span class="hd">Básico</span><textarea data-k="basico" style="min-height:72px"></textarea></div>
+        <div class="span2"><span class="hd">Aparência</span><textarea data-k="aparencia" style="min-height:96px"></textarea></div>
       </div>
     </div>
-    <div class="sec big"><img class="h" src="assets/ui/pontos-importancia.webp" alt="Pontos de importância">
+    <div class="sec big"><span class="hd">Pontos de importância</span>
       <div class="help">O que move o personagem: guia, defeito, e a magia que ele sabe fazer.</div>
       <textarea data-k="pontos"></textarea></div>
-    <div class="sec"><img class="h" src="assets/ui/valores-comportamento.webp" alt="Valores e comportamento">
+    <div class="sec"><span class="hd">Valores e comportamento</span>
       <div class="help">Escreva dois polos (ex.: Lealdade ↔ Liberdade) e marque onde o personagem se encaixa.</div>
       <div class="box">
         <div class="pole"><input type="text" data-k="val_l1" placeholder="Polo A"><input type="text" data-k="val_r1" placeholder="Polo B"></div>
         <div class="pole" style="margin-top:8px"><input type="text" data-k="val_l2" placeholder="Polo A"><input type="text" data-k="val_r2" placeholder="Polo B"></div>
       </div></div>
-    <div class="sec big"><img class="h" src="assets/ui/futuro.webp" alt="Futuro">
+    <div class="sec big"><span class="hd">Futuro</span>
       <textarea data-k="futuro" style="min-height:110px"></textarea></div>
-    <div class="sec"><img class="h" src="assets/ui/origens.webp" alt="Origens">
+    <div class="sec"><span class="hd">Origens</span>
       <textarea data-k="origens" style="min-height:110px"></textarea></div>
   </section>
 
   <!-- ESTADO -->
   <section class="panel" id="p-est">
-    <div class="sec"><img class="h" src="assets/ui/atributos.webp" alt="Atributos">
+    <div class="sec"><span class="hd">Atributos</span>
       <div class="help">6 pontos para distribuir, no máximo 4 em cada atributo.</div>
       <div class="box" id="attrs"></div>
       <div class="grid3" style="margin-top:10px">
@@ -184,47 +192,47 @@ details.pick .in{ padding:4px 10px 12px; }
       </div>
     </div>
     <div class="grid2 est2">
-      <div class="sec"><div class="box"><div class="cardlbl"><img src="assets/ui/limite-ferimentos.webp" alt="Limite de ferimentos"></div>
+      <div class="sec"><div class="box"><div class="cardlbl"><span class="lbl">Limite de ferimentos</span></div>
         <div class="cnt"><button data-d="feridas_atual:-1" aria-label="menos">−</button><span class="v" id="v-feridas_atual"></span><button data-d="feridas_atual:1" aria-label="mais">+</button>
         <span class="of">de <input type="number" data-k="feridas_max" inputmode="numeric"></span></div>
         <div class="hint" id="h-fer"></div></div></div>
-      <div class="sec"><div class="box"><div class="cardlbl"><img src="assets/ui/estresse-acumulado.webp" alt="Estresse acumulado"></div>
+      <div class="sec"><div class="box"><div class="cardlbl"><span class="lbl">Estresse acumulado</span></div>
         <div class="cnt"><button data-d="estresse_atual:-1" aria-label="menos">−</button><span class="v" id="v-estresse_atual"></span><button data-d="estresse_atual:1" aria-label="mais">+</button>
         <span class="of">de <input type="number" data-k="estresse_max" inputmode="numeric"></span></div>
         <div class="hint" id="h-est"></div></div></div>
     </div>
-    <div class="sec"><img class="h" src="assets/ui/estados-fadiga.webp" alt="Estados de fadiga">
+    <div class="sec"><span class="hd">Estados de fadiga</span>
       <div class="box"><span class="tag" id="fadtag"></span>
-        <div class="fad" id="fad"><img src="assets/ui/normal.webp" alt="Normal"><img src="assets/ui/cansado.webp" alt="Cansado"><img src="assets/ui/exausto.webp" alt="Exausto"><img src="assets/ui/esgotado.webp" alt="Esgotado"></div>
+        <div class="fad" id="fad"><span class="lbl">Normal</span><span class="lbl">Cansado</span><span class="lbl">Exausto</span><span class="lbl">Esgotado</span></div>
         <div class="hint">Calculada sozinha: estresse acima do limite. 5 = Cansado, 6 a 8 = Exausto, 9 ou mais = Esgotado.</div></div></div>
-    <div class="sec"><img class="h" src="assets/ui/complexidade-maxima.webp" alt="Complexidade máxima de mágica" style="height:40px">
-      <div class="box"><div class="cx" id="cx"><img src="assets/ui/regular.webp" alt="Regular"><img src="assets/ui/dificil.webp" alt="Difícil"><img src="assets/ui/complexo.webp" alt="Complexa"><img src="assets/ui/milagre.webp" alt="Milagre"></div>
+    <div class="sec"><span class="hd">Complexidade máxima de mágica</span>
+      <div class="box"><div class="cx" id="cx"><span class="lbl">Regular</span><span class="lbl">Difícil</span><span class="lbl">Complexa</span><span class="lbl">Milagre</span></div>
         <div class="hint">Segue o atributo Mente: 2 = Difícil, 4 = Complexa, 6 = Milagre.</div></div></div>
-    <div class="sec"><img class="h" src="assets/ui/marcos-crescimento.webp" alt="Marcos de crescimento">
+    <div class="sec"><span class="hd">Marcos de crescimento</span>
       <div class="box" id="marcos"></div></div>
   </section>
 
   <!-- HABILIDADES -->
   <section class="panel" id="p-hab">
-    <div class="sec big"><img class="h" src="assets/ui/habilidades-praticas.webp" alt="Habilidades práticas">
+    <div class="sec big"><span class="hd">Habilidades práticas</span>
       <div class="help">Coisas que o personagem sabe fazer com o corpo e a prática.</div>
       <textarea data-k="praticas" style="min-height:110px"></textarea></div>
-    <div class="sec big"><img class="h" src="assets/ui/habilidades-teoricas.webp" alt="Habilidades teóricas">
+    <div class="sec big"><span class="hd">Habilidades teóricas</span>
       <div class="help">Conhecimentos e estudos.</div>
       <textarea data-k="teoricas" style="min-height:110px"></textarea></div>
-    <div class="sec big"><img class="h" src="assets/ui/inventario.webp" alt="Inventário">
+    <div class="sec big"><span class="hd">Inventário</span>
       <textarea data-k="inventario" style="min-height:130px"></textarea></div>
   </section>
 
   <!-- GRIMÓRIO -->
   <section class="panel" id="p-gri">
-    <div class="sec"><img class="h lg" src="assets/ui/grimorio.webp" alt="Grimório" style="height:40px">
+    <div class="sec"><span class="hd lg">Grimório</span>
       <div class="fmt"><b>Como montar uma magia:</b> Função (o que faz) + Objeto (em quê) + Característica (como) + Complementos. Tem Totem? Sem ele não se conjura no mundo Mundano.</div>
       <div class="cntline" id="cnts"></div>
       <div id="mine"></div>
       <details class="pick"><summary>＋ Adicionar ou remover partículas</summary><div class="in" id="all"></div></details>
     </div>
-    <div class="sec"><img class="h" src="assets/ui/complementos.webp" alt="Complementos">
+    <div class="sec"><span class="hd">Complementos</span>
       <div class="help">Os complementos de 1º nível já são conhecidos.</div><div class="tiles" id="comps"></div></div>
     <div class="links"><a id="dic2" href="dicionario.html">📖 Abrir o dicionário completo</a></div>
   </section>
@@ -281,7 +289,7 @@ $$('textarea').forEach(function(t){ var g=function(){t.style.height='auto'; t.st
 var AT=[['corpo','corpo'],['alma','alma'],['mente','mente']], attrs=$('#attrs');
 AT.forEach(function(a){
   var row=document.createElement('div'); row.className='attr';
-  row.innerHTML='<span class="nm"><img src="assets/ui/'+a[1]+'.webp" alt="'+a[0]+'"></span><div class="pips"></div>';
+  row.innerHTML='<span class="nm lbl">'+a[0].charAt(0).toUpperCase()+a[0].slice(1)+'</span><div class="pips"></div>';
   var pips=$('.pips',row), els=[];
   for(var i=1;i<=6;i++)(function(i){ var b=document.createElement('button'); b.type='button'; b.className='pip'; b.setAttribute('aria-label',a[0]+' '+i);
     b.onclick=function(){ state[a[0]]=(num(a[0])===i)?i-1:i; save(); derive(); };
@@ -311,9 +319,9 @@ function derive(){
   if(num('fadiga')!==fd){ state.fadiga=fd; save(); }
   var lvl=fd>=9?3:fd>=6?2:fd>=5?1:0, names=['Normal','Cansado','Exausto','Esgotado'];
   var tg=$('#fadtag'); tg.textContent=names[lvl]+(over?' · '+over+' acima do limite':''); tg.classList.toggle('warn',lvl>0);
-  $$('#fad img').forEach(function(e,i){ e.classList.toggle('on',i===lvl); });
+  $$('#fad span').forEach(function(e,i){ e.classList.toggle('on',i===lvl); });
   var cm=Math.min(6,m); if(num('complex')!==cm){ state.complex=cm; save(); }
-  var cl=m>=6?3:m>=4?2:m>=2?1:0; $$('#cx img').forEach(function(e,i){ e.classList.toggle('on',i===cl); });
+  var cl=m>=6?3:m>=4?2:m>=2?1:0; $$('#cx span').forEach(function(e,i){ e.classList.toggle('on',i===cl); });
 }
 
 /* grimório */

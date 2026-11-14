@@ -33,7 +33,7 @@
 
   .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:10px 12px; max-width:1100px; margin:0 auto; }
   @media (min-width:560px){ .grid{ grid-template-columns:repeat(4,1fr); } }
-  @media (min-width:820px){ .grid{ grid-template-columns:repeat(6,1fr); } }
+  @media (min-width:820px){ .grid{ grid-template-columns:repeat(4,1fr); } } @media (min-width:1100px){ .grid{ grid-template-columns:repeat(5,1fr); } }
   .card{ position:relative; background:var(--paper); color:var(--ink); border:0; border-radius:12px; padding:8px 6px 10px; text-align:center; cursor:pointer; font-family:inherit;
          box-shadow:0 2px 0 rgba(0,0,0,.25); transition:transform .12s; }
   .card:active{ transform:scale(.97); }
@@ -73,12 +73,39 @@
   .nav.l{ left:8px; } .nav.r{ right:8px; }
   .toast{ position:fixed; left:50%; bottom:calc(env(safe-area-inset-bottom) + 20px); transform:translateX(-50%); background:#2a1536; color:#f4ecfa; font:600 13px system-ui,sans-serif; padding:10px 16px; border-radius:99px; border:1px solid #7b4a8a; opacity:0; pointer-events:none; transition:opacity .2s; z-index:200; }
   .toast.on{ opacity:1; }
+
+  /* melhorias */
+  .sheet{ max-height:92vh; overflow-y:auto; }
+  .sheet .big{ width:auto; height:min(30vh,230px); max-width:70%; }
+  @media (min-width:760px){
+    dialog{ display:flex; align-items:center; justify-content:center; }
+    .sheet{ position:relative; left:auto; right:auto; bottom:auto; width:min(860px,92vw); max-width:none; margin:0; border-radius:20px; display:grid; grid-template-columns:260px 1fr; column-gap:28px; align-items:center; padding:28px 36px; max-height:88vh; }
+    .sheet .big{ grid-column:1; grid-row:1/8; height:auto; width:100%; max-width:none; }
+    .sheet > :not(.big):not(.nav){ grid-column:2; }
+    .sheet h2,.sheet .sub,.sheet .cod,.sheet .desc,.sheet .mine{ text-align:left; margin-left:0; }
+    .sheet .btns{ justify-content:flex-start; }
+    .card .dsc{ display:block; }
+  }
+  .card .dsc{ display:none; font:11px/1.3 system-ui,sans-serif; opacity:.75; margin-top:5px; text-align:left; }
+  .top .logo{ height:26px; filter:brightness(0) invert(.92); margin-right:2px; }
+  .btns button.add{ background:var(--acc); color:#fff; border-color:var(--acc); }
+  .tray{ position:fixed; left:0; right:0; bottom:0; z-index:40; background:rgba(29,20,36,.97); border-top:2px solid #7b4a8a; padding:10px 12px calc(env(safe-area-inset-bottom) + 10px); display:none; }
+  .tray.on{ display:block; }
+  .tray .row{ display:flex; gap:8px; align-items:center; max-width:1100px; margin:0 auto; flex-wrap:wrap; }
+  .tray .gl{ display:flex; gap:6px; flex:1; min-width:0; overflow-x:auto; }
+  .tray .mini{ flex:none; width:44px; background:var(--paper); border-radius:8px; padding:3px; position:relative; }
+  .tray .mini svg{ width:100%; height:auto; display:block; } .tray .mini path{ fill:var(--ink); fill-rule:evenodd; }
+  .tray .mini b{ position:absolute; top:-6px; left:-4px; background:var(--acc); color:#fff; font:700 9px system-ui; border-radius:4px; padding:1px 3px; }
+  .tray .txt{ font:700 20px Georgia,serif; letter-spacing:.04em; color:#fff; flex:1 1 100%; }
+  .tray button{ font:600 13px system-ui,sans-serif; color:#f1ecf7; background:transparent; border:1px solid #7b4a8a; padding:9px 12px; border-radius:8px; cursor:pointer; }
+  .tray button.pri{ background:#5a2d66; }
+  body.hasTray{ padding-bottom:150px; } body.hasTray .toast{ bottom:calc(env(safe-area-inset-bottom) + 130px); }
 </style>
 </head>
 <body>
 <header>
   <div class="top">
-    <h1>Dicionário de Partículas</h1>
+    <img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Dicionário de Partículas</h1>
     <a id="back" href="index.html">← Voltar</a>
   </div>
   <label class="search">
@@ -94,6 +121,7 @@
 <main class="grid" id="grid" aria-live="polite"></main>
 
 <dialog id="dlg"><div class="sheet" id="sheet"></div></dialog>
+<div class="tray" id="tray"><div class="row"><div class="txt" id="ftxt"></div><div class="gl" id="fgl"></div><button id="fcopy" class="pri">Copiar frase</button><button id="fclr">Limpar</button></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="data/alunos.js"></script>
@@ -119,7 +147,7 @@
     document.getElementById('back').href='ficha.html?aluno='+encodeURIComponent(ALUNO.id);
     document.getElementById('back').textContent='← Ficha';
   }
-  P.forEach(function(p){ p.mine=!!(ALUNO&&((p.key&&known[p.key])||(p.cat==='Complementos'&&p.nivel===1))); p._s=norm(p.nome+' '+p.codigo+' '+p.cat); });
+  P.forEach(function(p){ p.mine=!!(ALUNO&&((p.key&&known[p.key])||(p.cat==='Complementos'&&p.nivel===1))); var gd=((window.GLOSSARIO||{}).d||{})[p.codigo]; p._s=norm(p.nome+' '+p.codigo+' '+p.cat+' '+(gd?gd[0]:'')); });
   function norm(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
   function svg(d,cls){ return '<svg viewBox="'+VB+'" '+(cls?'class="'+cls+'" ':'')+'role="img" aria-hidden="true"><path d="'+d+'"/></svg>'; }
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -139,6 +167,7 @@
   });
   document.getElementById('q').addEventListener('input',function(e){ q=norm(e.target.value.trim()); render(); });
 
+  function cardDsc(p){ var g=((window.GLOSSARIO||{}).d||{})[p.codigo]; if(!g) return ''; var t=g[0].split(/(?<=\.)\s/)[0]; if(t.length>90) t=t.slice(0,88).replace(/\s+\S*$/,'')+'…'; return '<div class="dsc">'+esc(t)+'</div>'; }
   var gridEl=document.getElementById('grid'), shown=[];
   function render(){
     shown=P.filter(function(p){
@@ -172,16 +201,40 @@
     sheet.innerHTML='<button class="nav l" aria-label="Anterior">‹</button><button class="nav r" aria-label="Próxima">›</button>'
       +svg(p.d,'big')+'<h2>'+esc(p.nome)+'</h2><div class="sub">'+esc(sub)+'</div><div class="cod">'+esc(p.codigo)+'</div>'
       +(p.mine?'<div class="mine">✓ No seu grimório</div>':'')+descHtml(p)
-      +'<div class="btns"><button id="cpy">Copiar código</button><button id="dl">Baixar SVG</button><button class="pri" id="cls">Fechar</button></div>';
+      +'<div class="btns"><button class="add" id="addf">'+(inFrase(p)?'✓ Na frase (remover)':'＋ Na frase')+'</button><button id="cpy">Copiar código</button><button id="dl">Baixar SVG</button><button class="pri" id="cls">Fechar</button></div>';
     if(!dlg.open) dlg.showModal();
     sheet.querySelector('.l').onclick=function(e){ e.stopPropagation(); openDetail((cur-1+shown.length)%shown.length); };
     sheet.querySelector('.r').onclick=function(e){ e.stopPropagation(); openDetail((cur+1)%shown.length); };
     sheet.querySelector('#cls').onclick=function(){ dlg.close(); };
     sheet.querySelector('#cpy').onclick=function(){ copy(p.codigo); };
+    sheet.querySelector('#addf').onclick=function(){ toggleFrase(p); openDetail(cur); };
     sheet.querySelector('#dl').onclick=function(){ download(p); };
   }
   dlg.addEventListener('click',function(e){ if(e.target===dlg) dlg.close(); });
   document.addEventListener('keydown',function(e){ if(!dlg.open) return; if(e.key==='ArrowLeft') sheet.querySelector('.l').click(); if(e.key==='ArrowRight') sheet.querySelector('.r').click(); });
+
+  /* montador de frase */
+  var F={fun:null,obj:null,car:[]};
+  function cap(c){ c=String(c).toLowerCase(); return c.charAt(0).toUpperCase()+c.slice(1); }
+  function inFrase(p){ return F.fun===p||F.obj===p||F.car.indexOf(p)>=0; }
+  function toggleFrase(p){
+    if(p.cat==='Funções') F.fun=(F.fun===p?null:p);
+    else if(p.cat==='Objetos') F.obj=(F.obj===p?null:p);
+    else{ var i=F.car.indexOf(p); if(i>=0) F.car.splice(i,1); else F.car.push(p); }
+    drawTray(); toast(inFrase(p)?'Adicionada à frase':'Removida da frase');
+  }
+  function fraseTxt(){
+    var w=[]; if(F.fun&&F.obj) w.push(cap(F.fun.codigo)+F.obj.codigo.toLowerCase()); else if(F.fun) w.push(cap(F.fun.codigo)); else if(F.obj) w.push(cap(F.obj.codigo));
+    F.car.forEach(function(c){ w.push(cap(c.codigo)); }); return w.join(' ');
+  }
+  function drawTray(){
+    var all=[F.fun,F.obj].concat(F.car).filter(Boolean), t=document.getElementById('tray');
+    t.classList.toggle('on',all.length>0); document.body.classList.toggle('hasTray',all.length>0);
+    document.getElementById('ftxt').textContent=fraseTxt();
+    document.getElementById('fgl').innerHTML=all.map(function(p){ var k=p.cat==='Funções'?'F':p.cat==='Objetos'?'O':'C'; return '<span class="mini" title="'+esc(p.nome)+'"><b>'+k+'</b>'+svg(p.d)+'</span>'; }).join('');
+  }
+  document.getElementById('fcopy').onclick=function(){ copy(fraseTxt()); };
+  document.getElementById('fclr').onclick=function(){ F={fun:null,obj:null,car:[]}; drawTray(); };
   var toastEl=document.getElementById('toast'), tt;
   function toast(m){ toastEl.textContent=m; toastEl.classList.add('on'); clearTimeout(tt); tt=setTimeout(function(){ toastEl.classList.remove('on'); },1600); }
   function copy(t){
