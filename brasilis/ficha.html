@@ -253,6 +253,7 @@ details.pick .in{ padding:4px 10px 12px; }
       <div class="help">Ações que pedem teste: 2d6 + o atributo do tipo. A Complexidade máxima segue o atributo Mente.</div>
       <div class="box" id="proezas"></div>
       <label class="chk"><input type="checkbox" id="prat"> <span>Tenho <b>Proezas Práticas (P)</b>: uso Corpo (em vez de Mente) para a Complexidade máxima das Proezas Físicas.</span></label>
+      <div style="margin-top:10px"><label class="lb">Minhas proezas (exemplos da personagem)</label><textarea data-k="pr_notas" style="min-height:96px"></textarea></div>
       <details class="pick"><summary>Rudimentos (para justificar a Proeza)</summary><div class="in" id="rud"></div></details>
     </div>
     <div class="sec"><span class="hd">Itens encantados</span>
@@ -264,6 +265,7 @@ details.pick .in{ padding:4px 10px 12px; }
     <div class="sec"><span class="hd">Familiar</span>
       <label class="chk"><input type="checkbox" id="famon"> <span>Tenho um Familiar (pacto com um companheiro místico)</span></label>
       <div id="fambox" style="display:none">
+        <img id="famimg" alt="" style="display:none;width:min(60%,230px);margin:10px auto 0">
         <div class="grid2" style="margin-top:8px">
           <div><label class="lb">Nome do Familiar</label><input type="text" data-k="fam_nome"></div>
           <div><label class="lb">Tipo de pacto</label><input type="text" data-k="fam_tipo" placeholder="Afetivo, Espiritual, Fenômeno Místico ou Contrato Escrito"></div>
@@ -429,6 +431,7 @@ $('#itq').addEventListener('input',drawCat);
 $('#pactor').innerHTML='<ul style="margin:0;padding-left:18px;font:13.5px/1.5 system-ui,sans-serif">'+(FAM.pacto||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';
 var fp=$('#famforca'), fpels=[]; for(var i=1;i<=4;i++)(function(i){ var b=document.createElement('button'); b.type='button'; b.className='pip'; b.setAttribute('aria-label','Força '+i); b.onclick=function(){ state.fam_forca=(num('fam_forca')===i)?i-1:i; save(); drawFam(); }; fpels.push(b); fp.appendChild(b); })(i);
 $('#famon').addEventListener('change',function(){ state.fam_on=this.checked; save(); drawFam(); });
+var fi=$('#famimg'); if(ALUNO.familiar_img){ fi.onload=function(){ fi.style.display='block'; fi.alt='Familiar '+(state.fam_nome||''); }; fi.src=ALUNO.familiar_img; }
 function drawFam(){
   var on=!!state.fam_on; $('#famon').checked=on; $('#fambox').style.display=on?'block':'none'; if(!on) return;
   var fo=Math.max(1,num('fam_forca')||1), sel=jget('fam_apts'), lim=fo+2;
