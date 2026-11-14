@@ -64,6 +64,7 @@
 
 <div class="bar">
   <a class="btn ghost" href="index.html" id="btnBack">← Turma</a>
+  <a class="btn ghost" href="dicionario.html" id="btnDic">📖 Dicionário</a>
   <button id="btnPdf">⬇ Gerar PDF</button>
   <button id="btnPrint" class="ghost">🖨 Imprimir</button>
   <button id="btnReset" class="ghost">Restaurar original</button>
@@ -84,6 +85,7 @@
   var ALUNO=ALUNOS.filter(function(a){return a.id===qs.get('aluno');})[0]||ALUNOS[0]||{id:'x',nome:'Aluno',ficha:{}};
   var BASE=ALUNO.ficha||{};
   var STORE='etmos-ficha-v2-'+ALUNO.id;
+  (function(){ var d=document.getElementById('btnDic'); if(d) d.href='dicionario.html?aluno='+encodeURIComponent(ALUNO.id); })();
   document.title='Ficha — '+(BASE.personagem||ALUNO.nome)+' · Etmos RPG';
 
   /* ---------- Definição dos campos (coordenadas em px da imagem 1386×1969) ---------- */
