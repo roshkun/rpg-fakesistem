@@ -77,6 +77,17 @@ input:focus,textarea:focus{ background:rgba(255,255,255,.7); box-shadow:0 0 0 2p
 @media (min-width:560px){ .paper{ margin:18px auto 0; padding:24px 30px 28px; } .tabs{ margin:0 -30px 18px; } .emb{display:block} }
 .big textarea{ min-height:150px; font-size:18px; }
 
+
+/* travas: campos de base não mudam durante a sessão */
+.top #lock{ white-space:nowrap; }
+.top #lock.open{ background:#b3261e; color:#fff; border-color:#b3261e; }
+body.locked #attrs, body.locked #famforca, body.locked #famapts, body.locked #gpick, body.locked #comps,
+body.locked label:has(#prat), body.locked label:has(#famon), body.locked #mine{ pointer-events:none; }
+body.locked #attrs .pip, body.locked #famforca .pip{ cursor:default; }
+body.locked #gpick{ display:none; }
+body.locked .fxin{ background:rgba(62,28,67,.07)!important; color:inherit; cursor:default; border-bottom-style:dotted!important; }
+body.locked .fxin:focus{ outline:none; }
+
 /* valores */
 .pole{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .pole input{ text-align:center; }
@@ -137,6 +148,7 @@ details.pick .in{ padding:4px 10px 12px; }
   <a href="index.html" id="back">← Turma</a>
   <a href="dicionario.html" id="dic">📖 Dicionário</a>
   <span class="sp"></span>
+  <button id="lock" aria-pressed="true" title="Campos de base (identidade, atributos, grimório, pacto) ficam travados durante a sessão">🔒 Base travada</button>
   <button class="pri" id="pdf">⬇ PDF</button>
 </div>
 <div class="wrap">
@@ -239,7 +251,7 @@ details.pick .in{ padding:4px 10px 12px; }
       <div class="fmt"><b>Como montar uma magia:</b> Função (o que faz) + Objeto (em quê) + Característica (como) + Complementos. Tem Totem? Sem ele não se conjura no mundo Mundano.</div>
       <div class="cntline" id="cnts"></div>
       <div id="mine"></div>
-      <details class="pick"><summary>＋ Adicionar ou remover partículas</summary><div class="in" id="all"></div></details>
+      <details class="pick" id="gpick"><summary>＋ Adicionar ou remover partículas</summary><div class="in" id="all"></div></details>
     </div>
     <div class="sec"><span class="hd">Complementos</span>
       <div class="help">Os complementos de 1º nível já são conhecidos.</div><div class="tiles" id="comps"></div></div>
@@ -444,8 +456,22 @@ function drawFam(){
 }
 function extras(){ $('#prat').checked=!!state.pr_praticas; drawProezas(); drawItens(); drawFam(); }
 
+
+/* ---- travas ---- */
+var FIXOS=['jogador','personagem','ano','idade','basico','aparencia','pontos','val_l1','val_r1','val_l2','val_r2','futuro','origens','nivel','dados','feridas_max','estresse_max','fam_nome','fam_tipo'];
+function setLock(on){
+  document.body.classList.toggle('locked',on);
+  var b=$('#lock'); b.setAttribute('aria-pressed',on?'true':'false'); b.classList.toggle('open',!on);
+  b.textContent=on?'🔒 Base travada':'🔓 Editando base';
+  FIXOS.forEach(function(k){ $$('[data-k="'+k+'"]').forEach(function(el){ el.readOnly=on; el.classList.toggle('fxin',on); }); });
+}
+$('#lock').addEventListener('click',function(){
+  if(document.body.classList.contains('locked')){
+    if(confirm('Destravar identidade, atributos, grimório e pacto para edição?\n(Use só ao criar a personagem ou subir de nível.)')) setLock(false);
+  } else setLock(true);
+});
 function all(){ refresh.forEach(function(r){r();}); derive(); grimorio(); extras(); }
-all();
+all(); setLock(true);
 
 /* PDF = ficha original, gerada em segundo plano (mesmos dados) */
 var pb=$('#pdf');
