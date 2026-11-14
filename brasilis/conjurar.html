@@ -92,7 +92,7 @@ dialog button.x{ margin-top:12px; width:100%; font:600 14px system-ui; border:1p
 </div>
 <div class="toast" id="toast"></div>
 <dialog id="dlg"></dialog>
-<script src="data/alunos.js?v=4"></script>
+<script src="data/alunos.js?v=6"></script>
 <script src="data/particulas.js?v=4"></script>
 <script src="data/mesa.js?v=8"></script>
 <script src="mesa-cliente.js?v=5"></script>
@@ -228,7 +228,7 @@ function regras(){
   if(ALUNO){
     var c=['Regular','Difícil','Difícil','Complexa','Complexa','Milagre','Milagre'][Math.min(6,mente)]; if(mente<2) c='Regular';
     L.push(['in','Complexidade máxima da sua personagem: <b>'+(mente>=6?'Milagre':mente>=4?'Complexa':mente>=2?'Difícil':'Regular')+'</b> (Mente '+mente+'). Complementos tendem a aumentar a Complexidade; combine com o narrador.']);
-    if(/Mundano/i.test(st.origens||'')) L.push(['in','Origem Mundana: para conjurar no mundo Mundano é preciso um <b>Totem</b>.']);
+    L.push(['in','No mundo <b>Mundano</b> só se conjura com um <b>Totem</b> (ou dentro de um Santuário), e cada magia não Trivial soma ao Estresse um valor extra igual ao <b>Rank</b> dele.'+(ALUNO.totem?' Seu Totem: <b>'+ALUNO.totem.nome+'</b> (Rank '+ALUNO.totem.rank+').':'')]);
   }
   L.push(['in','Fale a frase em voz alta e use só partículas do seu <b>Grimório</b>. A frase precisa casar com a sua <b>intenção</b>.']);
   $('#regras').innerHTML=L.map(function(l){ return '<li class="'+l[0]+'"><b>'+(l[0]==='ok'?'✓':l[0]==='no'?'✕':'i')+'</b><span>'+l[1]+'</span></li>'; }).join('');
