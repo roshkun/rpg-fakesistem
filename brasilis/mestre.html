@@ -90,10 +90,10 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
 </div>
 </main>
 
-<script src="data/mestre.enc.js?v=7"></script>
+<script src="data/mestre.enc.js?v=8"></script>
 <script>window.MESA_SO_PUBLICAR=true;</script>
-<script src="data/mesa.js?v=7"></script>
-<script src="mesa-cliente.js?v=4"></script>
+<script src="data/mesa.js?v=8"></script>
+<script src="mesa-cliente.js?v=5"></script>
 <script>
 (function(){
 var A={}, qs=new URLSearchParams(location.search), aid=qs.get('aluno');
@@ -127,7 +127,7 @@ function fichaMz(c){
   var m={}; c.campos.forEach(function(f){ m[f[0]]=f[1]; });
   var tags=(m['Arquétipos']||'').split(',').map(function(x){return '<span>'+esc(x.trim())+'</span>';}).join('')+'<span class="am">Ameaça '+esc(m['Ameaça']||'')+'</span>';
   var st=[['Ferimentos',m['Limite de Ferimentos']],['Estresse',m['Estresse']],['Compl. máx.',m['Complexidade Máxima']],['Mov.',m['Movimentação']],['Comunica?',m['Comunicação?']],['Corpo',m['Corpo']],['Mente',m['Mente']],['Alma',m['Alma']]].map(function(x){return '<div>'+esc(x[0])+'<b>'+esc(x[1]||'—')+'</b></div>';}).join('');
-  var tx=['Descrição','Aptidões','Grimório (sugestão)','Aptidões (Ataques)','Fraquezas','Variantes','Comportamento','Na aventura'].filter(function(k){return m[k];}).map(function(k){return '<p><b>'+esc(k)+':</b> '+esc(m[k])+'</p>';}).join('');
+  var tx=['Descrição','Aptidões','Grimório (sugestão)','Aptidões (Ataques)','Totem','Fraquezas','Variantes','Comportamento','Na aventura'].filter(function(k){return m[k];}).map(function(k){return '<p><b>'+esc(k)+':</b> '+esc(m[k])+'</p>';}).join('');
   return '<div class="card mz"><h2>'+esc(c.nome)+'</h2><div class="tags">'+tags+'</div><div class="stats">'+st+'</div>'+tx+'</div>'; 
 }
 document.getElementById('meso').innerHTML=(A.mesoamerica||[]).map(fichaMz).join('');
