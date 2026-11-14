@@ -12,19 +12,30 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "ano": "1º",
+      "idade": "16",
+      "nivel": "1",
       "corpo": 3,
       "mente": 2,
       "alma": 1,
       "complex": 2,
-      "feridas_max": "5",
+      "feridas_max": "6",
       "estresse_max": "5",
-      "origens": "Mundano",
+      "origens": "Mundano\n• Atleta (+1 Ferimento)\n• Treinamento Formal em Combate",
+      "praticas": "Protetor\nAparar\nArmas Brancas (Origem)",
+      "teoricas": "Acuidade Mágica\nTécnicas de Apoio",
       "basico": "A Vanguarda · Mundano",
-      "pontos": "Guia: A 'muralha' do grupo. Mantém a postura rígida e estruturada.\nDefeito: Superprotetora e controladora. Quer ditar como os outros devem agir.\nMagia (Difícil): Manipula a água ao redor (poças, canos urbanos) para criar barreiras.",
-      "praticas": "Bloqueio\nIntimidação\nTática de Combate",
+      "aparencia": "Cabelo preto liso com folhas, pintura vermelha no rosto e faixas nos braços; postura de braços cruzados.",
+      "pontos": "Guia: A 'muralha' do grupo. Mantém a postura rígida e estruturada.\nDefeito: Superprotetora e controladora. Quer ditar como os outros devem agir.\nMagia: Et Eli Quan (Difícil): manipula a água ao redor (poças, canos urbanos) para criar barreiras.",
       "fun_5": true,
-      "obj_10": true,
-      "car_1": true
+      "fun_12": true,
+      "obj_8": true,
+      "obj_13": true,
+      "obj_7": true,
+      "car_1": true,
+      "car_11": true,
+      "car2_4": true,
+      "car_5": true
     }
   },
   {
@@ -38,18 +49,30 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "ano": "1º",
+      "idade": "15",
+      "nivel": "1",
       "corpo": 2,
       "mente": 2,
       "alma": 2,
       "complex": 2,
       "feridas_max": "5",
       "estresse_max": "6",
-      "origens": "Ancestralidade: Caipora",
-      "basico": "O Rebelde · Ancestralidade: Caipora",
-      "pontos": "Guia: Desafia a autoridade dos Oradores. Prefere o caos do Fantástico.\nDefeito: Teimoso e antissocial. Detesta seguir regras ou ordens do grupo.\nMagia (Difícil): Especialista em quebrar fechaduras e derrubar barreiras físicas ou mágicas.",
-      "praticas": "Sobrevivência Urbana\nIntimidação\nRastreio",
+      "origens": "Fantástico (Caipora)\n• Afinidade Natural: Fogo\n• Criado no Fantástico",
+      "praticas": "Ladinagem\nPronto para ação",
+      "teoricas": "Reconhecer Sinais\nArtes de Combate",
+      "basico": "O Rebelde · Fantástico (Caipora)",
+      "aparencia": "Cabelo ruivo espetado, camiseta preta e casaco amarrado na cintura; sorriso desafiador.",
+      "pontos": "Guia: Desafia a autoridade dos Oradores. Prefere o caos do Fantástico.\nDefeito: Teimoso e antissocial. Detesta seguir regras ou ordens do grupo.\nMagia: As Omu Vib (Difícil): especialista em quebrar fechaduras e derrubar barreiras físicas ou mágicas.",
       "fun_6": true,
-      "obj_10": true
+      "fun_2": true,
+      "obj_7": true,
+      "obj_10": true,
+      "obj_17": true,
+      "car_10": true,
+      "car_11": true,
+      "car_7": true,
+      "car_18": true
     }
   },
   {
@@ -63,18 +86,30 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "ano": "1º",
+      "idade": "15",
+      "nivel": "1",
       "corpo": 1,
       "mente": 2,
       "alma": 3,
       "complex": 2,
       "feridas_max": "4",
-      "estresse_max": "7",
-      "origens": "Ancestralidade: Curupira",
-      "basico": "O Curandeiro · Ancestralidade: Curupira",
-      "pontos": "Guia: Muito sensível às alterações emocionais. Tenta manter o grupo unido.\nDefeito: Empatia excessiva. Hesita em causar dano aos inimigos.\nMagia (Improvável): Usa palavras calmantes e precisas para reorganizar a realidade de um corpo ferido.",
-      "praticas": "Medicina / Primeiros Socorros\nEmpatia\nOratória Prática",
+      "estresse_max": "9",
+      "origens": "Fantástico (Curupira)\n• Espírito Forte (+2 Estresse)\n• Audição Sensível",
+      "praticas": "Artista\nDiplomacia",
+      "teoricas": "Medicina\nTécnicas de Apoio",
+      "basico": "O Curandeiro · Fantástico (Curupira)",
+      "aparencia": "Tranças longas com anéis dourados, cardigã azul caído no ombro e broche da escola.",
+      "pontos": "Guia: Muito sensível às alterações emocionais. Tenta manter o grupo unido.\nDefeito: Empatia excessiva. Hesita em causar dano aos inimigos.\nMagia: An Ivi (Difícil): usa palavras calmantes e precisas para reorganizar a realidade de um corpo ferido.",
       "fun_13": true,
-      "obj_13": true
+      "fun_12": true,
+      "obj_13": true,
+      "obj_1": true,
+      "obj_18": true,
+      "car_8": true,
+      "car_16": true,
+      "car2_9": true,
+      "car_5": true
     }
   },
   {
@@ -88,18 +123,31 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "ano": "1º",
+      "idade": "16",
+      "nivel": "1",
       "corpo": 1,
       "mente": 4,
       "alma": 1,
       "complex": 4,
       "feridas_max": "4",
       "estresse_max": "5",
-      "origens": "Mundano",
+      "origens": "Mundano\n• Aluno Modelo\n• Ensino Formal Mundano",
+      "praticas": "Perspicácia\nConjuração Silenciosa",
+      "teoricas": "Pesquisador\nTreinamento Mágico (Triz)\nConhecimento em História (Origem)",
       "basico": "O Acadêmico · Mundano",
-      "pontos": "Guia: O sabe-tudo da Escola Brasilis. Conhece a teoria, mas tem pouca prática.\nDefeito: Arrogância intelectual, mas é um pouco covarde sob pressão real.\nMagia (Regular): Consegue ler resíduos mágicos em orelhões, cabines e prédios abandonados.",
-      "teoricas": "Pesquisa\nSemântica Mágica\nInvestigação",
+      "aparencia": "Cabelo preto desgrenhado, óculos redondos, camisa branca com gravata e caderno espiral.",
+      "pontos": "Guia: O sabe-tudo da Escola Brasilis. Conhece a teoria, mas tem pouca prática.\nDefeito: Arrogância intelectual, mas é um pouco covarde sob pressão real.\nMagia: Il Azi Mag (Regular): consegue ler resíduos mágicos em orelhões, cabines e prédios abandonados.",
       "fun_14": true,
-      "car_17": true
+      "fun_15": true,
+      "obj_11": true,
+      "obj_12": true,
+      "obj_15": true,
+      "car_17": true,
+      "car_13": true,
+      "car_16": true,
+      "car_6": true,
+      "car_7": true
     }
   },
   {
@@ -113,20 +161,30 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "ano": "1º",
+      "idade": "15",
+      "nivel": "1",
       "corpo": 1,
       "mente": 2,
       "alma": 3,
       "complex": 2,
       "feridas_max": "4",
       "estresse_max": "7",
-      "origens": "Ancestralidade: Boto",
-      "basico": "O Ilusionista · Ancestralidade: Boto",
-      "pontos": "Guia: Sempre com a cabeça no 'Outro Lado'. Fala em enigmas e adora pregar peças.\nDefeito: Distraído. Perde o foco no mundo Mundano facilmente.\nMagia (Difícil): Cria imagens efêmeras formadas por partículas caóticas.",
-      "praticas": "Lábia\nFurtividade",
-      "teoricas": "Percepção do Fantástico",
+      "origens": "Fantástico (Boto)\n• Charme Fantástico\n• Sortudo",
+      "praticas": "Enganar\nLadinagem",
+      "teoricas": "Comunicação de Intenção\nMagia Entre Nós",
+      "basico": "O Ilusionista · Fantástico (Boto)",
+      "aparencia": "Chapéu de palha com fita vermelha, jaqueta azul e cinza, sorriso de canto.",
+      "pontos": "Guia: Sempre com a cabeça no 'Outro Lado'. Fala em enigmas e adora pregar peças.\nDefeito: Distraído. Perde o foco no mundo Mundano facilmente.\nMagia: Ev Una Alui (Difícil): cria imagens efêmeras formadas por partículas caóticas.",
       "fun_9": true,
+      "fun_0": true,
+      "obj_14": true,
+      "obj_3": true,
+      "obj_12": true,
+      "car_14": true,
       "car_16": true,
-      "car_14": true
+      "car2_8": true,
+      "car2_14": true
     }
   },
   {
@@ -140,18 +198,30 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "ano": "1º",
+      "idade": "16",
+      "nivel": "1",
       "corpo": 3,
       "mente": 1,
       "alma": 2,
       "complex": 1,
-      "feridas_max": "5",
+      "feridas_max": "6",
       "estresse_max": "6",
-      "origens": "Mundano",
+      "origens": "Mundano\n• Atleta (+1 Ferimento)\n• Inteligência das Ruas",
+      "praticas": "Aperfeiçoamento Corporal\nPronto para ação\nAparar (Origem)",
+      "teoricas": "Dedicado\nArtes de Combate",
       "basico": "O Atleta · Mundano",
-      "pontos": "Guia: Age primeiro, pensa depois. Muito competitivo.\nDefeito: Impulsivo. Frequentemente cruza Portais do Meio sem planejamento.\nMagia (Regular): Usa a magia para alterar o próprio peso e saltar prédios no mundo Mundano.",
-      "praticas": "Atletismo\nAcrobacia\nLuta Corpo a Corpo",
+      "aparencia": "Cabelo crespo volumoso, jaqueta azul com detalhes vermelhos e mochila no ombro.",
+      "pontos": "Guia: Age primeiro, pensa depois. Muito competitivo.\nDefeito: Impulsivo. Frequentemente cruza Portais do Meio sem planejamento.\nMagia: Et Ivi Ym (Regular): usa a magia para alterar o próprio peso e saltar prédios no mundo Mundano.",
       "fun_5": true,
-      "obj_13": true
+      "fun_16": true,
+      "obj_13": true,
+      "obj_17": true,
+      "obj_10": true,
+      "car_12": true,
+      "car_18": true,
+      "car_11": true,
+      "car2_12": true
     }
   }
 ];

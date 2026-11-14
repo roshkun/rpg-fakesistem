@@ -125,8 +125,8 @@
   A(P1,'inventario',696,1609,515,199);
 
   /* Página 2 */
-  A(P2,'basico',182,376,533,87);
-  A(P2,'aparencia',183,519,533,87);
+  A(P2,'basico',182,376,533,87,{fs:26,sc:1});
+  A(P2,'aparencia',183,519,533,87,{fs:25,sc:1});
   A(P2,'pontos',735,369,535,231,{fs:21,sc:1});
   A(P2,'futuro',738,657,532,125);
   T(P2,'val_l1',212,684,126,36,{fs:28,c:1,u:1});
@@ -134,19 +134,17 @@
   T(P2,'val_r1',564,683,126,36,{fs:28,c:1,u:1});
   T(P2,'val_r2',564,721,126,36,{fs:28,c:1,u:1});
 
-  var COLS = [   // [chave, x0, x1, y0, y1, quantidade]
+  var COLS = [   // [chave, xa, xb, ya, yb, n, ia, ib]  (ya/xa no índice ia; yb/xb no índice ib)
     ['fun', 187,191, 936,1397, 17, 0, 16],
     ['obj', 452,456, 933,1453, 19, 0, 18],
     ['car', 767,773, 931,1450, 19, 0, 18],
-    ['car2',1006,1009, 928,1333, 15, 1, 14]
+    ['car2',1006,1009, 957,1333, 15, 1, 14]
   ];
-  // y0 = topo do 1º item (ou do índice de referência); aqui calculamos passo a partir de dois pontos conhecidos
   COLS.forEach(function(c){
-    var k=c[0], n=c[5], i0=c[6], i1=c[7];
-    var pitch=(c[4]-c[3])/(i1-i0);
-    var yTop0=c[3]-i0*pitch;
+    var k=c[0], n=c[5], ia=c[6], ib=c[7];
+    var pitch=(c[4]-c[3])/(ib-ia);
     for(var i=0;i<n;i++){
-      var y=yTop0+i*pitch, t=(y-c[3])/(c[4]-c[3]||1);
+      var y=c[3]+(i-ia)*pitch;
       var x=c[1]+(c[2]-c[1])*((y-c[3])/(c[4]-c[3]));
       C(P2,k+'_'+i,Math.round(x),Math.round(y),22,22);
     }
