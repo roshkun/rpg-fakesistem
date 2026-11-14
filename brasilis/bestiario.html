@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d1424">
+<title>Bestiário e Encontros — Etmos RPG</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M16 2 28 16 16 30 4 16z%27 fill=%27%233e1c43%27/%3E%3C/svg%3E">
+<style>
+:root{ --ink:#3e1c43; --paper:#e4e2f1; --acc:#6e3a7d; --deep:#1d1424; }
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+body{ background:var(--deep); color:#f1ecf7; font-family:Georgia,"Times New Roman",serif; min-height:100vh; padding-bottom:40px; }
+header{ position:sticky; top:0; z-index:20; background:rgba(29,20,36,.96); backdrop-filter:blur(8px); border-bottom:1px solid #4a2e55; padding:10px 12px; }
+.top{ display:flex; align-items:center; gap:10px; }
+.top .logo{ height:26px; filter:brightness(0) invert(.92); }
+.top h1{ flex:1; margin:0; font-size:18px; letter-spacing:.04em; }
+.top a{ font:600 13px/1 system-ui,sans-serif; color:#f1ecf7; text-decoration:none; border:1px solid #7b4a8a; padding:9px 12px; border-radius:8px; white-space:nowrap; }
+.tabs{ display:flex; gap:8px; margin-top:10px; }
+.tabs button{ flex:1; font:600 13px/1 system-ui,sans-serif; color:#d9cbe6; background:#2a1a36; border:1px solid #5b3a6b; padding:11px 6px; border-radius:99px; cursor:pointer; }
+.tabs button.on{ background:var(--acc); color:#fff; border-color:#a77ac0; }
+main{ max-width:980px; margin:0 auto; padding:12px; }
+.panel{ display:none; } .panel.on{ display:block; }
+.note{ font:14px/1.5 system-ui,sans-serif; color:#d9cbe6; background:#26172f; border:1px solid #4a2e55; border-radius:12px; padding:11px 14px; margin-bottom:12px; }
+.card{ background:var(--paper); color:var(--ink); border-radius:12px; padding:14px 14px 12px; margin-bottom:12px; box-shadow:0 2px 0 rgba(0,0,0,.25); }
+.card h2{ margin:0 0 10px; font:700 21px/1.1 "Cormorant Garamond","EB Garamond",Garamond,Georgia,serif; font-variant:small-caps; letter-spacing:.08em; border-bottom:2px solid var(--ink); padding-bottom:6px; }
+.cols{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.lv{ background:rgba(255,255,255,.45); border:1.5px solid var(--ink); border-radius:8px; padding:8px 9px; }
+.lv h3{ margin:0 0 6px; font:700 12px system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--acc); }
+.lv dl{ margin:0; display:grid; grid-template-columns:auto auto; gap:2px 8px; font:13px/1.3 system-ui,sans-serif; }
+.lv dt{ opacity:.75; } .lv dd{ margin:0; font-weight:700; text-align:right; }
+@media (max-width:620px){ .cols{ grid-template-columns:1fr; } .lv dl{ grid-template-columns:1fr auto; } }
+.st{ width:100%; border-collapse:collapse; font:14px system-ui,sans-serif; }
+.st th{ font:700 11px system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--acc); text-align:center; padding:4px 2px 6px; }
+.st td{ padding:6px 4px; border-top:1px solid rgba(62,28,67,.25); text-align:center; font-weight:700; }
+.st td:first-child{ text-align:left; font-weight:400; opacity:.8; }
+.st tbody tr:nth-child(even){ background:rgba(255,255,255,.3); }
+.ora p{ margin:0; font:15px/1.5 Georgia,serif; }
+.tier h2 small{ font:600 12px system-ui,sans-serif; letter-spacing:.04em; text-transform:none; opacity:.7; margin-left:6px; font-variant:normal; }
+.tier ul{ list-style:none; margin:0; padding:0; }
+.tier li{ display:flex; gap:10px; padding:7px 8px; border-radius:8px; font:14.5px/1.4 system-ui,sans-serif; }
+.tier li b{ flex:none; font-family:Georgia,serif; color:var(--acc); min-width:2.2em; }
+.tier li.hit{ background:var(--ink); color:#fff; } .tier li.hit b{ color:#d9b8ec; }
+.tier button{ margin-top:8px; font:600 13px system-ui,sans-serif; color:#fff; background:var(--ink); border:0; border-radius:8px; padding:10px 14px; cursor:pointer; }
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Bestiário</h1><a id="dic" href="dicionario.html">📖 Dicionário</a><a id="back" href="index.html">← Voltar</a></div>
+  <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="enc">Encontros</button></div>
+</header>
+<main>
+  <section class="panel on" id="p-cri"><div class="note">Fichas-base de criaturas do Fantástico, em três níveis de força.</div><div id="cri"></div></section>
+  <section class="panel" id="p-ora"><div class="note">Oradores genéricos para usar como NPCs: o grimório de cada um já vem pronto.</div><div id="ora"></div></section>
+  <section class="panel" id="p-enc"><div class="note">Role dados e veja quantos saíram iguais: 2 = simples, 3 = mediano, 4 = avançado, 5 ou mais = letal. Depois sorteie o encontro da faixa (o botão faz o sorteio por você).</div><div id="enc"></div></section>
+</main>
+<script src="data/alunos.js"></script>
+<script src="data/anexos.js"></script>
+<script>
+(function(){
+var A=window.ANEXOS||{}, qs=new URLSearchParams(location.search), aid=qs.get('aluno');
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+if(aid){ var e=encodeURIComponent(aid); document.getElementById('back').href='ficha.html?aluno='+e; document.getElementById('back').textContent='← Ficha'; document.getElementById('dic').href='dicionario.html?aluno='+e; }
+[].forEach.call(document.querySelectorAll('.tabs button'),function(b){ b.onclick=function(){ [].forEach.call(document.querySelectorAll('.tabs button'),function(x){x.classList.toggle('on',x===b);}); [].forEach.call(document.querySelectorAll('.panel'),function(p){p.classList.toggle('on',p.id==='p-'+b.dataset.t);}); }; });
+document.getElementById('cri').innerHTML=(A.bestiario||[]).map(function(c){
+  var rows=c.niveis[0].stats.map(function(s){return s[0];});
+  var th=c.niveis.map(function(n){return '<th>'+esc(n.nivel.replace(/[ae]$/,'')=='Interm'?'Interm.':n.nivel)+'</th>';}).join('');
+  var body=rows.map(function(r,i){ return '<tr><td>'+esc(r)+'</td>'+c.niveis.map(function(n){ var v=n.stats[i]?n.stats[i][1]:'—'; return '<td>'+esc(v)+'</td>'; }).join('')+'</tr>'; }).join('');
+  return '<div class="card"><h2>'+esc(c.nome)+'</h2><table class="st"><thead><tr><th></th>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>'; }).join('');
+document.getElementById('ora').innerHTML=(A.oradores||[]).map(function(o){ return '<div class="card ora"><h2>'+esc(o.nome)+'</h2><p>'+esc(o.txt)+'</p></div>'; }).join('');
+var enc=document.getElementById('enc');
+enc.innerHTML=(A.encontros||[]).map(function(t,i){
+  return '<div class="card tier"><h2>'+esc(t.nome)+'<small>('+esc(t.dados)+')</small></h2><ul>'+t.itens.map(function(x){ return '<li><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></li>'; }).join('')+'</ul><button data-i="'+i+'">🎲 Sortear encontro</button></div>'; }).join('');
+[].forEach.call(enc.querySelectorAll('button'),function(b){ b.onclick=function(){
+  var card=b.parentNode, lis=card.querySelectorAll('li'); [].forEach.call(lis,function(l){l.classList.remove('hit');});
+  var n=0, t=setInterval(function(){ [].forEach.call(lis,function(l){l.classList.remove('hit');}); lis[Math.floor(Math.random()*lis.length)].classList.add('hit'); if(++n>6) clearInterval(t); },70); }; });
+})();
+</script>
+</body>
+</html>
