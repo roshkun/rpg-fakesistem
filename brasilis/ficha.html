@@ -39,6 +39,9 @@ body{ background:#1d1424; color:var(--ink); font-family:Georgia,"Times New Roman
 .head .t img.tit{ width:min(100%,360px); }
 .emb{ position:absolute; right:0; top:-8px; width:34px; opacity:.85; display:none; }
 
+.stk{ position:sticky; top:49px; z-index:25; margin:0 -14px 14px; } .stk .tabs{ margin:0; position:relative; top:auto; z-index:auto; }
+.mgs{ display:flex; gap:6px; flex-wrap:wrap; } .mgs button{ font:13px system-ui,sans-serif; background:rgba(255,255,255,.55); border:1.5px solid var(--line); border-radius:8px; padding:8px 10px; cursor:pointer; color:inherit; } .mgs button b{ display:block; font-size:15px; }
+.stbar{ display:flex; gap:6px; justify-content:space-between; align-items:center; padding:6px 8px; background:var(--ink); color:#fff; font:13px system-ui,sans-serif; } .stbar>div{ display:flex; align-items:center; gap:4px; } .stbar .k{ font:600 10.5px system-ui; letter-spacing:.06em; text-transform:uppercase; opacity:.75; margin-right:2px; } .stbar button{ width:30px; height:30px; border:0; border-radius:6px; background:rgba(255,255,255,.18); color:#fff; font:700 17px system-ui; cursor:pointer; } .stbar b{ min-width:34px; text-align:center; font-size:15px; } .stbar .sbf b{ min-width:0; } .stbar b.warn{ color:#ffb4a8; }
 .tabs{ position:sticky; top:49px; z-index:25; display:flex; gap:0; margin:0 -14px 14px; padding:0 8px; background:var(--paper2); border-top:2px solid var(--line); border-bottom:2px solid var(--line); overflow-x:auto; scrollbar-width:none; }
 .tabs button{ flex:1; font:600 14px/1 Georgia,serif; letter-spacing:.06em; text-transform:uppercase; color:var(--purple); background:none; border:0; padding:14px 10px 12px; cursor:pointer; position:relative; white-space:nowrap; opacity:.65; }
 .tabs button.on{ opacity:1; }
@@ -77,7 +80,7 @@ input:focus,textarea:focus{ background:rgba(255,255,255,.7); box-shadow:0 0 0 2p
 .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
 .grid4{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
 .span2{ grid-column:1/-1; }
-@media (min-width:560px){ .paper{ margin:18px auto 0; padding:24px 30px 28px; } .tabs{ margin:0 -30px 18px; } .emb{display:block} }
+@media (min-width:560px){ .paper{ margin:18px auto 0; padding:24px 30px 28px; } .tabs{ margin:0 -30px 18px; } .stk{ margin:0 -30px 18px; } .stk .tabs{ margin:0; } .emb{display:block} }
 .big textarea{ min-height:150px; font-size:18px; }
 
 
@@ -190,12 +193,19 @@ details.pick .in{ padding:4px 10px 12px; }
     </div>
   </div>
 
+  <div class="stk">
+  <div class="stbar" id="stbar" aria-label="Resumo do estado">
+    <div><span class="k">Ferim.</span><button data-d="feridas_atual:-1" aria-label="menos ferimento">−</button><b id="sb-fer">0/0</b><button data-d="feridas_atual:1" aria-label="mais ferimento">+</button></div>
+    <div><span class="k">Estresse</span><button data-d="estresse_atual:-1" aria-label="menos estresse">−</button><b id="sb-est">0/0</b><button data-d="estresse_atual:1" aria-label="mais estresse">+</button></div>
+    <div class="sbf"><span class="k">Fadiga</span><b id="sb-fad">Normal</b></div>
+  </div>
   <div class="tabs" role="tablist">
     <button data-t="hist" class="on" role="tab">História</button>
     <button data-t="est" role="tab">Estado</button>
     <button data-t="hab" role="tab">Habilidades</button>
     <button data-t="gri" role="tab">Grimório</button>
     <button data-t="ext" role="tab">Extras</button>
+  </div>
   </div>
 
   <!-- HISTÓRIA -->
@@ -257,7 +267,11 @@ details.pick .in{ padding:4px 10px 12px; }
       <div class="sec"><div class="box"><div class="cardlbl"><span class="lbl">Estresse acumulado</span></div>
         <div class="cnt"><button data-d="estresse_atual:-1" aria-label="menos">−</button><span class="v" id="v-estresse_atual"></span><button data-d="estresse_atual:1" aria-label="mais">+</button>
         <span class="of">de <input type="number" data-k="estresse_max" inputmode="numeric"></span></div>
-        <div class="hint" id="h-est"></div></div></div>
+        <div class="hint" id="h-est"></div>
+        <div class="cardlbl" style="margin-top:10px"><span class="lbl">Conjurei uma magia</span></div>
+        <div class="mgs" id="mgs"></div>
+        <label class="chk" id="mgmw" style="margin-top:6px"><input type="checkbox" id="mgm"> <span id="mgmt">Conjurei no Mundano (soma o Rank do Totem)</span></label>
+        <div class="hint" id="mgout"></div></div></div>
     </div>
     <div class="sec"><span class="hd">Estados de fadiga</span>
       <div class="box"><span class="tag" id="fadtag"></span>
@@ -311,10 +325,10 @@ details.pick .in{ padding:4px 10px 12px; }
       <details class="pick"><summary>Rudimentos (para justificar a Proeza)</summary><div class="in" id="rud"></div></details>
     </div>
     <div class="sec" id="totsec" style="display:none"><span class="hd">Totem</span>
-      <div class="help">Item encantado que permite conjurar no Mundano e manter sua forma Fantástica sem desaparecer. Sintoniza com você no primeiro uso e perde a sintonia após 100 anos sem uso.</div>
+      <div class="help">Sem Totem (ou Santuário) não se conjura no Mundano, e um ser Fantástico não existe lá: sem ele, some e volta ao Fantástico depois de tantos minutos quanto o seu Corpo. O Totem sintoniza com quem o porta no primeiro uso e só perde a sintonia após 100 anos sem uso.</div>
       <div class="box" id="totbox" style="display:flex;gap:12px;align-items:center">
         <img id="totimg" alt="" style="display:none;width:96px;height:96px;object-fit:contain;flex:none">
-        <div><h4 id="totnome" style="margin:0 0 2px"></h4><span class="pp" id="totrank"></span><p id="totdesc" style="margin:6px 0 0"></p><div class="v" style="margin-top:6px"><b>Regra:</b> cada magia não Trivial conjurada no Mundano soma Estresse extra, conforme o Rank.</div></div>
+        <div><h4 id="totnome" style="margin:0 0 2px"></h4><span class="pp" id="totrank"></span><p id="totdesc" style="margin:6px 0 0"></p><div class="v" style="margin-top:6px"><b>Regra:</b> cada magia não Trivial conjurada no Mundano soma ao Estresse um valor extra igual ao Rank (Rank 4 = +4).</div></div>
       </div>
     </div>
     <div class="sec"><span class="hd">Itens encantados</span>
@@ -366,12 +380,12 @@ details.pick .in{ padding:4px 10px 12px; }
   </div>
   <div class="bar"><button id="dosfechar">Ocultar e abrir a ficha ▸</button></div>
 </div>
-<script src="data/alunos.js?v=5"></script>
+<script src="data/alunos.js?v=6"></script>
 <script src="data/habilidades.js?v=1"></script>
 <script src="data/particulas.js?v=4"></script>
 <script src="data/modulos.js?v=4"></script>
 <script src="data/glossario.js?v=4"></script>
-<script src="pdf-ficha.js?v=10"></script>
+<script src="pdf-ficha.js?v=14"></script>
 <script src="data/mesa.js?v=8"></script>
 <script src="mesa-cliente.js?v=5"></script>
 <script>
@@ -442,6 +456,7 @@ function derive(){
   var p=$('#pts'); p.textContent=bad?(sum>6?'Passou '+(sum-6)+' pt(s) do limite':'Máx. 4 por atributo'):('Pontos restantes: '+(6-sum)); p.classList.toggle('bad',bad);
   MR.forEach(function(x){ var v=num(x[0]); x[2].forEach(function(e,i){ e.classList.toggle('on',i<v); }); });
   $('#v-feridas_atual').textContent=num('feridas_atual'); $('#v-estresse_atual').textContent=num('estresse_atual');
+  $('#sb-fer').textContent=num('feridas_atual')+'/'+(num('feridas_max')||'—'); $('#sb-est').textContent=num('estresse_atual')+'/'+(num('estresse_max')||'—'); $('#sb-fer').classList.toggle('warn',num('feridas_max')>0&&num('feridas_atual')>=num('feridas_max')); $('#sb-est').classList.toggle('warn',num('estresse_atual')>num('estresse_max'));
   $('#h-fer').textContent='Pelo livro: 4 + metade do Corpo = '+(4+Math.floor(c/2))+' (+1 se for Atleta).';
   $('#h-est').textContent='Pelo livro: 4 + Alma = '+(4+a)+' (+2 se tiver Espírito Forte).';
   var over=Math.max(0,num('estresse_atual')-num('estresse_max')), fd=Math.min(9,over);
@@ -451,6 +466,7 @@ function derive(){
   var pts=man>=0?man:fd, lvl=pts>=9?3:pts>=6?2:pts>=1?1:0;
   var tg=$('#fadtag'); tg.textContent=names[lvl]+(pts?' · '+pts+' ponto(s) acima do limite':''); tg.classList.toggle('warn',lvl>0);
   $$('#fad button').forEach(function(e,i){ var on=i<pts; e.classList.toggle('on',on); e.setAttribute('aria-pressed',on?'true':'false'); });
+  var sbf=$('#sb-fad'); sbf.textContent=names[lvl]+(pts?' ('+pts+')':''); sbf.classList.toggle('warn',lvl>0);
   $('#fadhint').textContent=man<0?('Acompanhando o estresse (acima do limite: '+over+'). Toque num quadradinho ou use +1 / −1 para marcar por conta própria.'):('Marcado à mão. Pelo estresse atual seriam '+fd+' ponto(s) acima do limite.');
   $('#fada').style.display=man>=0?'inline-block':'none';
   var fxs=[['Cansado (1 a 5)','Todo Ferimento sofrido aumenta em 1. Vale também nos estados seguintes.'],['Exausto (6 a 8)','Ao conjurar magia não Trivial, role 2d6: se passar de Corpo + 4 ('+(c+4)+'), a magia não acontece.'],['Esgotado (9 ou mais)','Ao conjurar magia não Trivial, role 2d6: se passar de Corpo + 3 ('+(c+3)+'), a personagem morre após a conjuração (a magia ainda acontece). Substitui o efeito de Exausto.']];
@@ -530,6 +546,10 @@ $('#fadz').addEventListener('click',function(){ state.fadiga_pts=0; save(); deri
 $('#fadp').addEventListener('click',function(){ state.fadiga_pts=Math.min(9,curFad()+1); save(); derive(); });
 $('#fadm').addEventListener('click',function(){ state.fadiga_pts=Math.max(0,curFad()-1); save(); derive(); });
 $('#fada').addEventListener('click',function(){ delete state.fadiga_pts; save(); derive(); });
+(function(){ var T=ALUNO.totem, W=$('#mgmw'); var C=[['Trivial',0],['Regular',1],['Difícil',2],['Complexa',4],['Milagre',7]];
+  if(!T){ $('#mgmt').textContent='Conjurei no Mundano (precisa de Totem; esta personagem não tem)'; $('#mgm').disabled=true; } else { $('#mgmt').textContent='Conjurei no Mundano (soma +'+T.rank+', o Rank do '+T.nome+')'; }
+  C.forEach(function(c){ var b=document.createElement('button'); b.type='button'; b.innerHTML=c[0]+'<b>+'+c[1]+'</b>'; b.onclick=function(){ var mw=$('#mgm').checked&&T&&c[1]>0, add=c[1]+(mw?T.rank:0); state.estresse_atual=String(num('estresse_atual')+add); save(); derive(); extras(); $('#mgout').textContent='Magia '+c[0]+': +'+add+' de Estresse'+(mw?' ('+c[1]+' da magia + '+T.rank+' do Totem)':'')+'.'; }; $('#mgs').appendChild(b); });
+})();
 var fi=$('#famimg'); if(ALUNO.familiar_img){ fi.onload=function(){ fi.style.display='block'; fi.alt='Familiar '+(state.fam_nome||''); }; fi.src=ALUNO.familiar_img; }
 function drawFam(){
   var on=!!state.fam_on; $('#famon').checked=on; $('#fambox').style.display=on?'block':'none'; if(!on) return;
