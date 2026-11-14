@@ -65,7 +65,7 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
 <body>
 <header>
   <div class="top"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Área do Mestre</h1><a id="dic" href="dicionario.html">📖 Dicionário</a><a id="back" href="index.html">← Turma</a><a class="sair" id="sair" href="#">Sair</a></div>
-  <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="meso">Mesoamérica</button><button data-t="reg">Regras</button><button data-t="enc">Encontros</button><button data-t="mesa">Mesa</button></div>
+  <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="meso">Mesoamérica</button><button data-t="reg">Regras</button><button data-t="enc">Encontros</button><button data-t="avt">Aventura</button><button data-t="mesa">Mesa</button></div>
 </header>
 <main>
 <div id="trava" class="lock"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h2>Área do mestre</h2><p>Conteúdo reservado ao narrador. Digite a senha para entrar.</p><form id="f"><input id="pw" type="password" autocomplete="current-password" placeholder="Senha" aria-label="Senha"><div class="err" id="err" role="alert"></div><button type="submit">Entrar</button></form></div>
@@ -73,6 +73,7 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
   <section class="panel on" id="p-cri"><div class="note">Fichas-base de criaturas do Fantástico, em três níveis de força.</div><div id="cri"></div></section>
   <section class="panel" id="p-ora"><div class="note">Oradores genéricos para usar como NPCs: o grimório de cada um já vem pronto.</div><div id="ora"></div></section>
   <section class="panel" id="p-meso"><div class="note">Módulo Bestiário: Mesoamérica. (*) marca as aptidões como aparecem no módulo.</div><div id="meso"></div></section>
+  <section class="panel" id="p-avt"><div class="note">Criaturas e NPC da aventura da construção abandonada: Perna Cabeluda, Caipora e o que cerca as duas. Ferimentos = 4 + Corpo; Estresse = 4 + Alma. Valores sugeridos: ajuste ao nível do grupo.</div><div id="avt"></div></section>
   <section class="panel" id="p-reg"><div class="note">Pontos dos módulos que cabem ao narrador.</div><div id="reg"></div></section>
   <section class="panel" id="p-mesa"><div class="note">Escolha uma imagem do repositório e exiba para toda a mesa: ela abre em tela cheia no aparelho de quem estiver com o site aberto.</div>
     <div class="presenca"><b>Na mesa agora</b><div id="mesa-on"></div></div>
@@ -85,7 +86,7 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
 </div>
 </main>
 
-<script src="data/mestre.enc.js?v=4"></script>
+<script src="data/mestre.enc.js?v=5"></script>
 <script>window.MESA_SO_PUBLICAR=true;</script>
 <script src="data/mesa.js?v=4"></script>
 <script src="mesa-cliente.js?v=4"></script>
@@ -118,12 +119,15 @@ document.getElementById('cri').innerHTML=(A.bestiario||[]).map(function(c){
   var body=rows.map(function(r,i){ return '<tr><td>'+esc(r)+'</td>'+c.niveis.map(function(n){ var v=n.stats[i]?n.stats[i][1]:'—'; return '<td>'+esc(v)+'</td>'; }).join('')+'</tr>'; }).join('');
   return '<div class="card"><h2>'+esc(c.nome)+'</h2><table class="st"><thead><tr><th></th>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>'; }).join('');
 document.getElementById('ora').innerHTML=(A.oradores||[]).map(function(o){ return '<div class="card ora"><h2>'+esc(o.nome)+'</h2><p>'+esc(o.txt)+'</p></div>'; }).join('');
-document.getElementById('meso').innerHTML=(A.mesoamerica||[]).map(function(c){
+function fichaMz(c){
   var m={}; c.campos.forEach(function(f){ m[f[0]]=f[1]; });
   var tags=(m['Arquétipos']||'').split(',').map(function(x){return '<span>'+esc(x.trim())+'</span>';}).join('')+'<span class="am">Ameaça '+esc(m['Ameaça']||'')+'</span>';
   var st=[['Ferimentos',m['Limite de Ferimentos']],['Estresse',m['Estresse']],['Compl. máx.',m['Complexidade Máxima']],['Mov.',m['Movimentação']],['Comunica?',m['Comunicação?']],['Corpo',m['Corpo']],['Mente',m['Mente']],['Alma',m['Alma']]].map(function(x){return '<div>'+esc(x[0])+'<b>'+esc(x[1]||'—')+'</b></div>';}).join('');
-  var tx=['Aptidões','Aptidões (Ataques)','Variantes'].filter(function(k){return m[k];}).map(function(k){return '<p><b>'+esc(k)+':</b> '+esc(m[k])+'</p>';}).join('');
-  return '<div class="card mz"><h2>'+esc(c.nome)+'</h2><div class="tags">'+tags+'</div><div class="stats">'+st+'</div>'+tx+'</div>'; }).join('');
+  var tx=['Descrição','Aptidões','Grimório (sugestão)','Aptidões (Ataques)','Fraquezas','Variantes','Comportamento','Na aventura'].filter(function(k){return m[k];}).map(function(k){return '<p><b>'+esc(k)+':</b> '+esc(m[k])+'</p>';}).join('');
+  return '<div class="card mz"><h2>'+esc(c.nome)+'</h2><div class="tags">'+tags+'</div><div class="stats">'+st+'</div>'+tx+'</div>'; 
+}
+document.getElementById('meso').innerHTML=(A.mesoamerica||[]).map(fichaMz).join('');
+document.getElementById('avt').innerHTML=(A.aventura||[]).map(fichaMz).join('');
 document.getElementById('reg').innerHTML=(A.regras||[]).map(function(r){ return '<div class="card"><h2>'+esc(r.nome)+'</h2><ul style="margin:0 0 8px;padding-left:18px;font:14.5px/1.5 system-ui,sans-serif">'+r.itens.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'+(r.obs?'<p style="margin:0;font:13.5px/1.45 system-ui,sans-serif;opacity:.85"><b>Nota:</b> '+esc(r.obs)+'</p>':'')+'</div>'; }).join('');
 
 /* mesa: exibir imagens para os jogadores */
