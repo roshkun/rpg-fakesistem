@@ -83,6 +83,7 @@
     #hint{ font-size:15px; }
   }
   @media (prefers-reduced-motion: reduce){ .char .in{ animation:none; } }
+  #mestre{ position:fixed; left:12px; bottom:calc(env(safe-area-inset-bottom) + 12px); z-index:6; font:600 12px/1 system-ui,sans-serif; color:#f1ecf7; background:rgba(29,20,36,.6); border:1px solid rgba(123,74,138,.6); padding:9px 11px; border-radius:99px; text-decoration:none; backdrop-filter:blur(4px); }
 </style>
 </head>
 <body>
@@ -93,6 +94,7 @@
   <div id="hint">Toque em um aluno para abrir a ficha</div>
   <button id="motion" type="button">Ativar movimento</button>
   <a id="dic" href="dicionario.html">📖 Dicionário</a>
+  <a id="mestre" href="mestre.html" aria-label="Área do mestre">🔒 Mestre</a>
   <div id="veil"></div>
 </main>
 

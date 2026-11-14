@@ -106,7 +106,7 @@
 <header>
   <div class="top">
     <img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Dicionário de Partículas</h1>
-    <a id="bst" href="bestiario.html">Bestiário</a><a id="back" href="index.html">← Voltar</a>
+    <a id="back" href="index.html">← Voltar</a>
   </div>
   <label class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f1ecf7" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
@@ -145,7 +145,7 @@
     try{ var s=JSON.parse(localStorage.getItem('etmos-ficha-v2-'+ALUNO.id)||'{}'); Object.keys(s).forEach(function(k){ st[k]=s[k]; }); }catch(e){}
     Object.keys(st).forEach(function(k){ if(st[k]===true) known[k]=true; });
     document.getElementById('back').href='ficha.html?aluno='+encodeURIComponent(ALUNO.id);
-    document.getElementById('back').textContent='← Ficha'; document.getElementById('bst').href='bestiario.html?aluno='+encodeURIComponent(ALUNO.id);
+    document.getElementById('back').textContent='← Ficha';
   }
   P.forEach(function(p){ p.mine=!!(ALUNO&&((p.key&&known[p.key])||(p.cat==='Complementos'&&p.nivel===1))); var gd=((window.GLOSSARIO||{}).d||{})[p.codigo]; p._s=norm(p.nome+' '+p.codigo+' '+p.cat+' '+(gd?gd[0]:'')); });
   function norm(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }

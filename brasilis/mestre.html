@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1d1424">
-<title>Bestiário e Encontros — Etmos RPG</title>
+<title>Área do Mestre — Etmos RPG</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M16 2 28 16 16 30 4 16z%27 fill=%27%233e1c43%27/%3E%3C/svg%3E">
 <style>
 :root{ --ink:#3e1c43; --paper:#e4e2f1; --acc:#6e3a7d; --deep:#1d1424; }
@@ -42,29 +42,57 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
 .tier li b{ flex:none; font-family:Georgia,serif; color:var(--acc); min-width:2.2em; }
 .tier li.hit{ background:var(--ink); color:#fff; } .tier li.hit b{ color:#d9b8ec; }
 .tier button{ margin-top:8px; font:600 13px system-ui,sans-serif; color:#fff; background:var(--ink); border:0; border-radius:8px; padding:10px 14px; cursor:pointer; }
+.lock{ max-width:380px; margin:12vh auto 0; background:var(--paper); color:var(--ink); border-radius:14px; padding:22px 20px; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,.5); }
+.lock .logo{ height:34px; }
+.lock h2{ margin:10px 0 4px; font:700 22px "Cormorant Garamond",Georgia,serif; font-variant:small-caps; letter-spacing:.1em; border:0; padding:0; }
+.lock p{ font:14px/1.45 system-ui,sans-serif; margin:0 0 14px; opacity:.8; }
+.lock input{ width:100%; font:17px system-ui,sans-serif; padding:12px; border:2px solid var(--ink); border-radius:8px; background:#fff8; color:var(--ink); }
+.lock button{ margin-top:12px; width:100%; font:700 15px system-ui,sans-serif; color:#fff; background:var(--ink); border:0; border-radius:8px; padding:13px; cursor:pointer; }
+.lock .err{ color:#a3162b; font:600 13px system-ui,sans-serif; min-height:1.3em; margin-top:8px; }
+#conteudo,.tabs,.sair{ display:none; } .unlocked #conteudo{ display:block; } .unlocked #trava{ display:none; } .unlocked .tabs{ display:flex; } .unlocked .sair{ display:inline-block; }
 </style>
 </head>
 <body>
 <header>
-  <div class="top"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Bestiário</h1><a id="dic" href="dicionario.html">📖 Dicionário</a><a id="back" href="index.html">← Voltar</a></div>
+  <div class="top"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Área do Mestre</h1><a id="dic" href="dicionario.html">📖 Dicionário</a><a id="back" href="index.html">← Turma</a><a class="sair" id="sair" href="#">Sair</a></div>
   <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="enc">Encontros</button></div>
 </header>
 <main>
+<div id="trava" class="lock"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h2>Área do mestre</h2><p>Conteúdo reservado ao narrador. Digite a senha para entrar.</p><form id="f"><input id="pw" type="password" autocomplete="current-password" placeholder="Senha" aria-label="Senha"><div class="err" id="err" role="alert"></div><button type="submit">Entrar</button></form></div>
+<div id="conteudo">
   <section class="panel on" id="p-cri"><div class="note">Fichas-base de criaturas do Fantástico, em três níveis de força.</div><div id="cri"></div></section>
   <section class="panel" id="p-ora"><div class="note">Oradores genéricos para usar como NPCs: o grimório de cada um já vem pronto.</div><div id="ora"></div></section>
   <section class="panel" id="p-enc"><div class="note">Role dados e veja quantos saíram iguais: 2 = simples, 3 = mediano, 4 = avançado, 5 ou mais = letal. Depois sorteie o encontro da faixa (o botão faz o sorteio por você).</div><div id="enc"></div></section>
+</div>
 </main>
-<script src="data/alunos.js"></script>
-<script src="data/anexos.js"></script>
+
+<script src="data/mestre.enc.js"></script>
 <script>
 (function(){
-var A=window.ANEXOS||{}, qs=new URLSearchParams(location.search), aid=qs.get('aluno');
+var A={}, qs=new URLSearchParams(location.search), aid=qs.get('aluno');
 function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
-if(aid){ var e=encodeURIComponent(aid); document.getElementById('back').href='ficha.html?aluno='+e; document.getElementById('back').textContent='← Ficha'; document.getElementById('dic').href='dicionario.html?aluno='+e; }
+function b64(s){ var r=atob(s), u=new Uint8Array(r.length); for(var i=0;i<r.length;i++) u[i]=r.charCodeAt(i); return u; }
+function decifrar(senha){
+  var E=window.MESTRE_ENC; if(!E||!window.crypto||!crypto.subtle) return Promise.reject(new Error('nocrypto'));
+  return crypto.subtle.importKey('raw',new TextEncoder().encode(senha),'PBKDF2',false,['deriveKey'])
+   .then(function(k){ return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(E.salt),iterations:E.it,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']); })
+   .then(function(k){ return crypto.subtle.decrypt({name:'AES-GCM',iv:b64(E.iv)},k,b64(E.ct)); })
+   .then(function(buf){ return JSON.parse(new TextDecoder().decode(buf)); });
+}
+function iniciar(dados,senha){ A=dados; try{ sessionStorage.setItem('etmos-mestre',senha); }catch(e){} document.body.classList.add('unlocked'); montar(); }
+var err=document.getElementById('err');
+document.getElementById('f').addEventListener('submit',function(ev){ ev.preventDefault(); err.textContent='Verificando…';
+  var pw=document.getElementById('pw').value;
+  decifrar(pw).then(function(d){ iniciar(d,pw); },function(e){ err.textContent=(e&&e.message==='nocrypto')?'Este navegador não permite a verificação (abra pelo endereço https do site).':'Senha incorreta.'; });
+});
+document.getElementById('sair').addEventListener('click',function(ev){ ev.preventDefault(); try{ sessionStorage.removeItem('etmos-mestre'); }catch(e){} location.reload(); });
+try{ var sv=sessionStorage.getItem('etmos-mestre'); if(sv) decifrar(sv).then(function(d){ iniciar(d,sv); },function(){ sessionStorage.removeItem('etmos-mestre'); }); }catch(e){}
+if(aid){ var e0=encodeURIComponent(aid); document.getElementById('back').href='ficha.html?aluno='+e0; document.getElementById('dic').href='dicionario.html?aluno='+e0; }
+function montar(){
 [].forEach.call(document.querySelectorAll('.tabs button'),function(b){ b.onclick=function(){ [].forEach.call(document.querySelectorAll('.tabs button'),function(x){x.classList.toggle('on',x===b);}); [].forEach.call(document.querySelectorAll('.panel'),function(p){p.classList.toggle('on',p.id==='p-'+b.dataset.t);}); }; });
 document.getElementById('cri').innerHTML=(A.bestiario||[]).map(function(c){
   var rows=c.niveis[0].stats.map(function(s){return s[0];});
-  var th=c.niveis.map(function(n){return '<th>'+esc(n.nivel.replace(/[ae]$/,'')=='Interm'?'Interm.':n.nivel)+'</th>';}).join('');
+  var th=c.niveis.map(function(n){return '<th>'+esc(n.nivel)+'</th>';}).join('');
   var body=rows.map(function(r,i){ return '<tr><td>'+esc(r)+'</td>'+c.niveis.map(function(n){ var v=n.stats[i]?n.stats[i][1]:'—'; return '<td>'+esc(v)+'</td>'; }).join('')+'</tr>'; }).join('');
   return '<div class="card"><h2>'+esc(c.nome)+'</h2><table class="st"><thead><tr><th></th>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>'; }).join('');
 document.getElementById('ora').innerHTML=(A.oradores||[]).map(function(o){ return '<div class="card ora"><h2>'+esc(o.nome)+'</h2><p>'+esc(o.txt)+'</p></div>'; }).join('');
@@ -74,6 +102,7 @@ enc.innerHTML=(A.encontros||[]).map(function(t,i){
 [].forEach.call(enc.querySelectorAll('button'),function(b){ b.onclick=function(){
   var card=b.parentNode, lis=card.querySelectorAll('li'); [].forEach.call(lis,function(l){l.classList.remove('hit');});
   var n=0, t=setInterval(function(){ [].forEach.call(lis,function(l){l.classList.remove('hit');}); lis[Math.floor(Math.random()*lis.length)].classList.add('hit'); if(++n>6) clearInterval(t); },70); }; });
+}
 })();
 </script>
 </body>
