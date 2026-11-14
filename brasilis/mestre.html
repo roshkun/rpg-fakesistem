@@ -60,12 +60,15 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
 .mstat{ text-align:center; font:13px system-ui,sans-serif; color:#c9a6d6; min-height:18px; margin-bottom:8px; } .mstat.err{ color:#ff9a90; }
 .mcat{ font:700 13px system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:#c9a6d6; margin:16px 0 8px; } .mvazio{ font:13px system-ui,sans-serif; color:#8f7aa0; padding:6px 2px; }
 .mgal{ display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px; } .mgal button{ background:#241633; border:2px solid #4a2e55; border-radius:10px; padding:6px; cursor:pointer; color:#e8dcf2; font:600 12px system-ui,sans-serif; } .mgal button.on{ border-color:#c58ae0; } .mgal img{ width:100%; height:90px; object-fit:contain; display:block; margin-bottom:5px; }
+
+#mec details{ background:#241633; border:1px solid #4a2e55; border-radius:10px; margin:8px 0; } #mec summary{ cursor:pointer; padding:13px 14px; font:700 15px Georgia,serif; letter-spacing:.04em; color:#f1ecf7; } #mec .corpo{ padding:2px 14px 14px; font:15px/1.55 Georgia,serif; color:#e8dcf2; } #mec .corpo p{ margin:8px 0; } #mec .corpo h4{ margin:14px 0 4px; font:700 12px system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:#c9a6d6; } #mec .corpo ul,#mec .corpo ol{ margin:6px 0; padding-left:20px; } #mec .corpo li{ margin:3px 0; }
+#mec .nota{ border-left:3px solid #a974ba; background:#2e1d3d; padding:8px 12px; border-radius:0 8px 8px 0; margin:10px 0; font:14px/1.5 system-ui,sans-serif; color:#f1e4fa; } #mec .tabw{ overflow-x:auto; margin:8px 0; } #mec table{ border-collapse:collapse; width:100%; font:13.5px/1.4 system-ui,sans-serif; } #mec th,#mec td{ border:1px solid #4a2e55; padding:7px 9px; text-align:left; vertical-align:top; } #mec th{ background:#2e1d3d; color:#d9bfe8; }
 </style>
 </head>
 <body>
 <header>
   <div class="top"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Área do Mestre</h1><a id="dic" href="dicionario.html">📖 Dicionário</a><a id="back" href="index.html">← Turma</a><a class="sair" id="sair" href="#">Sair</a></div>
-  <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="meso">Mesoamérica</button><button data-t="reg">Regras</button><button data-t="enc">Encontros</button><button data-t="avt">Aventura</button><button data-t="mesa">Mesa</button></div>
+  <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="meso">Mesoamérica</button><button data-t="reg">Regras</button><button data-t="mec">Mecânica</button><button data-t="enc">Encontros</button><button data-t="avt">Aventura</button><button data-t="mesa">Mesa</button></div>
 </header>
 <main>
 <div id="trava" class="lock"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h2>Área do mestre</h2><p>Conteúdo reservado ao narrador. Digite a senha para entrar.</p><form id="f"><input id="pw" type="password" autocomplete="current-password" placeholder="Senha" aria-label="Senha"><div class="err" id="err" role="alert"></div><button type="submit">Entrar</button></form></div>
@@ -82,11 +85,12 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
     <div class="mstat" id="mesa-stat"></div>
     <div class="mbar"><button id="mesa-reload" type="button">↻ Atualizar galeria</button></div>
     <div id="mesa-gal"></div></section>
+  <section class="panel" id="p-mec"><div class="note">Regras mecânicas e instruções para o narrador. Toque em um tópico para abrir. A Mecânica do livro é a base; o narrador pode decidir o contrário, desde que explique o raciocínio e aplique a mesma regra a todos.</div><div id="mec"></div></section>
   <section class="panel" id="p-enc"><div class="note">Role dados e veja quantos saíram iguais: 2 = simples, 3 = mediano, 4 = avançado, 5 ou mais = letal. Depois sorteie o encontro da faixa (o botão faz o sorteio por você).</div><div id="enc"></div></section>
 </div>
 </main>
 
-<script src="data/mestre.enc.js?v=6"></script>
+<script src="data/mestre.enc.js?v=7"></script>
 <script>window.MESA_SO_PUBLICAR=true;</script>
 <script src="data/mesa.js?v=7"></script>
 <script src="mesa-cliente.js?v=4"></script>
@@ -128,6 +132,16 @@ function fichaMz(c){
 }
 document.getElementById('meso').innerHTML=(A.mesoamerica||[]).map(fichaMz).join('');
 document.getElementById('avt').innerHTML=(A.aventura||[]).map(fichaMz).join('');
+
+document.getElementById('mec').innerHTML=(A.mecanica||[]).map(function(s,i){
+  var body=s.b.map(function(b){
+    if(b.t==='p') return '<p>'+esc(b.x)+'</p>';
+    if(b.t==='h') return '<h4>'+esc(b.x)+'</h4>';
+    if(b.t==='ul'||b.t==='ol') return '<'+b.t+'>'+b.x.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</'+b.t+'>';
+    if(b.t==='nota') return '<div class="nota">'+esc(b.x)+'</div>';
+    if(b.t==='tab') return '<div class="tabw"><table><thead><tr>'+b.cab.map(function(c){return '<th>'+esc(c)+'</th>';}).join('')+'</tr></thead><tbody>'+b.rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+esc(c)+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table></div>';
+    return ''; }).join('');
+  return '<details'+(i===0?' open':'')+'><summary>'+esc(s.n)+'</summary><div class="corpo">'+body+'</div></details>'; }).join('');
 document.getElementById('reg').innerHTML=(A.regras||[]).map(function(r){ return '<div class="card"><h2>'+esc(r.nome)+'</h2><ul style="margin:0 0 8px;padding-left:18px;font:14.5px/1.5 system-ui,sans-serif">'+r.itens.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'+(r.obs?'<p style="margin:0;font:13.5px/1.45 system-ui,sans-serif;opacity:.85"><b>Nota:</b> '+esc(r.obs)+'</p>':'')+'</div>'; }).join('');
 
 /* mesa: exibir imagens para os jogadores */
