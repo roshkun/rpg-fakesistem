@@ -15,6 +15,14 @@ window.MESA={
   "crv": "P-256"
  },
  "imagens": [
+ {"c": "cenario", "t": "Corredor com vinhas travando a passagem", "s": "assets/cenario/corredor-vinhas-travando.webp"},
+ {"c": "cenario", "t": "Construção abandonada (exterior)", "s": "assets/cenario/construcao-abandonada-exterior.webp"},
+ {"c": "cenario", "t": "Sala de aula de Brasilis", "s": "assets/cenario/sala-de-aula-brasilis.webp"},
+ {"c": "cenario", "t": "Entrada: vinhas combatendo os sinais", "s": "assets/cenario/entrada-vinhas-combatendo.webp"},
+ {"c": "cenario", "t": "Entrada: vinhas combatendo (versão 2)", "s": "assets/cenario/entrada-vinhas-combatendo-versao-2.webp"},
+ {"c": "cenario", "t": "Entrada: vestígios da Perna Cabeluda", "s": "assets/cenario/entrada-vestigios-perna-cabeluda.webp"},
+ {"c": "cenario", "t": "Mão do professor com o besouro", "s": "assets/cenario/mao-professor-besouro.webp"},
+ {"c": "cenario", "t": "Sala vazia, sinais de obra", "s": "assets/cenario/sala-vazia-obra.webp"},
  {"c":"npcs","t":"Caipora","s":"assets/npcs/caipora.webp"},
  {"c":"npcs","t":"Perna Cabeluda","s":"assets/npcs/perna-cabeluda.webp"},
  {"c":"npcs","t":"Professor Jonas \"Fagulha\"","s":"assets/npcs/professor-jonas-fagulha.webp"},
@@ -85,7 +93,7 @@ window.MESA={
    "s": "assets/mascotes/corisco.webp"
   }
  ],
- "titulos": {"caipora":"Caipora","perna-cabeluda":"Perna Cabeluda","professor-jonas-fagulha":"Professor Jonas \"Fagulha\"","orador-buscador":"Orador Buscador","escola-brasilis": "Escola Brasilis", "a-vanguarda": "A Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "O Rebelde", "brasinha": "Brasinha", "o-curandeiro": "O Curandeiro", "cantiga": "Cantiga", "o-academico": "O Acadêmico", "verbete": "Verbete", "o-ilusionista": "O Ilusionista", "miragem": "Miragem", "o-atleta": "O Atleta", "corisco": "Corisco"},
+ "titulos": {"corredor-vinhas-travando":"Corredor com vinhas travando a passagem", "construcao-abandonada-exterior":"Construção abandonada (exterior)", "sala-de-aula-brasilis":"Sala de aula de Brasilis", "entrada-vinhas-combatendo":"Entrada: vinhas combatendo os sinais", "entrada-vinhas-combatendo-versao-2":"Entrada: vinhas combatendo (versão 2)", "entrada-vestigios-perna-cabeluda":"Entrada: vestígios da Perna Cabeluda", "mao-professor-besouro":"Mão do professor com o besouro", "sala-vazia-obra":"Sala vazia, sinais de obra","caipora":"Caipora","perna-cabeluda":"Perna Cabeluda","professor-jonas-fagulha":"Professor Jonas \"Fagulha\"","orador-buscador":"Orador Buscador","escola-brasilis": "Escola Brasilis", "a-vanguarda": "A Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "O Rebelde", "brasinha": "Brasinha", "o-curandeiro": "O Curandeiro", "cantiga": "Cantiga", "o-academico": "O Acadêmico", "verbete": "Verbete", "o-ilusionista": "O Ilusionista", "miragem": "Miragem", "o-atleta": "O Atleta", "corisco": "Corisco"},
  "categorias": [["personagens","Personagens"],["mascotes","Mascotes"],["npcs","NPCs"],["cenario","Cenário"]],
  "repo": {"nome":"roshkun/rpg-fakesistem","ramo":"main","pasta":"brasilis/assets"}
 };
