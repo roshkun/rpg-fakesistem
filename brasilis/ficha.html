@@ -17,6 +17,7 @@ body{ background:#1d1424; color:var(--ink); font-family:Georgia,"Times New Roman
 .top{ position:sticky; top:0; z-index:30; display:flex; gap:8px; align-items:center; padding:8px 10px; background:rgba(29,20,36,.95); backdrop-filter:blur(6px); border-bottom:1px solid #4a2e55; }
 .top a,.top button{ font:600 13px/1 system-ui,sans-serif; color:#f1ecf7; background:transparent; border:1px solid #7b4a8a; padding:9px 11px; border-radius:8px; cursor:pointer; text-decoration:none; white-space:nowrap; }
 .top .sp{ flex:1; }
+@media (max-width:520px){ .top .tx{ display:none; } .top a,.top button{ padding:9px 10px; } }
 .top button.pri{ background:#5a2d66; }
 .top button:disabled{ opacity:.6; cursor:wait; }
 
@@ -88,6 +89,26 @@ body.locked #gpick{ display:none; }
 body.locked .fxin{ background:rgba(62,28,67,.07)!important; color:inherit; cursor:default; border-bottom-style:dotted!important; }
 body.locked .fxin:focus{ outline:none; }
 
+
+/* corpo inteiro + dossiê de abertura */
+.fullbody{ text-align:center; margin:2px 0 12px; }
+.fullbody img{ height:min(52vh,360px); width:auto; max-width:100%; filter:drop-shadow(0 6px 10px rgba(46,26,58,.35)); }
+.fullbody .cap{ font:700 12px system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--acc); margin-top:4px; }
+#dossie{ position:fixed; inset:0; z-index:200; overflow-y:auto; -webkit-overflow-scrolling:touch; background:radial-gradient(ellipse at top,#3a2347 0%,#1d1424 70%); color:#f1ecf7; display:none; }
+#dossie.on{ display:block; }
+#dossie .in{ max-width:820px; margin:0 auto; padding:18px 16px 110px; display:grid; gap:18px; grid-template-columns:1fr; }
+@media (min-width:700px){ #dossie .in{ grid-template-columns:minmax(220px,300px) 1fr; align-items:start; padding-top:34px; } #dossie .fig{ position:sticky; top:24px; } }
+#dossie .fig{ text-align:center; }
+#dossie .fig img{ height:min(46vh,420px); width:auto; max-width:100%; filter:drop-shadow(0 8px 14px rgba(0,0,0,.55)); }
+@media (min-width:700px){ #dossie .fig img{ height:min(70vh,560px); } }
+#dossie .ey{ font:700 12px system-ui,sans-serif; letter-spacing:.2em; text-transform:uppercase; color:#c9a6d6; }
+#dossie h1{ margin:4px 0 2px; font:700 28px/1.1 Georgia,serif; font-variant:small-caps; letter-spacing:.04em; }
+#dossie .or{ color:#c9a6d6; font:600 14px system-ui,sans-serif; margin-bottom:6px; }
+#dossie h2{ margin:18px 0 6px; font:700 15px Georgia,serif; font-variant:small-caps; letter-spacing:.1em; color:#e2c9ee; border-bottom:1px solid #5a2d66; padding-bottom:4px; }
+#dossie p{ margin:0; font:17px/1.55 Georgia,serif; white-space:pre-wrap; }
+#dossie .bar{ position:fixed; left:0; right:0; bottom:0; padding:12px 16px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(to top,#1d1424 60%,rgba(29,20,36,0)); display:flex; justify-content:center; }
+#dossie .bar button{ font:700 15px system-ui,sans-serif; color:#fff; background:#6e3a7d; border:1px solid #a974ba; padding:14px 26px; border-radius:10px; cursor:pointer; width:min(100%,420px); }
+
 /* valores */
 .pole{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .pole input{ text-align:center; }
@@ -146,9 +167,10 @@ details.pick .in{ padding:4px 10px 12px; }
 <body>
 <div class="top">
   <a href="index.html" id="back">← Turma</a>
-  <a href="dicionario.html" id="dic">📖 Dicionário</a>
+  <a href="dicionario.html" id="dic">📖<span class="tx"> Dicionário</span></a>
   <span class="sp"></span>
-  <button id="lock" aria-pressed="true" title="Campos de base (identidade, atributos, grimório, pacto) ficam travados durante a sessão">🔒 Base travada</button>
+  <button id="dosbtn" title="Rever o dossiê da coordenação">📋<span class="tx"> Dossiê</span></button>
+  <button id="lock" aria-pressed="true" title="Campos de base (identidade, atributos, grimório, pacto) ficam travados durante a sessão">🔒<span class="tx"> Base travada</span></button>
   <button class="pri" id="pdf">⬇ PDF</button>
 </div>
 <div class="wrap">
@@ -172,6 +194,7 @@ details.pick .in{ padding:4px 10px 12px; }
 
   <!-- HISTÓRIA -->
   <section class="panel on" id="p-hist">
+    <div class="fullbody"><img id="corpo" alt=""><div class="cap" id="corpocap"></div></div>
     <div class="sec">
       <div class="grid2">
         <div><label class="lb">Nome do jogador</label><input type="text" data-k="jogador"></div>
@@ -311,6 +334,20 @@ details.pick .in{ padding:4px 10px 12px; }
     <a id="orig" href="ficha-original.html">Ver ficha original (1:1)</a>
   </div>
  </div>
+</div>
+<div id="dossie" role="dialog" aria-modal="true" aria-label="Dossiê da Coordenação">
+  <div class="in">
+    <div class="fig"><img id="dosimg" alt=""></div>
+    <div>
+      <div class="ey">Escola Brasilis · Dossiê da Coordenação</div>
+      <h1 id="dosnome"></h1>
+      <div class="or" id="dosor"></div>
+      <h2>Como chegou</h2><p id="dos1"></p>
+      <h2>Postura e temperamento</h2><p id="dos2"></p>
+      <h2>Observação da coordenação</h2><p id="dos3"></p>
+    </div>
+  </div>
+  <div class="bar"><button id="dosfechar">Ocultar e abrir a ficha ▸</button></div>
 </div>
 <script src="data/alunos.js"></script>
 <script src="data/particulas.js"></script>
@@ -470,7 +507,7 @@ var FIXOS=['jogador','personagem','ano','idade','basico','aparencia','pontos','v
 function setLock(on){
   document.body.classList.toggle('locked',on);
   var b=$('#lock'); b.setAttribute('aria-pressed',on?'true':'false'); b.classList.toggle('open',!on);
-  b.textContent=on?'🔒 Base travada':'🔓 Editando base';
+  b.innerHTML=on?'🔒<span class="tx"> Base travada</span>':'🔓<span class="tx"> Editando base</span>';
   FIXOS.forEach(function(k){ $$('[data-k="'+k+'"]').forEach(function(el){ el.readOnly=on; el.classList.toggle('fxin',on); }); });
 }
 $('#lock').addEventListener('click',function(){
@@ -480,6 +517,25 @@ $('#lock').addEventListener('click',function(){
 });
 function all(){ refresh.forEach(function(r){r();}); derive(); grimorio(); extras(); }
 all(); setLock(true);
+/* ---- corpo inteiro + dossiê de abertura ---- */
+(function(){
+  var src=ALUNO.imagem||''; var c=$('#corpo'), d=$('#dosimg');
+  if(src){ c.src=src; d.src=src; } else { c.parentNode.style.display='none'; d.style.display='none'; }
+  c.alt=d.alt=ALUNO.nome; $('#corpocap').textContent=ALUNO.nome;
+  var ov=$('#dossie');
+  function fill(){
+    $('#dosnome').textContent=state.personagem||ALUNO.nome;
+    $('#dosor').textContent=state.basico||'';
+    $('#dos1').textContent=state.dos_chegada||''; $('#dos2').textContent=state.dos_postura||''; $('#dos3').textContent=state.dos_atencao||'';
+  }
+  function abrir(){ fill(); ov.classList.add('on'); ov.scrollTop=0; document.body.style.overflow='hidden'; }
+  function fechar(){ ov.classList.remove('on'); document.body.style.overflow=''; window.scrollTo(0,0); }
+  $('#dosfechar').addEventListener('click',fechar);
+  $('#dosbtn').addEventListener('click',abrir);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('on')) fechar(); });
+  if(qs.get('dossie')!=='0') abrir();
+})();
+
 
 /* PDF = ficha original, gerada em segundo plano (mesmos dados) */
 var pb=$('#pdf');
