@@ -28,7 +28,7 @@ header a,header button{ font:600 12px/1 system-ui,sans-serif; color:#f1ecf7; bac
 .plus{ align-self:center; font:700 22px Georgia; opacity:.6; }
 .card{ position:relative; width:68px; flex:none; background:var(--paper); color:var(--ink); border-radius:10px; padding:5px 4px 6px; text-align:center; box-shadow:0 3px 8px rgba(0,0,0,.45); border-top:5px solid var(--cc,#888); cursor:grab; touch-action:none; }
 .card svg{ display:block; width:100%; height:auto; aspect-ratio:41/40; } .card svg path{ fill:var(--ink); fill-rule:evenodd; }
-.card .n{ font:700 10.5px/1.1 Georgia,serif; margin-top:1px; min-height:2.2em; display:flex; align-items:center; justify-content:center; }
+.card .n{ font:700 10.5px/1.1 Georgia,serif; margin-top:1px; min-height:2.2em; display:flex; align-items:center; justify-content:center; overflow-wrap:anywhere; padding:0 1px; } .card{ overflow:hidden; }
 .card .c{ font:700 10px system-ui,sans-serif; letter-spacing:.14em; color:#6e3a7d; }
 .card[data-cat="Funções"]{ --cc:var(--F);} .card[data-cat="Objetos"]{ --cc:var(--O);} .card[data-cat="Características"]{ --cc:var(--C);} .card[data-cat="Complementos"]{ --cc:var(--M);}
 .slot .card{ width:76px; } .slot.big .card{ width:88px; }
@@ -189,7 +189,8 @@ function pickMut(){
 }
 
 /* ---------- renderização ---------- */
-function cardHtml(p,extra){ return '<div class="card'+(extra||'')+'" data-cat="'+esc(p.cat)+'">'+svg(p.d)+'<div class="n">'+esc(p.nome.replace('Forma: ','Forma '))+'</div><div class="c">'+esc(p.codigo)+'</div></div>'; }
+function zw(t){ return esc(t).replace(/\//g,'/&#8203;'); }
+function cardHtml(p,extra){ return '<div class="card'+(extra||'')+'" data-cat="'+esc(p.cat)+'">'+svg(p.d)+'<div class="n">'+zw(p.nome.replace('Forma: ','Forma '))+'</div><div class="c">'+esc(p.codigo)+'</div></div>'; }
 function draw(){
   var okF=!!F, okO=!!O, text=frase();
   var h='';
@@ -257,7 +258,7 @@ var LIVRE_ALL=false;
 function handList(){ return P.filter(function(p){ return p.cat===tab && (LIVRE_ALL||known(p)); }); }
 function drawHand(){
   var l=handList(), fan=$('#fan');
-  fan.innerHTML=l.length?l.map(function(p,i){ var rot=((i-(l.length-1)/2)*(l.length>8?0.6:1.4)).toFixed(1); return '<div class="card'+(used(p)?' used':'')+'" data-cat="'+esc(p.cat)+'" data-i="'+i+'" style="transform:rotate('+rot+'deg)" title="'+esc(p.nome)+'">'+svg(p.d)+'<div class="n">'+esc(p.nome.replace('Forma: ','Forma '))+'</div><div class="c">'+esc(p.codigo)+'</div></div>'; }).join(''):'<div class="empty">Nenhuma partícula desta categoria no seu grimório.</div>';
+  fan.innerHTML=l.length?l.map(function(p,i){ var rot=((i-(l.length-1)/2)*(l.length>8?0.6:1.4)).toFixed(1); return '<div class="card'+(used(p)?' used':'')+'" data-cat="'+esc(p.cat)+'" data-i="'+i+'" style="transform:rotate('+rot+'deg)" title="'+esc(p.nome)+'">'+svg(p.d)+'<div class="n">'+zw(p.nome.replace('Forma: ','Forma '))+'</div><div class="c">'+esc(p.codigo)+'</div></div>'; }).join(''):'<div class="empty">Nenhuma partícula desta categoria no seu grimório.</div>';
   [].forEach.call(fan.querySelectorAll('.card'),function(el){ el.addEventListener('pointerdown',function(ev){ startDrag(ev,el,l[+el.dataset.i]); }); });
 }
 

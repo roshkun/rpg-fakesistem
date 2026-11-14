@@ -110,10 +110,10 @@ input:focus,textarea:focus{ background:rgba(255,255,255,.7); box-shadow:0 0 0 2p
 .cx img{ height:20px; opacity:.28; } .cx img.on{ opacity:1; }
 
 /* grimório */
-.tiles{ display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:8px; }
+.tiles{ display:grid; grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:8px; }
 .tile{ background:rgba(255,255,255,.4); border:2px solid var(--line); border-radius:6px; padding:6px 4px 7px; text-align:center; color:var(--purple); cursor:pointer; font:inherit; }
 .tile svg{ width:100%; height:auto; aspect-ratio:41/40; display:block; }
-.tile .n{ font:600 12px/1.1 Georgia,serif; margin-top:2px; } .tile .c{ font:10px system-ui,sans-serif; letter-spacing:.08em; opacity:.7; }
+.tile{ min-width:0; overflow:hidden; } .tile .n{ font:600 12px/1.15 Georgia,serif; margin-top:3px; min-height:2.3em; display:flex; align-items:center; justify-content:center; overflow-wrap:anywhere; word-break:break-word; hyphens:auto; padding:0 2px; } .tile .c{ font:10px system-ui,sans-serif; letter-spacing:.08em; opacity:.7; }
 .tile.off{ opacity:.55; border-style:dashed; }
 .tile.fixed{ cursor:default; }
 .cntline{ display:flex; gap:8px; flex-wrap:wrap; margin:0 0 8px; }
@@ -381,7 +381,7 @@ var CATS=[['Funções',2],['Objetos',3],['Características',4]];
 function svg(d){ return '<svg viewBox="120 15 410 400" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="'+d+'"/></svg>'; }
 function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 function tile(p,on,fixed){ var b=document.createElement('button'); b.type='button'; b.className='tile'+(on?'':' off')+(fixed?' fixed':'');
-  b.innerHTML=svg(p.d)+'<div class="n">'+esc(p.nome)+'</div><div class="c">'+esc(p.codigo)+'</div>'; return b; }
+  b.innerHTML=svg(p.d)+'<div class="n">'+esc(p.nome).replace(/\//g,'/&#8203;').replace(/:/g,':&#8203;')+'</div><div class="c">'+esc(p.codigo)+'</div>'; return b; }
 function grimorio(){
   var mine=$('#mine'), all=$('#all'), cn=$('#cnts'); mine.innerHTML=''; all.innerHTML=''; cn.innerHTML='';
   var open=$('details.pick').open;
