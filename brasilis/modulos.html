@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d1424">
+<title>Módulos — Etmos RPG</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M16 2 28 16 16 30 4 16z%27 fill=%27%233e1c43%27/%3E%3C/svg%3E">
+<style>
+:root{ --ink:#3e1c43; --paper:#e4e2f1; --acc:#6e3a7d; --deep:#1d1424; }
+*{ box-sizing:border-box; } html,body{ margin:0; }
+body{ background:var(--deep); color:#f1ecf7; font-family:Georgia,"Times New Roman",serif; min-height:100vh; padding-bottom:40px; }
+header{ position:sticky; top:0; z-index:20; background:rgba(29,20,36,.96); backdrop-filter:blur(8px); border-bottom:1px solid #4a2e55; padding:10px 12px; }
+.top{ display:flex; align-items:center; gap:10px; } .top .logo{ height:26px; filter:brightness(0) invert(.92); }
+.top h1{ flex:1; margin:0; font-size:17px; min-width:0; }
+.top a{ font:600 13px/1 system-ui,sans-serif; color:#f1ecf7; text-decoration:none; border:1px solid #7b4a8a; padding:9px 12px; border-radius:8px; white-space:nowrap; }
+.tabs{ display:flex; gap:8px; margin-top:10px; }
+.tabs button{ flex:1; font:600 13px/1 system-ui,sans-serif; color:#d9cbe6; background:#2a1a36; border:1px solid #5b3a6b; padding:11px 6px; border-radius:99px; cursor:pointer; }
+.tabs button.on{ background:var(--acc); color:#fff; border-color:#a77ac0; }
+main{ max-width:960px; margin:0 auto; padding:12px; } .panel{ display:none; } .panel.on{ display:block; }
+.note{ font:14px/1.5 system-ui,sans-serif; color:#d9cbe6; background:#26172f; border:1px solid #4a2e55; border-radius:12px; padding:11px 14px; margin-bottom:12px; }
+.card{ background:var(--paper); color:var(--ink); border-radius:12px; padding:14px; margin-bottom:12px; box-shadow:0 2px 0 rgba(0,0,0,.25); }
+.card h2{ margin:0 0 10px; font:700 21px/1.1 "Cormorant Garamond","EB Garamond",Garamond,Georgia,serif; font-variant:small-caps; letter-spacing:.08em; border-bottom:2px solid var(--ink); padding-bottom:6px; }
+.card p,.card li{ font:14.5px/1.5 system-ui,sans-serif; margin:0 0 8px; } .card ul{ margin:0; padding-left:18px; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:8px; }
+.mini{ background:rgba(255,255,255,.5); border:1.5px solid var(--ink); border-radius:8px; padding:9px 10px; font:13.5px/1.4 system-ui,sans-serif; }
+.mini b{ display:block; font:700 15px Georgia,serif; color:var(--acc); margin-bottom:2px; }
+table{ border-collapse:collapse; font:14px system-ui,sans-serif; } td,th{ padding:6px 14px; border-top:1px solid rgba(62,28,67,.25); text-align:center; } th{ font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--acc); border:0; }
+.search input{ width:100%; font:16px system-ui,sans-serif; color:#f1ecf7; background:#2a1a36; border:1px solid #5b3a6b; border-radius:10px; padding:12px 14px; outline:none; margin-bottom:8px; }
+.chips{ display:flex; gap:6px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none; }
+.chips button{ flex:none; font:600 12px system-ui,sans-serif; color:#d9cbe6; background:#2a1a36; border:1px solid #5b3a6b; padding:8px 12px; border-radius:99px; cursor:pointer; } .chips button[aria-pressed=true]{ background:var(--acc); color:#fff; }
+.item{ position:relative; } .item .pp{ position:absolute; top:10px; right:10px; background:var(--ink); color:#fff; font:700 12px system-ui,sans-serif; border-radius:99px; padding:4px 9px; }
+.item h3{ margin:0 28px 5px 0; font:700 17px Georgia,serif; padding-right:46px; } .item .v{ font:12.5px system-ui,sans-serif; opacity:.75; margin-top:4px; }
+.empty{ text-align:center; padding:30px; color:#b9a9c6; font:15px system-ui,sans-serif; }
+</style>
+</head>
+<body>
+<header><div class="top"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Módulos</h1><a id="back" href="index.html">← Voltar</a></div>
+<div class="tabs"><button class="on" data-t="pro">Proezas</button><button data-t="ite">Itens</button><button data-t="fam">Familiares</button></div></header>
+<main>
+<section class="panel on" id="p-pro"></section>
+<section class="panel" id="p-ite"><div class="note">Itens encantados com o custo em Pontos de Preparo (PP) e os veículos em que podem ser feitos.</div><div class="search"><input id="q" type="search" placeholder="Buscar item ou veículo" aria-label="Buscar item"></div><div class="chips" id="chips"></div><div id="itens"></div></section>
+<section class="panel" id="p-fam"></section>
+</main>
+<script src="data/alunos.js"></script>
+<script src="data/modulos.js"></script>
+<script>
+(function(){
+var M=window.MODULOS||{}, qs=new URLSearchParams(location.search), aid=qs.get('aluno');
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function norm(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
+if(aid){ document.getElementById('back').href='ficha.html?aluno='+encodeURIComponent(aid); document.getElementById('back').textContent='← Ficha'; }
+[].forEach.call(document.querySelectorAll('.tabs button'),function(b){ b.onclick=function(){ [].forEach.call(document.querySelectorAll('.tabs button'),function(x){x.classList.toggle('on',x===b);}); [].forEach.call(document.querySelectorAll('.panel'),function(p){p.classList.toggle('on',p.id==='p-'+b.dataset.t);}); }; });
+var P=M.proezas||{};
+document.getElementById('p-pro').innerHTML=
+ '<div class="note">'+esc(P.intro||'')+'</div>'
+ +'<div class="card"><h2>Mecânica das Proezas</h2><p>'+esc(P.mecanica||'')+'</p><div class="grid">'+(P.tipos||[]).map(function(t){return '<div class="mini"><b>'+esc(t[0])+' ('+esc(t[1])+')</b>2d6 + '+esc(t[1])+'. '+esc(t[2])+'</div>';}).join('')+'</div></div>'
+ +'<div class="card"><h2>Os Rudimentos</h2><p>Elementos básicos usados para justificar e estruturar uma Proeza.</p><div class="grid">'+(P.rudimentos||[]).map(function(r,i){return '<div class="mini"><b>'+(i+1)+'. '+esc(r[0])+'</b>'+esc(r[1])+'</div>';}).join('')+'</div></div>'
+ +'<div class="card"><h2>Complexidade das Proezas</h2><p>'+esc(P.complexidade||'')+'</p><table><tr><th>Complexidade</th><th>Estresse</th></tr>'+(P.estresse||[]).map(function(e){return '<tr><td>'+esc(e[0])+'</td><td><b>'+e[1]+'</b></td></tr>';}).join('')+'</table></div>'
+ +'<div class="card"><h2>Proeza Composta</h2><ul>'+(P.composta||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
+ +(P.habilidade?'<div class="card"><h2>Nova Habilidade: '+esc(P.habilidade[0])+'</h2><p>'+esc(P.habilidade[1])+'</p></div>':'');
+var F=M.familiares||{};
+document.getElementById('p-fam').innerHTML=
+ '<div class="note">A mecânica que permite o vínculo entre um Orador ("Pactário") e um companheiro místico ("Familiar").</div>'
+ +'<div class="card"><h2>O Pacto</h2><ul>'+(F.pacto||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
+ +'<div class="card"><h2>Status base do Familiar</h2><div class="grid">'+(F.base||[]).map(function(b){return '<div class="mini"><b>'+esc(b[1])+'</b>'+esc(b[0])+'</div>';}).join('')+'</div></div>'
+ +'<div class="card"><h2>Aptidões dos Familiares</h2><p>'+esc(F.aptintro||'')+'</p><div class="grid">'+(F.aptidoes||[]).map(function(a){return '<div class="mini"><b>'+esc(a[0])+'</b>'+esc(a[1])+'</div>';}).join('')+'</div></div>'
+ +'<div class="card"><h2>Força do Pacto</h2><p>Determina quantas Aptidões o companheiro tem.</p><div class="grid">'+(F.forca||[]).map(function(a){return '<div class="mini"><b>'+esc(a[0])+'</b>'+esc(a[1])+'</div>';}).join('')+'</div></div>';
+var I=M.itens||[], pp=0, q='';
+var costs=[]; I.forEach(function(i){ if(costs.indexOf(i.pp)<0) costs.push(i.pp); }); costs.sort(function(a,b){return a-b;});
+var chips=document.getElementById('chips'); chips.innerHTML='<button data-p="0" aria-pressed="true">Todos ('+I.length+')</button>'+costs.map(function(c){return '<button data-p="'+c+'" aria-pressed="false">'+c+' PP</button>';}).join('');
+[].forEach.call(chips.children,function(b){ b.onclick=function(){ pp=+b.dataset.p; [].forEach.call(chips.children,function(x){x.setAttribute('aria-pressed',x===b);}); draw(); }; });
+document.getElementById('q').addEventListener('input',function(e){ q=norm(e.target.value.trim()); draw(); });
+function draw(){
+  var l=I.filter(function(i){ return (!pp||i.pp===pp)&&(!q||norm(i.nome+' '+i.efeito+' '+i.veiculos).indexOf(q)>=0); });
+  document.getElementById('itens').innerHTML=l.length?l.map(function(i){ return '<div class="card item"><span class="pp">'+i.pp+' PP</span><h3>'+esc(i.nome)+'</h3><p>'+esc(i.efeito)+'</p>'+(i.veiculos?'<div class="v"><b>Veículos:</b> '+esc(i.veiculos)+'</div>':'')+'</div>'; }).join(''):'<div class="empty">Nenhum item encontrado.</div>';
+}
+draw();
+})();
+</script>
+</body>
+</html>

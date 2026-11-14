@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d1424">
+<title>Área do Mestre — Etmos RPG</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M16 2 28 16 16 30 4 16z%27 fill=%27%233e1c43%27/%3E%3C/svg%3E">
+<style>
+:root{ --ink:#3e1c43; --paper:#e4e2f1; --acc:#6e3a7d; --deep:#1d1424; }
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+body{ background:var(--deep); color:#f1ecf7; font-family:Georgia,"Times New Roman",serif; min-height:100vh; padding-bottom:40px; }
+header{ position:sticky; top:0; z-index:20; background:rgba(29,20,36,.96); backdrop-filter:blur(8px); border-bottom:1px solid #4a2e55; padding:10px 12px; }
+.top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.top .logo{ height:26px; filter:brightness(0) invert(.92); }
+.top h1{ flex:1; margin:0; font-size:18px; letter-spacing:.04em; }
+.top a{ font:600 13px/1 system-ui,sans-serif; color:#f1ecf7; text-decoration:none; border:1px solid #7b4a8a; padding:9px 12px; border-radius:8px; white-space:nowrap; }
+.tabs{ display:flex; gap:8px; margin-top:10px; }
+.tabs button{ flex:1; font:600 13px/1 system-ui,sans-serif; color:#d9cbe6; background:#2a1a36; border:1px solid #5b3a6b; padding:11px 6px; border-radius:99px; cursor:pointer; }
+.tabs button.on{ background:var(--acc); color:#fff; border-color:#a77ac0; }
+main{ max-width:980px; margin:0 auto; padding:12px; }
+.panel{ display:none; } .panel.on{ display:block; }
+.note{ font:14px/1.5 system-ui,sans-serif; color:#d9cbe6; background:#26172f; border:1px solid #4a2e55; border-radius:12px; padding:11px 14px; margin-bottom:12px; }
+.card{ background:var(--paper); color:var(--ink); border-radius:12px; padding:14px 14px 12px; margin-bottom:12px; box-shadow:0 2px 0 rgba(0,0,0,.25); }
+.card h2{ margin:0 0 10px; font:700 21px/1.1 "Cormorant Garamond","EB Garamond",Garamond,Georgia,serif; font-variant:small-caps; letter-spacing:.08em; border-bottom:2px solid var(--ink); padding-bottom:6px; }
+.cols{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.lv{ background:rgba(255,255,255,.45); border:1.5px solid var(--ink); border-radius:8px; padding:8px 9px; }
+.lv h3{ margin:0 0 6px; font:700 12px system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--acc); }
+.lv dl{ margin:0; display:grid; grid-template-columns:auto auto; gap:2px 8px; font:13px/1.3 system-ui,sans-serif; }
+.lv dt{ opacity:.75; } .lv dd{ margin:0; font-weight:700; text-align:right; }
+@media (max-width:620px){ .cols{ grid-template-columns:1fr; } .lv dl{ grid-template-columns:1fr auto; } }
+.st{ width:100%; border-collapse:collapse; font:14px system-ui,sans-serif; }
+.st th{ font:700 11px system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--acc); text-align:center; padding:4px 2px 6px; }
+.st td{ padding:6px 4px; border-top:1px solid rgba(62,28,67,.25); text-align:center; font-weight:700; }
+.st td:first-child{ text-align:left; font-weight:400; opacity:.8; }
+.st tbody tr:nth-child(even){ background:rgba(255,255,255,.3); }
+.mz .tags{ display:flex; gap:6px; flex-wrap:wrap; margin:-2px 0 10px; } .mz .tags span{ font:700 11px system-ui,sans-serif; background:var(--ink); color:#fff; border-radius:99px; padding:4px 9px; } .mz .tags span.am{ background:#a3162b; }
+.mz .stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(86px,1fr)); gap:6px; margin-bottom:10px; } .mz .stats div{ background:rgba(255,255,255,.45); border:1.5px solid var(--ink); border-radius:8px; padding:6px 8px; text-align:center; font:11px system-ui,sans-serif; } .mz .stats b{ display:block; font:700 18px Georgia,serif; color:var(--acc); }
+.mz p{ margin:6px 0 0; font:14px/1.45 system-ui,sans-serif; } .mz p b{ color:var(--acc); }
+.ora p{ margin:0; font:15px/1.5 Georgia,serif; }
+.tier h2 small{ font:600 12px system-ui,sans-serif; letter-spacing:.04em; text-transform:none; opacity:.7; margin-left:6px; font-variant:normal; }
+.tier ul{ list-style:none; margin:0; padding:0; }
+.tier li{ display:flex; gap:10px; padding:7px 8px; border-radius:8px; font:14.5px/1.4 system-ui,sans-serif; }
+.tier li b{ flex:none; font-family:Georgia,serif; color:var(--acc); min-width:2.2em; }
+.tier li.hit{ background:var(--ink); color:#fff; } .tier li.hit b{ color:#d9b8ec; }
+.tier button{ margin-top:8px; font:600 13px system-ui,sans-serif; color:#fff; background:var(--ink); border:0; border-radius:8px; padding:10px 14px; cursor:pointer; }
+.lock{ max-width:380px; margin:12vh auto 0; background:var(--paper); color:var(--ink); border-radius:14px; padding:22px 20px; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,.5); }
+.lock .logo{ height:34px; }
+.lock h2{ margin:10px 0 4px; font:700 22px "Cormorant Garamond",Georgia,serif; font-variant:small-caps; letter-spacing:.1em; border:0; padding:0; }
+.lock p{ font:14px/1.45 system-ui,sans-serif; margin:0 0 14px; opacity:.8; }
+.lock input{ width:100%; font:17px system-ui,sans-serif; padding:12px; border:2px solid var(--ink); border-radius:8px; background:#fff8; color:var(--ink); }
+.lock button{ margin-top:12px; width:100%; font:700 15px system-ui,sans-serif; color:#fff; background:var(--ink); border:0; border-radius:8px; padding:13px; cursor:pointer; }
+.lock .err{ color:#a3162b; font:600 13px system-ui,sans-serif; min-height:1.3em; margin-top:8px; }
+#conteudo,.tabs,.sair{ display:none; } .unlocked #conteudo{ display:block; } .unlocked #trava{ display:none; } .unlocked .tabs{ display:flex; } .unlocked .sair{ display:inline-block; }
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Área do Mestre</h1><a id="dic" href="dicionario.html">📖 Dicionário</a><a id="back" href="index.html">← Turma</a><a class="sair" id="sair" href="#">Sair</a></div>
+  <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="meso">Mesoamérica</button><button data-t="reg">Regras</button><button data-t="enc">Encontros</button></div>
+</header>
+<main>
+<div id="trava" class="lock"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h2>Área do mestre</h2><p>Conteúdo reservado ao narrador. Digite a senha para entrar.</p><form id="f"><input id="pw" type="password" autocomplete="current-password" placeholder="Senha" aria-label="Senha"><div class="err" id="err" role="alert"></div><button type="submit">Entrar</button></form></div>
+<div id="conteudo">
+  <section class="panel on" id="p-cri"><div class="note">Fichas-base de criaturas do Fantástico, em três níveis de força.</div><div id="cri"></div></section>
+  <section class="panel" id="p-ora"><div class="note">Oradores genéricos para usar como NPCs: o grimório de cada um já vem pronto.</div><div id="ora"></div></section>
+  <section class="panel" id="p-meso"><div class="note">Módulo Bestiário: Mesoamérica. (*) marca as aptidões como aparecem no módulo.</div><div id="meso"></div></section>
+  <section class="panel" id="p-reg"><div class="note">Pontos dos módulos que cabem ao narrador.</div><div id="reg"></div></section>
+  <section class="panel" id="p-enc"><div class="note">Role dados e veja quantos saíram iguais: 2 = simples, 3 = mediano, 4 = avançado, 5 ou mais = letal. Depois sorteie o encontro da faixa (o botão faz o sorteio por você).</div><div id="enc"></div></section>
+</div>
+</main>
+
+<script src="data/mestre.enc.js"></script>
+<script>
+(function(){
+var A={}, qs=new URLSearchParams(location.search), aid=qs.get('aluno');
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function b64(s){ var r=atob(s), u=new Uint8Array(r.length); for(var i=0;i<r.length;i++) u[i]=r.charCodeAt(i); return u; }
+function decifrar(senha){
+  var E=window.MESTRE_ENC; if(!E||!window.crypto||!crypto.subtle) return Promise.reject(new Error('nocrypto'));
+  return crypto.subtle.importKey('raw',new TextEncoder().encode(senha),'PBKDF2',false,['deriveKey'])
+   .then(function(k){ return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(E.salt),iterations:E.it,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']); })
+   .then(function(k){ return crypto.subtle.decrypt({name:'AES-GCM',iv:b64(E.iv)},k,b64(E.ct)); })
+   .then(function(buf){ return JSON.parse(new TextDecoder().decode(buf)); });
+}
+function iniciar(dados,senha){ A=dados; try{ sessionStorage.setItem('etmos-mestre',senha); }catch(e){} document.body.classList.add('unlocked'); montar(); }
+var err=document.getElementById('err');
+document.getElementById('f').addEventListener('submit',function(ev){ ev.preventDefault(); err.textContent='Verificando…';
+  var pw=document.getElementById('pw').value;
+  decifrar(pw).then(function(d){ iniciar(d,pw); },function(e){ err.textContent=(e&&e.message==='nocrypto')?'Este navegador não permite a verificação (abra pelo endereço https do site).':'Senha incorreta.'; });
+});
+document.getElementById('sair').addEventListener('click',function(ev){ ev.preventDefault(); try{ sessionStorage.removeItem('etmos-mestre'); }catch(e){} location.reload(); });
+try{ var sv=sessionStorage.getItem('etmos-mestre'); if(sv) decifrar(sv).then(function(d){ iniciar(d,sv); },function(){ sessionStorage.removeItem('etmos-mestre'); }); }catch(e){}
+if(aid){ var e0=encodeURIComponent(aid); document.getElementById('back').href='ficha.html?aluno='+e0; document.getElementById('dic').href='dicionario.html?aluno='+e0; }
+function montar(){
+[].forEach.call(document.querySelectorAll('.tabs button'),function(b){ b.onclick=function(){ [].forEach.call(document.querySelectorAll('.tabs button'),function(x){x.classList.toggle('on',x===b);}); [].forEach.call(document.querySelectorAll('.panel'),function(p){p.classList.toggle('on',p.id==='p-'+b.dataset.t);}); }; });
+document.getElementById('cri').innerHTML=(A.bestiario||[]).map(function(c){
+  var rows=c.niveis[0].stats.map(function(s){return s[0];});
+  var th=c.niveis.map(function(n){return '<th>'+esc(n.nivel)+'</th>';}).join('');
+  var body=rows.map(function(r,i){ return '<tr><td>'+esc(r)+'</td>'+c.niveis.map(function(n){ var v=n.stats[i]?n.stats[i][1]:'—'; return '<td>'+esc(v)+'</td>'; }).join('')+'</tr>'; }).join('');
+  return '<div class="card"><h2>'+esc(c.nome)+'</h2><table class="st"><thead><tr><th></th>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>'; }).join('');
+document.getElementById('ora').innerHTML=(A.oradores||[]).map(function(o){ return '<div class="card ora"><h2>'+esc(o.nome)+'</h2><p>'+esc(o.txt)+'</p></div>'; }).join('');
+document.getElementById('meso').innerHTML=(A.mesoamerica||[]).map(function(c){
+  var m={}; c.campos.forEach(function(f){ m[f[0]]=f[1]; });
+  var tags=(m['Arquétipos']||'').split(',').map(function(x){return '<span>'+esc(x.trim())+'</span>';}).join('')+'<span class="am">Ameaça '+esc(m['Ameaça']||'')+'</span>';
+  var st=[['Ferimentos',m['Limite de Ferimentos']],['Estresse',m['Estresse']],['Compl. máx.',m['Complexidade Máxima']],['Mov.',m['Movimentação']],['Comunica?',m['Comunicação?']],['Corpo',m['Corpo']],['Mente',m['Mente']],['Alma',m['Alma']]].map(function(x){return '<div>'+esc(x[0])+'<b>'+esc(x[1]||'—')+'</b></div>';}).join('');
+  var tx=['Aptidões','Aptidões (Ataques)','Variantes'].filter(function(k){return m[k];}).map(function(k){return '<p><b>'+esc(k)+':</b> '+esc(m[k])+'</p>';}).join('');
+  return '<div class="card mz"><h2>'+esc(c.nome)+'</h2><div class="tags">'+tags+'</div><div class="stats">'+st+'</div>'+tx+'</div>'; }).join('');
+document.getElementById('reg').innerHTML=(A.regras||[]).map(function(r){ return '<div class="card"><h2>'+esc(r.nome)+'</h2><ul style="margin:0 0 8px;padding-left:18px;font:14.5px/1.5 system-ui,sans-serif">'+r.itens.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'+(r.obs?'<p style="margin:0;font:13.5px/1.45 system-ui,sans-serif;opacity:.85"><b>Nota:</b> '+esc(r.obs)+'</p>':'')+'</div>'; }).join('');
+var enc=document.getElementById('enc');
+enc.innerHTML=(A.encontros||[]).map(function(t,i){
+  return '<div class="card tier"><h2>'+esc(t.nome)+'<small>('+esc(t.dados)+')</small></h2><ul>'+t.itens.map(function(x){ return '<li><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></li>'; }).join('')+'</ul><button data-i="'+i+'">🎲 Sortear encontro</button></div>'; }).join('');
+[].forEach.call(enc.querySelectorAll('button'),function(b){ b.onclick=function(){
+  var card=b.parentNode, lis=card.querySelectorAll('li'); [].forEach.call(lis,function(l){l.classList.remove('hit');});
+  var n=0, t=setInterval(function(){ [].forEach.call(lis,function(l){l.classList.remove('hit');}); lis[Math.floor(Math.random()*lis.length)].classList.add('hit'); if(++n>6) clearInterval(t); },70); }; });
+}
+})();
+</script>
+</body>
+</html>
