@@ -152,6 +152,19 @@ function gerarPaginas(o,imgs){
   txt('Esgotado: magia não Trivial, 2d6 maior que Corpo+3 e a personagem morre (a magia ainda acontece).',M+24,y+262,{font:'400 22px '+SANS,color:ACC});
   y+=320;
 
+  /* marcadores de jogo: ferimentos, estresse, dados de empenho e marcos de crescimento */
+  ensure(580); label('Marcadores de jogo');
+  box(M,y,CW,540);
+  function trilha(rot,x0,yy,n,cheios,s0){ txt(rot.toUpperCase(),x0,yy+34,{font:'700 22px '+SANS,color:ACC,ls:2}); var sz=s0||46, gp2=12; for(var q=0;q<n;q++){ var qx=x0+300+q*(sz+gp2); ctx.save(); ctx.lineWidth=4; ctx.strokeStyle=LINE; ctx.strokeRect(qx,yy,sz,sz); if(q<cheios){ ctx.fillStyle=PUR; ctx.fillRect(qx+8,yy+8,sz-16,sz-16); } ctx.restore(); } }
+  var fatu=num(st,'feridas_atual'), eatu=num(st,'estresse_atual'), demp=Math.min(6,parseInt(st.dados,10)||0);
+  trilha('Ferimentos',M+24,y+24,Math.max(1,Math.min(10,fmax)),Math.min(fatu,fmax));
+  trilha('Estresse',M+24,y+96,Math.max(1,Math.min(14,emax)),Math.min(eatu,emax));
+  txt('Estresse acima do limite entra na trilha de fadiga.',M+24,y+176,{font:'400 22px '+SANS,color:ACC});
+  trilha('Dados de empenho',M+24,y+204,6,demp);
+  txt('MARCOS DE CRESCIMENTO',M+24,y+294,{font:'700 22px '+SANS,color:ACC,ls:2});
+  [['Físico','m_fis'],['Emocional','m_emo'],['Mental','m_men']].forEach(function(r,ri){ trilha(r[0],M+24,y+326+ri*66,5,Math.min(5,num(st,r[1]))); });
+  y+=570;
+
   /* proezas */
   title('Proezas');
   var pr=!!st.pr_praticas, fis=pr?c:m;
@@ -173,7 +186,7 @@ function gerarPaginas(o,imgs){
     var tw=0; if(imgs.totem){ var th=Math.min(240,imgs.totem.naturalHeight); tw=th*imgs.totem.naturalWidth/imgs.totem.naturalHeight; if(tw>240){ tw=240; th=tw*imgs.totem.naturalHeight/imgs.totem.naturalWidth; } ctx.drawImage(imgs.totem,M,y,tw,th); tw+=30; }
     txt(T.nome,M+tw,y+40,{font:'700 36px '+SERIF,color:PUR}); txt('RANK '+T.rank,M+tw,y+86,{font:'700 24px '+SANS,color:ACC,ls:3});
     var tl=wrap(T.desc||'',CW-tw,'400 28px '+SERIF), ty=y+134; tl.forEach(function(l){ txt(l,M+tw,ty,{font:'400 28px '+SERIF}); ty+=40; });
-    var tr=wrap('Cada magia não Trivial conjurada no Mundano soma Estresse extra, conforme o Rank. Sintoniza no primeiro uso; perde a sintonia após 100 anos sem uso.',CW-tw,'400 24px '+SERIF); ty+=10; tr.forEach(function(l){ txt(l,M+tw,ty,{font:'italic 400 24px '+SERIF,color:ACC}); ty+=34; });
+    var tr=wrap('Cada magia não Trivial conjurada no Mundano soma Estresse extra igual ao Rank (Rank 4 = +4). Sem Totem, nada de magia no Mundano e um ser Fantástico some de lá. Sintoniza no primeiro uso; perde a sintonia após 100 anos sem uso.',CW-tw,'400 24px '+SERIF); ty+=10; tr.forEach(function(l){ txt(l,M+tw,ty,{font:'italic 400 24px '+SERIF,color:ACC}); ty+=34; });
     y=Math.max(y+250,ty+10);
   }
 
