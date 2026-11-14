@@ -6,6 +6,7 @@ Coloque as imagens do mestre nas pastas abaixo (suba direto pelo GitHub). A gale
 - `mascotes/` — familiares e companheiros
 - `npcs/` — personagens do mestre
 - `cenario/` — locais, mapas e ambientes
+- `itens/` — objetos e Totens (os Totens das fichas usam `totem-rebelde.webp`, `totem-curandeiro.webp`, `totem-ilusionista.webp` e, para o professor, `totem-professor-jonas.webp`)
 
 Formatos: webp, png, jpg, gif, svg. Prefira nomes sem acento e com hífen, como `mestre-aldo.webp`; o título na galeria sai do nome do arquivo (`mestre-aldo` vira "Mestre Aldo"). Depois de subir, o GitHub Pages leva 1 a 3 minutos para publicar.
 
