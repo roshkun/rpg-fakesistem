@@ -58,6 +58,7 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
 .mprev{ text-align:center; margin:10px 0; } .mprev img{ max-width:100%; max-height:42vh; object-fit:contain; border-radius:8px; display:none; background:#241633; } #mesa-nome{ font:600 14px system-ui,sans-serif; color:#d9cbe6; margin-top:6px; }
 .mbar{ display:flex; gap:8px; justify-content:center; margin:8px 0; } .mbar button{ font:700 14px system-ui,sans-serif; color:#fff; background:#2a1a36; border:1px solid #5b3a6b; padding:13px 16px; border-radius:10px; cursor:pointer; } .mbar button.pri{ background:var(--acc); border-color:#a77ac0; flex:1; max-width:300px; } .mbar button:disabled{ opacity:.5; cursor:not-allowed; }
 .mstat{ text-align:center; font:13px system-ui,sans-serif; color:#c9a6d6; min-height:18px; margin-bottom:8px; } .mstat.err{ color:#ff9a90; }
+.mcat{ font:700 13px system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:#c9a6d6; margin:16px 0 8px; } .mvazio{ font:13px system-ui,sans-serif; color:#8f7aa0; padding:6px 2px; }
 .mgal{ display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px; } .mgal button{ background:#241633; border:2px solid #4a2e55; border-radius:10px; padding:6px; cursor:pointer; color:#e8dcf2; font:600 12px system-ui,sans-serif; } .mgal button.on{ border-color:#c58ae0; } .mgal img{ width:100%; height:90px; object-fit:contain; display:block; margin-bottom:5px; }
 </style>
 </head>
@@ -78,7 +79,8 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
     <div id="mesa-prev" class="mprev"><img alt="" id="mesa-img"><div id="mesa-nome">Nenhuma imagem escolhida</div></div>
     <div class="mbar"><button id="mesa-show" class="pri" disabled>📺 Exibir para a mesa</button><button id="mesa-hide">⏹ Ocultar</button></div>
     <div class="mstat" id="mesa-stat"></div>
-    <div id="mesa-gal" class="mgal"></div></section>
+    <div class="mbar"><button id="mesa-reload" type="button">↻ Atualizar galeria</button></div>
+    <div id="mesa-gal"></div></section>
   <section class="panel" id="p-enc"><div class="note">Role dados e veja quantos saíram iguais: 2 = simples, 3 = mediano, 4 = avançado, 5 ou mais = letal. Depois sorteie o encontro da faixa (o botão faz o sorteio por você).</div><div id="enc"></div></section>
 </div>
 </main>
@@ -127,8 +129,30 @@ document.getElementById('reg').innerHTML=(A.regras||[]).map(function(r){ return 
 /* mesa: exibir imagens para os jogadores */
 (function(){
   var M=window.MESA||{imagens:[]}, sel=null, gal=document.getElementById('mesa-gal'), st=document.getElementById('mesa-stat'), bs=document.getElementById('mesa-show');
-  gal.innerHTML=M.imagens.map(function(i,k){ return '<button data-k="'+k+'"><img src="'+esc(i.s)+'" alt="" loading="lazy">'+esc(i.t)+'</button>'; }).join('');
-  [].forEach.call(gal.querySelectorAll('button'),function(b){ b.onclick=function(){ sel=M.imagens[+b.dataset.k]; [].forEach.call(gal.querySelectorAll('button'),function(x){x.classList.toggle('on',x===b);}); var im=document.getElementById('mesa-img'); im.src=sel.s; im.style.display='inline-block'; document.getElementById('mesa-nome').textContent=sel.t; bs.disabled=false; }; });
+  var EXT=/\.(webp|png|jpe?g|gif|svg|avif)$/i;
+  function bonito(arq){ var k=arq.replace(EXT,''); if((M.titulos||{})[k]) return M.titulos[k]; return k.replace(/[-_]+/g,' ').replace(/\b\p{L}/gu,function(c){return c.toUpperCase();}); }
+  function escolher(it,b){ sel=it; [].forEach.call(gal.querySelectorAll('button'),function(x){x.classList.toggle('on',x===b);}); var im=document.getElementById('mesa-img'); im.src=encodeURI(it.s); im.style.display='inline-block'; document.getElementById('mesa-nome').textContent=it.t; bs.disabled=false; }
+  function desenhar(lista,aviso){
+    gal.innerHTML=''; var cats=M.categorias||[];
+    cats.forEach(function(c){
+      var its=lista.filter(function(i){return i.c===c[0];}); var h=document.createElement('h3'); h.textContent=c[1]; h.className='mcat'; gal.appendChild(h);
+      var g=document.createElement('div'); g.className='mgal'; gal.appendChild(g);
+      if(!its.length){ var e=document.createElement('div'); e.className='mvazio'; e.textContent='Nenhuma imagem ainda. Suba em assets/'+c[0]+'/ no repositório.'; g.replaceWith(e); return; }
+      its.forEach(function(it){ var b=document.createElement('button'); b.type='button'; var im=document.createElement('img'); im.src=encodeURI(it.s); im.alt=''; im.loading='lazy'; b.appendChild(im); b.appendChild(document.createTextNode(it.t)); b.onclick=function(){ escolher(it,b); }; g.appendChild(b); });
+    });
+    if(aviso){ var p=document.createElement('div'); p.className='mvazio'; p.textContent=aviso; gal.appendChild(p); }
+  }
+  function carregar(){
+    var R=M.repo; if(!R){ desenhar(M.imagens); return; }
+    st.className='mstat'; st.textContent='Atualizando a galeria…';
+    Promise.all((M.categorias||[]).map(function(c){
+      return fetch('https://api.github.com/repos/'+R.nome+'/contents/'+R.pasta+'/'+c[0]+'?ref='+R.ramo,{headers:{Accept:'application/vnd.github+json'}}).then(function(r){ if(r.status===404) return []; if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+        .then(function(arr){ return arr.filter(function(f){ return f.type==='file'&&EXT.test(f.name); }).map(function(f){ return {c:c[0],t:bonito(f.name),s:'assets/'+c[0]+'/'+f.name}; }); });
+    })).then(function(parts){ var all=[].concat.apply([],parts); desenhar(all); st.textContent=all.length+' imagem(ns) no repositório.'; })
+      .catch(function(){ desenhar(M.imagens,'Não foi possível ler o repositório agora (limite do GitHub ou sem conexão). Mostrando a lista salva.'); st.textContent=''; });
+  }
+  var rb=document.getElementById('mesa-reload'); if(rb) rb.onclick=carregar;
+  carregar();
   function enviar(acao){
     if(!A.mesa_chave){ st.className='mstat err'; st.textContent='Chave da mesa ausente.'; return; }
     st.className='mstat'; st.textContent='Enviando…';
