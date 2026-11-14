@@ -234,7 +234,7 @@ details.pick .in{ padding:4px 10px 12px; }
     </div>
     <div class="sec"><span class="hd">Complementos</span>
       <div class="help">Os complementos de 1º nível já são conhecidos.</div><div class="tiles" id="comps"></div></div>
-    <div class="links"><a id="dic2" href="dicionario.html">📖 Abrir o dicionário completo</a> &nbsp;·&nbsp; <a id="bst2" href="bestiario.html">🐾 Bestiário e encontros</a></div>
+    <div class="links"><a id="dic2" href="dicionario.html">📖 Abrir o dicionário completo</a></div>
   </section>
 
   <div class="foot">
@@ -253,7 +253,6 @@ var qs=new URLSearchParams(location.search), ALUNOS=window.ALUNOS||[], PART=wind
 var ALUNO=ALUNOS.filter(function(a){return a.id===qs.get('aluno');})[0]||ALUNOS[0]||{id:'x',nome:'Aluno',ficha:{}};
 var BASE=ALUNO.ficha||{}, STORE='etmos-ficha-v2-'+ALUNO.id, id=encodeURIComponent(ALUNO.id);
 document.getElementById('dic').href=document.getElementById('dic2').href='dicionario.html?aluno='+id;
-document.getElementById('bst2').href='bestiario.html?aluno='+id;
 document.getElementById('orig').href='ficha-original.html?aluno='+id;
 document.title='Ficha — '+(BASE.personagem||ALUNO.nome)+' · Etmos RPG';
 var state={}, saved={};
