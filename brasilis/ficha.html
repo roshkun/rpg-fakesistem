@@ -138,6 +138,7 @@ body.locked .fxin:focus{ outline:none; }
 .tag{ display:inline-block; font:700 12px system-ui,sans-serif; letter-spacing:.05em; color:#fff; background:var(--purple); padding:5px 10px; border-radius:99px; }
 .tag.warn{ background:#a3162b; }
 .fad{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px; }
+.fadb button{ font:inherit; background:rgba(255,255,255,.4); border:1.5px solid var(--line); border-radius:999px; padding:6px 12px; cursor:pointer; color:inherit; opacity:.55; } .fadb button.on{ opacity:1; background:var(--ink); color:#fff; text-decoration:none; } .mini{ margin-top:8px; font:12px system-ui,sans-serif; background:none; border:1px dashed var(--line); border-radius:6px; padding:4px 8px; cursor:pointer; color:inherit; }
 .fad img{ height:18px; opacity:.28; }
 .fad img.on{ opacity:1; }
 .cx{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
@@ -257,8 +258,9 @@ details.pick .in{ padding:4px 10px 12px; }
     </div>
     <div class="sec"><span class="hd">Estados de fadiga</span>
       <div class="box"><span class="tag" id="fadtag"></span>
-        <div class="fad" id="fad"><span class="lbl">Normal</span><span class="lbl">Cansado</span><span class="lbl">Exausto</span><span class="lbl">Esgotado</span></div>
-        <div class="hint">Calculada sozinha: estresse acima do limite. 5 = Cansado, 6 a 8 = Exausto, 9 ou mais = Esgotado.</div></div></div>
+        <div class="fad fadb" id="fad" role="radiogroup" aria-label="Estado de fadiga"><button type="button" role="radio" class="lbl">Normal</button><button type="button" role="radio" class="lbl">Cansado</button><button type="button" role="radio" class="lbl">Exausto</button><button type="button" role="radio" class="lbl">Esgotado</button></div>
+        <div class="hint" id="fadhint"></div>
+        <button type="button" class="mini" id="fadauto" style="display:none">↺ Seguir o estresse automaticamente</button></div></div>
     <div class="sec"><span class="hd">Complexidade máxima de mágica</span>
       <div class="box"><div class="cx" id="cx"><span class="lbl">Regular</span><span class="lbl">Difícil</span><span class="lbl">Complexa</span><span class="lbl">Milagre</span></div>
         <div class="hint">Segue o atributo Mente: 2 = Difícil, 4 = Complexa, 6 = Milagre.</div></div></div>
@@ -364,7 +366,7 @@ details.pick .in{ padding:4px 10px 12px; }
 <script src="data/particulas.js?v=4"></script>
 <script src="data/modulos.js?v=4"></script>
 <script src="data/glossario.js?v=4"></script>
-<script src="pdf-ficha.js?v=7"></script>
+<script src="pdf-ficha.js?v=8"></script>
 <script src="data/mesa.js?v=8"></script>
 <script src="mesa-cliente.js?v=5"></script>
 <script>
@@ -439,9 +441,13 @@ function derive(){
   $('#h-est').textContent='Pelo livro: 4 + Alma = '+(4+a)+' (+2 se tiver Espírito Forte).';
   var over=Math.max(0,num('estresse_atual')-num('estresse_max')), fd=Math.min(9,over);
   if(num('fadiga')!==fd){ state.fadiga=fd; save(); }
-  var lvl=fd>=9?3:fd>=6?2:fd>=5?1:0, names=['Normal','Cansado','Exausto','Esgotado'];
+  var sug=fd>=9?3:fd>=6?2:fd>=5?1:0, names=['Normal','Cansado','Exausto','Esgotado'];
+  var man=(state.fadiga_est===undefined||state.fadiga_est===''||state.fadiga_est===null)?-1:Math.max(0,Math.min(3,parseInt(state.fadiga_est,10)||0));
+  var lvl=man>=0?man:sug;
   var tg=$('#fadtag'); tg.textContent=names[lvl]+(over?' · '+over+' acima do limite':''); tg.classList.toggle('warn',lvl>0);
-  $$('#fad span').forEach(function(e,i){ e.classList.toggle('on',i===lvl); });
+  $$('#fad button').forEach(function(e,i){ e.classList.toggle('on',i===lvl); e.setAttribute('aria-checked',i===lvl?'true':'false'); });
+  $('#fadhint').textContent='Toque no estado para marcar. Pelo estresse atual o livro indica: '+names[sug]+' (5 acima do limite = Cansado, 6 a 8 = Exausto, 9 ou mais = Esgotado).'+(man>=0&&man!==sug?' Você marcou diferente do sugerido.':'');
+  $('#fadauto').style.display=man>=0?'inline-block':'none';
   var cm=Math.min(6,m); if(num('complex')!==cm){ state.complex=cm; save(); }
   if(typeof drawProezas==='function') drawProezas();
   var cl=m>=6?3:m>=4?2:m>=2?1:0; $$('#cx span').forEach(function(e,i){ e.classList.toggle('on',i===cl); });
@@ -511,6 +517,8 @@ function drawHab(){
 }
 $$('[data-k=praticas],[data-k=teoricas]').forEach(function(el){ el.addEventListener('input',drawHab); });
 refresh.push(drawHab); drawHab();
+$$('#fad button').forEach(function(b,i){ b.addEventListener('click',function(){ state.fadiga_est=i; save(); derive(); }); });
+$('#fadauto').addEventListener('click',function(){ delete state.fadiga_est; save(); derive(); });
 var fi=$('#famimg'); if(ALUNO.familiar_img){ fi.onload=function(){ fi.style.display='block'; fi.alt='Familiar '+(state.fam_nome||''); }; fi.src=ALUNO.familiar_img; }
 function drawFam(){
   var on=!!state.fam_on; $('#famon').checked=on; $('#fambox').style.display=on?'block':'none'; if(!on) return;
