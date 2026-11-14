@@ -138,7 +138,10 @@ body.locked .fxin:focus{ outline:none; }
 .tag{ display:inline-block; font:700 12px system-ui,sans-serif; letter-spacing:.05em; color:#fff; background:var(--purple); padding:5px 10px; border-radius:99px; }
 .tag.warn{ background:#a3162b; }
 .fad{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px; }
-.fadb button{ font:inherit; background:rgba(255,255,255,.4); border:1.5px solid var(--line); border-radius:999px; padding:6px 12px; cursor:pointer; color:inherit; opacity:.55; } .fadb button.on{ opacity:1; background:var(--ink); color:#fff; text-decoration:none; } .mini{ margin-top:8px; font:12px system-ui,sans-serif; background:none; border:1px dashed var(--line); border-radius:6px; padding:4px 8px; cursor:pointer; color:inherit; }
+.fadtr{ display:grid; grid-template-columns:repeat(9,1fr); gap:4px; margin-top:10px; } .fadtr button{ height:36px; border:2px solid var(--line); border-radius:6px; background:rgba(255,255,255,.5); cursor:pointer; padding:0; } .fadtr button.on{ background:var(--ink); } .fadtr button.on.l2{ background:#8a3b1f; } .fadtr button.on.l3{ background:#a1122b; }
+.fadseg{ display:grid; grid-template-columns:repeat(9,1fr); gap:4px; margin-top:2px; font:10.5px system-ui,sans-serif; text-align:center; color:#5b4668; } .fadseg span{ border-top:2px solid var(--line); padding-top:2px; white-space:nowrap; }
+.fadctl{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; } .fadctl button{ font:13px system-ui,sans-serif; background:rgba(255,255,255,.5); border:1.5px solid var(--line); border-radius:999px; padding:6px 12px; cursor:pointer; color:inherit; }
+.fadfx{ margin-top:8px; font:12.5px/1.4 system-ui,sans-serif; } .fadfx div{ padding:4px 6px; border-left:3px solid transparent; opacity:.6; } .fadfx div.on{ opacity:1; border-left-color:var(--acc); background:rgba(110,58,125,.08); }
 .fad img{ height:18px; opacity:.28; }
 .fad img.on{ opacity:1; }
 .cx{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
@@ -258,9 +261,11 @@ details.pick .in{ padding:4px 10px 12px; }
     </div>
     <div class="sec"><span class="hd">Estados de fadiga</span>
       <div class="box"><span class="tag" id="fadtag"></span>
-        <div class="fad fadb" id="fad" role="radiogroup" aria-label="Estado de fadiga"><button type="button" role="radio" class="lbl">Normal</button><button type="button" role="radio" class="lbl">Cansado</button><button type="button" role="radio" class="lbl">Exausto</button><button type="button" role="radio" class="lbl">Esgotado</button></div>
+        <div class="fadtr" id="fad" role="group" aria-label="Pontos de estresse acima do limite"></div>
+        <div class="fadseg"><span style="grid-column:span 5">Cansado</span><span style="grid-column:span 3">Exausto</span><span>Esgot.</span></div>
+        <div class="fadctl"><button type="button" id="fadz">○ Normal</button><button type="button" id="fadm" aria-label="menos 1">−1</button><button type="button" id="fadp" aria-label="mais 1">+1</button><button type="button" id="fada" style="display:none">↺ Seguir o estresse</button></div>
         <div class="hint" id="fadhint"></div>
-        <button type="button" class="mini" id="fadauto" style="display:none">↺ Seguir o estresse automaticamente</button></div></div>
+        <div class="fadfx" id="fadfx"></div></div></div>
     <div class="sec"><span class="hd">Complexidade máxima de mágica</span>
       <div class="box"><div class="cx" id="cx"><span class="lbl">Regular</span><span class="lbl">Difícil</span><span class="lbl">Complexa</span><span class="lbl">Milagre</span></div>
         <div class="hint">Segue o atributo Mente: 2 = Difícil, 4 = Complexa, 6 = Milagre.</div></div></div>
@@ -366,7 +371,7 @@ details.pick .in{ padding:4px 10px 12px; }
 <script src="data/particulas.js?v=4"></script>
 <script src="data/modulos.js?v=4"></script>
 <script src="data/glossario.js?v=4"></script>
-<script src="pdf-ficha.js?v=8"></script>
+<script src="pdf-ficha.js?v=10"></script>
 <script src="data/mesa.js?v=8"></script>
 <script src="mesa-cliente.js?v=5"></script>
 <script>
@@ -441,13 +446,15 @@ function derive(){
   $('#h-est').textContent='Pelo livro: 4 + Alma = '+(4+a)+' (+2 se tiver Espírito Forte).';
   var over=Math.max(0,num('estresse_atual')-num('estresse_max')), fd=Math.min(9,over);
   if(num('fadiga')!==fd){ state.fadiga=fd; save(); }
-  var sug=fd>=9?3:fd>=6?2:fd>=5?1:0, names=['Normal','Cansado','Exausto','Esgotado'];
-  var man=(state.fadiga_est===undefined||state.fadiga_est===''||state.fadiga_est===null)?-1:Math.max(0,Math.min(3,parseInt(state.fadiga_est,10)||0));
-  var lvl=man>=0?man:sug;
-  var tg=$('#fadtag'); tg.textContent=names[lvl]+(over?' · '+over+' acima do limite':''); tg.classList.toggle('warn',lvl>0);
-  $$('#fad button').forEach(function(e,i){ e.classList.toggle('on',i===lvl); e.setAttribute('aria-checked',i===lvl?'true':'false'); });
-  $('#fadhint').textContent='Toque no estado para marcar. Pelo estresse atual o livro indica: '+names[sug]+' (5 acima do limite = Cansado, 6 a 8 = Exausto, 9 ou mais = Esgotado).'+(man>=0&&man!==sug?' Você marcou diferente do sugerido.':'');
-  $('#fadauto').style.display=man>=0?'inline-block':'none';
+  var names=['Normal','Cansado','Exausto','Esgotado'];
+  var man=(state.fadiga_pts===undefined||state.fadiga_pts===''||state.fadiga_pts===null)?-1:Math.max(0,Math.min(9,parseInt(state.fadiga_pts,10)||0));
+  var pts=man>=0?man:fd, lvl=pts>=9?3:pts>=6?2:pts>=1?1:0;
+  var tg=$('#fadtag'); tg.textContent=names[lvl]+(pts?' · '+pts+' ponto(s) acima do limite':''); tg.classList.toggle('warn',lvl>0);
+  $$('#fad button').forEach(function(e,i){ var on=i<pts; e.classList.toggle('on',on); e.setAttribute('aria-pressed',on?'true':'false'); });
+  $('#fadhint').textContent=man<0?('Acompanhando o estresse (acima do limite: '+over+'). Toque num quadradinho ou use +1 / −1 para marcar por conta própria.'):('Marcado à mão. Pelo estresse atual seriam '+fd+' ponto(s) acima do limite.');
+  $('#fada').style.display=man>=0?'inline-block':'none';
+  var fxs=[['Cansado (1 a 5)','Todo Ferimento sofrido aumenta em 1. Vale também nos estados seguintes.'],['Exausto (6 a 8)','Ao conjurar magia não Trivial, role 2d6: se passar de Corpo + 4 ('+(c+4)+'), a magia não acontece.'],['Esgotado (9 ou mais)','Ao conjurar magia não Trivial, role 2d6: se passar de Corpo + 3 ('+(c+3)+'), a personagem morre após a conjuração (a magia ainda acontece). Substitui o efeito de Exausto.']];
+  $('#fadfx').innerHTML=fxs.map(function(f,i){ return '<div'+(lvl===i+1?' class="on"':'')+'><b>'+f[0]+':</b> '+esc(f[1])+'</div>'; }).join('');
   var cm=Math.min(6,m); if(num('complex')!==cm){ state.complex=cm; save(); }
   if(typeof drawProezas==='function') drawProezas();
   var cl=m>=6?3:m>=4?2:m>=2?1:0; $$('#cx span').forEach(function(e,i){ e.classList.toggle('on',i===cl); });
@@ -517,8 +524,12 @@ function drawHab(){
 }
 $$('[data-k=praticas],[data-k=teoricas]').forEach(function(el){ el.addEventListener('input',drawHab); });
 refresh.push(drawHab); drawHab();
-$$('#fad button').forEach(function(b,i){ b.addEventListener('click',function(){ state.fadiga_est=i; save(); derive(); }); });
-$('#fadauto').addEventListener('click',function(){ delete state.fadiga_est; save(); derive(); });
+(function(){ var tr=$('#fad'); for(var i=1;i<=9;i++){ var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',i+' ponto(s) acima do limite'); b.className=i>=9?'l3':i>=6?'l2':'l1'; (function(i){ b.onclick=function(){ var cur=curFad(); state.fadiga_pts=(cur===i)?i-1:i; save(); derive(); }; })(i); tr.appendChild(b); } derive(); })();
+function curFad(){ var m=state.fadiga_pts; if(m!==undefined&&m!==''&&m!==null) return Math.max(0,Math.min(9,parseInt(m,10)||0)); return Math.min(9,Math.max(0,num('estresse_atual')-num('estresse_max'))); }
+$('#fadz').addEventListener('click',function(){ state.fadiga_pts=0; save(); derive(); });
+$('#fadp').addEventListener('click',function(){ state.fadiga_pts=Math.min(9,curFad()+1); save(); derive(); });
+$('#fadm').addEventListener('click',function(){ state.fadiga_pts=Math.max(0,curFad()-1); save(); derive(); });
+$('#fada').addEventListener('click',function(){ delete state.fadiga_pts; save(); derive(); });
 var fi=$('#famimg'); if(ALUNO.familiar_img){ fi.onload=function(){ fi.style.display='block'; fi.alt='Familiar '+(state.fam_nome||''); }; fi.src=ALUNO.familiar_img; }
 function drawFam(){
   var on=!!state.fam_on; $('#famon').checked=on; $('#fambox').style.display=on?'block':'none'; if(!on) return;
