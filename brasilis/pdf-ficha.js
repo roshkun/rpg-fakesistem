@@ -139,13 +139,18 @@ function gerarPaginas(o,imgs){
   y+=6; ensure(130);
   var bw3=(CW-40)/3, fmax=num(st,'feridas_max')||(4+Math.floor(c/2)), emax=num(st,'estresse_max')||(4+a);
   field('Dados de empenho',st.dados,M,y,bw3); field('Limite de ferimentos',String(fmax),M+bw3+20,y,bw3); field('Limite de estresse',String(emax),M+2*(bw3+20),y,bw3); y+=130;
-  /* fadiga: caixas para marcar à mão (vêm marcadas só se o jogador marcou no digital) */
-  ensure(190); label('Estados de fadiga');
-  var fman=(st.fadiga_est===undefined||st.fadiga_est===''||st.fadiga_est===null)?-1:parseInt(st.fadiga_est,10), fcw=CW/4, fnm=[['Normal','sem fadiga'],['Cansado','5 acima do limite'],['Exausto','6 a 8 acima'],['Esgotado','9 ou mais acima']];
-  box(M,y,CW,128);
-  fnm.forEach(function(f,i){ var fx=M+i*fcw+22; ctx.save(); ctx.lineWidth=4; ctx.strokeStyle=LINE; ctx.strokeRect(fx,y+30,48,48); if(i===fman){ ctx.fillStyle=PUR; ctx.fillRect(fx+9,y+39,30,30); } ctx.restore();
-    txt(f[0],fx+62,y+60,{font:'700 32px '+SERIF,color:PUR}); txt(f[1],fx+62,y+96,{font:'400 22px '+SANS,color:ACC}); });
-  y+=150;
+  /* fadiga: trilha de 9 quadradinhos para marcar à mão (vem marcada só se o jogador marcou no digital) */
+  ensure(320); label('Estados de fadiga');
+  var fpts=(st.fadiga_pts===undefined||st.fadiga_pts===''||st.fadiga_pts===null)?0:Math.max(0,Math.min(9,parseInt(st.fadiga_pts,10)||0));
+  box(M,y,CW,294);
+  var tx0=M+190, bs=64, gp=12, ty=y+36;
+  txt('Normal',M+24,ty+bs/2+12,{font:'700 30px '+SERIF,color:PUR});
+  for(var fi2=0;fi2<9;fi2++){ var fx=tx0+fi2*(bs+gp); ctx.save(); ctx.lineWidth=4; ctx.strokeStyle=LINE; ctx.strokeRect(fx,ty,bs,bs); if(fi2<fpts){ ctx.fillStyle=PUR; ctx.fillRect(fx+10,ty+10,bs-20,bs-20); } ctx.restore(); }
+  function colch(i0,i1,rot,ss){ var xa=tx0+i0*(bs+gp), xb=tx0+i1*(bs+gp)+bs; ctx.save(); ctx.lineWidth=4; ctx.strokeStyle=LINE; ctx.beginPath(); ctx.moveTo(xa,ty+bs+16); ctx.lineTo(xb,ty+bs+16); ctx.stroke(); ctx.restore(); txt(rot,xa,ty+bs+54,{font:'700 28px '+SERIF,color:PUR}); if(ss) txt(ss,xa,ty+bs+86,{font:'400 21px '+SANS,color:ACC}); }
+  colch(0,4,'Cansado','1 a 5 pontos acima do limite'); colch(5,7,'Exausto','6 a 8'); colch(8,8,'Esg.','9+');
+  txt('Cansado: +1 Ferimento sofrido (vale nos seguintes). Exausto: magia não Trivial, 2d6 maior que Corpo+4 e a magia falha.',M+24,y+226,{font:'400 22px '+SANS,color:ACC});
+  txt('Esgotado: magia não Trivial, 2d6 maior que Corpo+3 e a personagem morre (a magia ainda acontece).',M+24,y+262,{font:'400 22px '+SANS,color:ACC});
+  y+=320;
 
   /* proezas */
   title('Proezas');
