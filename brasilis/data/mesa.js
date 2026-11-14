@@ -16,56 +16,72 @@ window.MESA={
  },
  "imagens": [
   {
+   "c": "cenario",
    "t": "Escola Brasilis",
-   "s": "assets/escola.webp"
+   "s": "assets/cenario/escola-brasilis.webp"
   },
   {
+   "c": "personagens",
    "t": "A Vanguarda",
-   "s": "assets/alunos/aluno1.webp"
+   "s": "assets/personagens/a-vanguarda.webp"
   },
   {
+   "c": "personagens",
    "t": "O Rebelde",
-   "s": "assets/alunos/aluno2.webp"
+   "s": "assets/personagens/o-rebelde.webp"
   },
   {
+   "c": "personagens",
    "t": "O Curandeiro",
-   "s": "assets/alunos/aluno3.webp"
+   "s": "assets/personagens/o-curandeiro.webp"
   },
   {
+   "c": "personagens",
    "t": "O Acadêmico",
-   "s": "assets/alunos/aluno4.webp"
+   "s": "assets/personagens/o-academico.webp"
   },
   {
+   "c": "personagens",
    "t": "O Ilusionista",
-   "s": "assets/alunos/aluno5.webp"
+   "s": "assets/personagens/o-ilusionista.webp"
   },
   {
+   "c": "personagens",
    "t": "O Atleta",
-   "s": "assets/alunos/aluno6.webp"
+   "s": "assets/personagens/o-atleta.webp"
   },
   {
-   "t": "Familiar: Jabuti-Muralha",
-   "s": "assets/familiares/aluno1.webp"
+   "c": "mascotes",
+   "t": "Jabuti-Muralha",
+   "s": "assets/mascotes/jabuti-muralha.webp"
   },
   {
-   "t": "Familiar: Brasinha",
-   "s": "assets/familiares/aluno2.webp"
+   "c": "mascotes",
+   "t": "Brasinha",
+   "s": "assets/mascotes/brasinha.webp"
   },
   {
-   "t": "Familiar: Cantiga",
-   "s": "assets/familiares/aluno3.webp"
+   "c": "mascotes",
+   "t": "Cantiga",
+   "s": "assets/mascotes/cantiga.webp"
   },
   {
-   "t": "Familiar: Verbete",
-   "s": "assets/familiares/aluno4.webp"
+   "c": "mascotes",
+   "t": "Verbete",
+   "s": "assets/mascotes/verbete.webp"
   },
   {
-   "t": "Familiar: Miragem",
-   "s": "assets/familiares/aluno5.webp"
+   "c": "mascotes",
+   "t": "Miragem",
+   "s": "assets/mascotes/miragem.webp"
   },
   {
-   "t": "Familiar: Corisco",
-   "s": "assets/familiares/aluno6.webp"
+   "c": "mascotes",
+   "t": "Corisco",
+   "s": "assets/mascotes/corisco.webp"
   }
- ]
+ ],
+ "titulos": {"escola-brasilis": "Escola Brasilis", "a-vanguarda": "A Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "O Rebelde", "brasinha": "Brasinha", "o-curandeiro": "O Curandeiro", "cantiga": "Cantiga", "o-academico": "O Acadêmico", "verbete": "Verbete", "o-ilusionista": "O Ilusionista", "miragem": "Miragem", "o-atleta": "O Atleta", "corisco": "Corisco"},
+ "categorias": [["personagens","Personagens"],["mascotes","Mascotes"],["npcs","NPCs"],["cenario","Cenário"]],
+ "repo": {"nome":"roshkun/rpg-fakesistem","ramo":"main","pasta":"brasilis/assets"}
 };
