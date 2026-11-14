@@ -331,7 +331,6 @@ details.pick .in{ padding:4px 10px 12px; }
   <div class="foot">
     <button id="reset">Restaurar original</button>
     <button id="export">Exportar dados</button>
-    <a id="orig" href="ficha-original.html">Ver ficha original (1:1)</a>
   </div>
  </div>
 </div>
@@ -363,7 +362,6 @@ var BASE=ALUNO.ficha||{}, STORE='etmos-ficha-v2-'+ALUNO.id, id=encodeURIComponen
 document.getElementById('dic').href=document.getElementById('dic2').href='dicionario.html?aluno='+id;
 document.getElementById('conj2').href='conjurar.html?aluno='+id;
 document.getElementById('mod2').href='modulos.html?aluno='+id;
-document.getElementById('orig').href='ficha-original.html?aluno='+id;
 document.title='Ficha — '+(BASE.personagem||ALUNO.nome)+' · Etmos RPG';
 var state={}, saved={};
 try{ var s=localStorage.getItem(STORE); if(s) saved=JSON.parse(s)||{}; }catch(e){}
@@ -539,7 +537,7 @@ all(); setLock(true);
 })();
 
 
-/* PDF = ficha original, gerada em segundo plano (mesmos dados) */
+/* PDF da ficha (background, jogo e partículas) */
 var pb=$('#pdf');
 pb.onclick=function(){
   pb.disabled=true; var old=pb.innerHTML; pb.textContent='Gerando…';
