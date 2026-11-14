@@ -99,6 +99,9 @@
 </main>
 
 <script src="data/alunos.js"></script>
+<script>window.MESA_SO_PUBLICAR=true;</script>
+<script src="data/mesa.js"></script>
+<script src="mesa-cliente.js"></script>
 <script>
 (function(){
   "use strict";
@@ -182,7 +185,7 @@
     var cur=getComputedStyle(b).transform;
     var base=b.style.transform;
     b.animate([{transform:base},{transform:base+' translate3d('+dx+'px,'+dy+'px,0) scale('+s+')'}],{duration:750,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
-    setTimeout(function(){ location.href='ficha.html?aluno='+encodeURIComponent(a.id)+'&v=3'; },820);
+    setTimeout(function(){ MesaCliente.perguntar(function(){ location.href='ficha.html?aluno='+encodeURIComponent(a.id)+'&v=3'; }); },820);
   }
   // volta pelo histórico: restaura a cena
   addEventListener('pageshow',function(e){
