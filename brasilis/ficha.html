@@ -458,7 +458,7 @@ function extras(){ $('#prat').checked=!!state.pr_praticas; drawProezas(); drawIt
 
 
 /* ---- travas ---- */
-var FIXOS=['jogador','personagem','ano','idade','basico','aparencia','pontos','val_l1','val_r1','val_l2','val_r2','futuro','origens','nivel','dados','feridas_max','estresse_max','fam_nome','fam_tipo'];
+var FIXOS=['jogador','personagem','ano','idade','basico','aparencia','pontos','val_l1','val_r1','val_l2','val_r2','futuro','origens','nivel','dados','praticas','teoricas','feridas_max','estresse_max','fam_nome','fam_tipo'];
 function setLock(on){
   document.body.classList.toggle('locked',on);
   var b=$('#lock'); b.setAttribute('aria-pressed',on?'true':'false'); b.classList.toggle('open',!on);
