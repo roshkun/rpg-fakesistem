@@ -6,6 +6,7 @@ var M=window.MESA; if(!M) return;
 var ECDSA={name:'ECDSA',namedCurve:'P-256'}, ALG={name:'ECDSA',hash:'SHA-256'};
 function b64(s){ var r=atob(s), u=new Uint8Array(r.length); for(var i=0;i<r.length;i++) u[i]=r.charCodeAt(i); return u; }
 function b64e(buf){ var u=new Uint8Array(buf), s=''; for(var i=0;i<u.length;i++) s+=String.fromCharCode(u[i]); return btoa(s); }
+function caminhoOk(p){ return typeof p==='string'&&/^assets\/(personagens|mascotes|npcs|cenario)\/[^\\:?#"'<>]+\.(webp|png|jpe?g|gif|svg|avif)$/i.test(p)&&p.indexOf('..')<0; }
 function corpo(m){ return [m.a,m.s||'',m.n||'',m.t].join('|'); }
 function enc(s){ return new TextEncoder().encode(s); }
 
@@ -82,7 +83,7 @@ function overlay(){
 }
 function abrir(){
   if(!ultimo||ultimo.a!=='show') return;
-  var o=overlay(); o.querySelector('img').src=ultimo.s; o.querySelector('.cap').textContent=ultimo.n||''; o.style.display='flex';
+  var o=overlay(); o.querySelector('img').src=encodeURI(ultimo.s); o.querySelector('.cap').textContent=ultimo.n||''; o.style.display='flex';
 }
 function fechar(){ if(ov) ov.style.display='none'; if(ultimo) fechadoT=ultimo.t; }
 function atualizaBtn(){ if(!btn) return; var on=naMesa(); btn.innerHTML=(on?'📺':'📺')+'<span class="tx">'+(on?' Na mesa':' Entrar na mesa')+'</span>'; btn.style.borderColor=on?'#7bd88f':'#7b4a8a'; }
@@ -101,7 +102,7 @@ function assinar(){
     if(d.event!=='message'||!d.message) return;
     var m; try{ m=JSON.parse(d.message); }catch(e){ return; }
     if(!m||(m.a!=='show'&&m.a!=='hide')||!m.g||typeof m.t!=='number') return;
-    if(m.a==='show'&&!/^assets\/[\w\-\/.]+$/.test(m.s)) return;
+    if(m.a==='show'&&!caminhoOk(m.s)) return;
     valido(m).then(function(ok){ if(ok) aplicar(m); });
   };
 }
