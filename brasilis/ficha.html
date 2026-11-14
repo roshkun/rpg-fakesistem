@@ -300,6 +300,13 @@ details.pick .in{ padding:4px 10px 12px; }
       <div style="margin-top:10px"><label class="lb">Minhas proezas (exemplos da personagem)</label><textarea data-k="pr_notas" style="min-height:96px"></textarea></div>
       <details class="pick"><summary>Rudimentos (para justificar a Proeza)</summary><div class="in" id="rud"></div></details>
     </div>
+    <div class="sec" id="totsec" style="display:none"><span class="hd">Totem</span>
+      <div class="help">Item encantado que permite conjurar no Mundano e manter sua forma Fantástica sem desaparecer. Sintoniza com você no primeiro uso e perde a sintonia após 100 anos sem uso.</div>
+      <div class="box" id="totbox" style="display:flex;gap:12px;align-items:center">
+        <img id="totimg" alt="" style="display:none;width:96px;height:96px;object-fit:contain;flex:none">
+        <div><h4 id="totnome" style="margin:0 0 2px"></h4><span class="pp" id="totrank"></span><p id="totdesc" style="margin:6px 0 0"></p><div class="v" style="margin-top:6px"><b>Regra:</b> cada magia não Trivial conjurada no Mundano soma Estresse extra, conforme o Rank.</div></div>
+      </div>
+    </div>
     <div class="sec"><span class="hd">Itens encantados</span>
       <div class="help">Os itens que sua personagem possui, com o custo em Pontos de Preparo (PP).</div>
       <div id="meusitens"></div>
@@ -349,13 +356,13 @@ details.pick .in{ padding:4px 10px 12px; }
   </div>
   <div class="bar"><button id="dosfechar">Ocultar e abrir a ficha ▸</button></div>
 </div>
-<script src="data/alunos.js?v=4"></script>
+<script src="data/alunos.js?v=5"></script>
 <script src="data/particulas.js?v=4"></script>
 <script src="data/modulos.js?v=4"></script>
 <script src="data/glossario.js?v=4"></script>
-<script src="pdf-ficha.js?v=4"></script>
-<script src="data/mesa.js?v=7"></script>
-<script src="mesa-cliente.js?v=4"></script>
+<script src="pdf-ficha.js?v=5"></script>
+<script src="data/mesa.js?v=8"></script>
+<script src="mesa-cliente.js?v=5"></script>
 <script>
 (function(){
 "use strict";
@@ -491,6 +498,7 @@ $('#itq').addEventListener('input',drawCat);
 $('#pactor').innerHTML='<ul style="margin:0;padding-left:18px;font:13.5px/1.5 system-ui,sans-serif">'+(FAM.pacto||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';
 var fp=$('#famforca'), fpels=[]; for(var i=1;i<=4;i++)(function(i){ var b=document.createElement('button'); b.type='button'; b.className='pip'; b.setAttribute('aria-label','Força '+i); b.onclick=function(){ state.fam_forca=(num('fam_forca')===i)?i-1:i; save(); drawFam(); }; fpels.push(b); fp.appendChild(b); })(i);
 $('#famon').addEventListener('change',function(){ state.fam_on=this.checked; save(); drawFam(); });
+(function(){ var T=ALUNO.totem; if(!T) return; $('#totsec').style.display='block'; $('#totnome').textContent=T.nome; $('#totrank').textContent='Rank '+T.rank; $('#totdesc').textContent=T.desc||''; var ti=$('#totimg'); ti.onload=function(){ ti.style.display='block'; ti.alt='Totem: '+T.nome; }; if(T.img) ti.src=T.img; })();
 var fi=$('#famimg'); if(ALUNO.familiar_img){ fi.onload=function(){ fi.style.display='block'; fi.alt='Familiar '+(state.fam_nome||''); }; fi.src=ALUNO.familiar_img; }
 function drawFam(){
   var on=!!state.fam_on; $('#famon').checked=on; $('#fambox').style.display=on?'block':'none'; if(!on) return;
