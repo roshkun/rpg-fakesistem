@@ -147,8 +147,13 @@ function gerarPaginas(o,imgs){
   rows.forEach(function(r){ ensure(70); txt(r[0],M,y+44,{font:'700 36px '+SERIF,color:PUR}); txt('2d6 + '+r[2]+' '+r[1],M+300,y+44,{font:'400 36px '+SERIF}); txt('até '+r[3],M+800,y+44,{font:'400 36px '+SERIF}); y+=70; });
   var es=(PZ.estresse||[]); if(es.length){ para('Estresse por Complexidade: '+es.map(function(e){return e[0]+' '+e[1];}).join(' · ')+'. Proeza Composta: +1 de Estresse extra.',{size:28,color:ACC}); }
   if(norm(st.pr_notas)){ label('Minhas proezas'); para(norm(st.pr_notas),{size:28}); }
-  if(norm(st.praticas)){ label('Habilidades práticas'); para(norm(st.praticas),{size:28}); }
-  if(norm(st.teoricas)){ label('Habilidades teóricas'); para(norm(st.teoricas),{size:28}); }
+  function habs(rot,lista){
+    var L=norm(lista).split('\n').map(function(l){return window.habInfo?window.habInfo(l):{nome:l,nota:'',desc:''};}).filter(function(h){return h&&h.nome;});
+    if(!L.length) return; label(rot);
+    L.forEach(function(h){ var ls=wrap(h.desc||'',CW,'400 26px '+SERIF), hh=44+ls.length*36+10; ensure(hh);
+      txt(h.nome+(h.nota?'  ('+h.nota+')':''),M,y+32,{font:'700 30px '+SERIF,color:PUR}); var yy=y+40; ls.forEach(function(l){ yy+=36; txt(l,M,yy,{font:'400 26px '+SERIF}); }); y+=hh; });
+  }
+  habs('Habilidades práticas',st.praticas); habs('Habilidades teóricas',st.teoricas);
 
   /* totem */
   if(A.totem){
