@@ -186,6 +186,14 @@ details.pick .in{ padding:4px 10px 12px; }
         <div class="span2"><span class="hd">Aparência</span><textarea data-k="aparencia" style="min-height:96px"></textarea></div>
       </div>
     </div>
+    <div class="sec"><span class="hd lg">Dossiê da Coordenação</span>
+      <div class="help">Registro da Escola Brasilis sobre a chegada e a adaptação. Fica travado durante a sessão.</div>
+      <div class="grid2" style="margin-top:6px">
+        <div class="span2"><span class="hd">Como chegou</span><textarea data-k="dos_chegada" style="min-height:96px"></textarea></div>
+        <div class="span2"><span class="hd">Postura e temperamento</span><textarea data-k="dos_postura" style="min-height:96px"></textarea></div>
+        <div class="span2"><span class="hd">Observação da coordenação</span><textarea data-k="dos_atencao" style="min-height:110px"></textarea></div>
+      </div>
+    </div>
     <div class="sec big"><span class="hd">Pontos de importância</span>
       <div class="help">O que move o personagem: guia, defeito, e a magia que ele sabe fazer.</div>
       <textarea data-k="pontos"></textarea></div>
@@ -458,7 +466,7 @@ function extras(){ $('#prat').checked=!!state.pr_praticas; drawProezas(); drawIt
 
 
 /* ---- travas ---- */
-var FIXOS=['jogador','personagem','ano','idade','basico','aparencia','pontos','val_l1','val_r1','val_l2','val_r2','futuro','origens','nivel','dados','praticas','teoricas','feridas_max','estresse_max','fam_nome','fam_tipo'];
+var FIXOS=['jogador','personagem','ano','idade','basico','aparencia','pontos','val_l1','val_r1','val_l2','val_r2','futuro','origens','dos_chegada','dos_postura','dos_atencao','nivel','dados','praticas','teoricas','feridas_max','estresse_max','fam_nome','fam_tipo'];
 function setLock(on){
   document.body.classList.toggle('locked',on);
   var b=$('#lock'); b.setAttribute('aria-pressed',on?'true':'false'); b.classList.toggle('open',!on);
