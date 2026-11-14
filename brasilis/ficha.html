@@ -56,6 +56,14 @@ body{ background:#1d1424; color:var(--ink); font-family:Georgia,"Times New Roman
 .tit{ display:block; font:700 clamp(16px,4.6vw,26px)/1.1 "Cormorant Garamond","EB Garamond",Garamond,Georgia,serif; font-variant:small-caps; letter-spacing:.07em; color:var(--purple); text-transform:lowercase; }
 .fad span,.cx span{ opacity:.3; } .fad span.on,.cx span.on{ opacity:1; text-decoration:underline; text-underline-offset:4px; }
 .sec .hd{ margin-bottom:7px; }
+
+.chk{ display:flex; gap:10px; align-items:flex-start; font:14px/1.4 system-ui,sans-serif; margin:10px 0 4px; } .chk input{ width:22px; height:22px; flex:none; accent-color:var(--purple); margin-top:1px; }
+.prz{ display:grid; grid-template-columns:auto 1fr auto; gap:6px 12px; align-items:center; font:14px system-ui,sans-serif; } .prz b{ font:700 16px Georgia,serif; color:var(--purple); }
+.mi{ position:relative; margin-bottom:8px; } .mi h4{ margin:0 60px 3px 0; font:700 16px Georgia,serif; } .mi p{ margin:0; font:13.5px/1.4 system-ui,sans-serif; } .mi .v{ font:12px system-ui; opacity:.7; margin-top:3px; }
+.mi .pp{ position:absolute; top:9px; right:34px; background:var(--purple); color:#fff; font:700 11px system-ui,sans-serif; border-radius:99px; padding:3px 8px; } .mi .rm{ position:absolute; top:6px; right:8px; border:0; background:none; font-size:18px; color:#a3162b; cursor:pointer; }
+.cit{ border:1.5px solid var(--line); border-radius:6px; padding:8px 10px; margin-bottom:6px; cursor:pointer; background:rgba(255,255,255,.3); font:13px/1.35 system-ui,sans-serif; } .cit b{ font:700 14px Georgia,serif; } .cit i{ float:right; font:700 11px system-ui; color:var(--purple); font-style:normal; }
+.tile.apt{ text-align:left; padding:8px 9px; } .tile.apt .n{ font:700 13px Georgia,serif; } .tile.apt .c{ font:11.5px/1.3 system-ui,sans-serif; letter-spacing:0; opacity:.85; margin-top:2px; } .tile.apt.on{ background:var(--purple); color:#fff; border-color:var(--purple); }
+.hd small{ font:600 12px system-ui,sans-serif; letter-spacing:0; text-transform:none; opacity:.7; }
 .sec .help{ font:12.5px/1.4 system-ui,sans-serif; color:#5b4668; margin:-2px 0 8px; }
 .box{ border:2px solid var(--line); border-radius:3px; background:rgba(255,255,255,.28); padding:9px 11px; }
 label.lb{ display:block; font:700 11px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:#5b4668; margin:0 0 4px; }
@@ -147,6 +155,7 @@ details.pick .in{ padding:4px 10px 12px; }
     <button data-t="est" role="tab">Estado</button>
     <button data-t="hab" role="tab">Habilidades</button>
     <button data-t="gri" role="tab">Grimório</button>
+    <button data-t="ext" role="tab">Extras</button>
   </div>
 
   <!-- HISTÓRIA -->
@@ -237,6 +246,43 @@ details.pick .in{ padding:4px 10px 12px; }
     <div class="links"><a id="conj2" href="conjurar.html">✨ Montar uma magia (mesa de cartas)</a> &nbsp;·&nbsp; <a id="dic2" href="dicionario.html">📖 Dicionário completo</a> &nbsp;·&nbsp; <a id="mod2" href="modulos.html">📘 Módulos (proezas, itens, familiares)</a></div>
   </section>
 
+
+  <!-- EXTRAS (módulos) -->
+  <section class="panel" id="p-ext">
+    <div class="sec"><span class="hd">Proezas</span>
+      <div class="help">Ações que pedem teste: 2d6 + o atributo do tipo. A Complexidade máxima segue o atributo Mente.</div>
+      <div class="box" id="proezas"></div>
+      <label class="chk"><input type="checkbox" id="prat"> <span>Tenho <b>Proezas Práticas (P)</b>: uso Corpo (em vez de Mente) para a Complexidade máxima das Proezas Físicas.</span></label>
+      <details class="pick"><summary>Rudimentos (para justificar a Proeza)</summary><div class="in" id="rud"></div></details>
+    </div>
+    <div class="sec"><span class="hd">Itens encantados</span>
+      <div class="help">Os itens que sua personagem possui, com o custo em Pontos de Preparo (PP).</div>
+      <div id="meusitens"></div>
+      <div class="pts" id="ptotal" style="margin:6px 0"></div>
+      <details class="pick" id="itpick"><summary>＋ Adicionar item</summary><div class="in"><input type="text" id="itq" placeholder="Buscar item ou veículo" style="margin-bottom:8px"><div id="itcat"></div></div></details>
+    </div>
+    <div class="sec"><span class="hd">Familiar</span>
+      <label class="chk"><input type="checkbox" id="famon"> <span>Tenho um Familiar (pacto com um companheiro místico)</span></label>
+      <div id="fambox" style="display:none">
+        <div class="grid2" style="margin-top:8px">
+          <div><label class="lb">Nome do Familiar</label><input type="text" data-k="fam_nome"></div>
+          <div><label class="lb">Tipo de pacto</label><input type="text" data-k="fam_tipo" placeholder="Afetivo, Espiritual, Fenômeno Místico ou Contrato Escrito"></div>
+        </div>
+        <div class="box" style="margin-top:10px"><div class="cardlbl"><span class="lbl">Força do Pacto</span><span class="pts" id="famfp"></span></div>
+          <div class="pips" id="famforca"></div></div>
+        <div class="grid2 est2" style="margin-top:10px">
+          <div class="box"><span class="lbl">Ferimentos</span><div class="cnt"><button data-d="fam_fer:-1" aria-label="menos">−</button><span class="v" id="v-fam_fer"></span><button data-d="fam_fer:1" aria-label="mais">+</button><span class="of">de <b id="famfmax"></b></span></div></div>
+          <div class="box"><span class="lbl">Estresse</span><div class="cnt"><button data-d="fam_est:-1" aria-label="menos">−</button><span class="v" id="v-fam_est"></span><button data-d="fam_est:1" aria-label="mais">+</button><span class="of">de <b>2</b></span></div></div>
+        </div>
+        <div class="hint">Base do Familiar: Corpo 1, Mente 1, Alma 1, Ferimentos 2, Estresse 2, Complexidade máxima Regular. "Robustez" soma +2 aos Ferimentos; "Treinado" soma +2 a um Atributo (máx. 5).</div>
+        <span class="hd" style="margin-top:12px;font-size:17px">Aptidões <small id="famaptc"></small></span>
+        <div class="tiles" id="famapts" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))"></div>
+        <details class="pick"><summary>Regras do pacto</summary><div class="in" id="pactor"></div></details>
+        <div style="margin-top:10px"><label class="lb">Anotações sobre o Familiar</label><textarea data-k="fam_notas" style="min-height:70px"></textarea></div>
+      </div>
+    </div>
+  </section>
+
   <div class="foot">
     <button id="reset">Restaurar original</button>
     <button id="export">Exportar dados</button>
@@ -246,6 +292,7 @@ details.pick .in{ padding:4px 10px 12px; }
 </div>
 <script src="data/alunos.js"></script>
 <script src="data/particulas.js"></script>
+<script src="data/modulos.js"></script>
 <script>
 (function(){
 "use strict";
@@ -276,7 +323,7 @@ var cr=ALUNO.crop||{}; f.style.transform='scale('+(cr.z||1)+')';
 /* abas */
 function tab(n){ $$('.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.t===n);}); $$('.panel').forEach(function(p){p.classList.toggle('on',p.id==='p-'+n);}); try{history.replaceState(null,'','#'+n);}catch(e){} window.scrollTo({top:0}); }
 $$('.tabs button').forEach(function(b){ b.addEventListener('click',function(){tab(b.dataset.t);}); });
-if(/^#(hist|est|hab|gri)$/.test(location.hash)) tab(location.hash.slice(1));
+if(/^#(hist|est|hab|gri|ext)$/.test(location.hash)) tab(location.hash.slice(1));
 
 /* campos de texto */
 var refresh=[];
@@ -299,7 +346,7 @@ AT.forEach(function(a){
   attrs.appendChild(row); a.push(els);
 });
 /* contadores */
-$$('[data-d]').forEach(function(b){ var p=b.dataset.d.split(':'); b.onclick=function(){ state[p[0]]=String(Math.max(0,num(p[0])+parseInt(p[1],10))); save(); derive(); }; });
+$$('[data-d]').forEach(function(b){ var p=b.dataset.d.split(':'); b.onclick=function(){ state[p[0]]=String(Math.max(0,num(p[0])+parseInt(p[1],10))); save(); derive(); extras(); }; });
 /* marcos */
 var mk=$('#marcos'), MR=[['m_fis','Físico'],['m_emo','Emocional'],['m_men','Mental']];
 MR.forEach(function(m){
@@ -323,6 +370,7 @@ function derive(){
   var tg=$('#fadtag'); tg.textContent=names[lvl]+(over?' · '+over+' acima do limite':''); tg.classList.toggle('warn',lvl>0);
   $$('#fad span').forEach(function(e,i){ e.classList.toggle('on',i===lvl); });
   var cm=Math.min(6,m); if(num('complex')!==cm){ state.complex=cm; save(); }
+  if(typeof drawProezas==='function') drawProezas();
   var cl=m>=6?3:m>=4?2:m>=2?1:0; $$('#cx span').forEach(function(e,i){ e.classList.toggle('on',i===cl); });
 }
 
@@ -350,7 +398,50 @@ function grimorio(){
 }
 var comps=$('#comps'); PART.filter(function(p){return p.cat==='Complementos'&&p.nivel===1;}).forEach(function(p){ comps.appendChild(tile(p,true,true)); });
 
-function all(){ refresh.forEach(function(r){r();}); derive(); grimorio(); }
+
+/* ---------- EXTRAS: proezas, itens, familiar ---------- */
+var MOD=window.MODULOS||{}, PZ=MOD.proezas||{}, FAM=MOD.familiares||{}, ITENS=MOD.itens||[];
+function cmx(v){ return v>=6?'Milagre':v>=4?'Complexa':v>=2?'Difícil':'Regular'; }
+function jget(k){ try{ var a=JSON.parse(state[k]||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+function jset(k,a){ state[k]=JSON.stringify(a); save(); }
+var estr={}; (PZ.estresse||[]).forEach(function(e){ estr[e[0]]=e[1]; });
+$('#rud').innerHTML='<div style="display:grid;gap:6px">'+(PZ.rudimentos||[]).map(function(r){ return '<div class="cit" style="cursor:default"><b>'+esc(r[0])+'</b><br>'+esc(r[1])+'</div>'; }).join('')+'</div>';
+$('#prat').addEventListener('change',function(){ state.pr_praticas=this.checked; save(); extras(); });
+function drawProezas(){
+  var c=num('corpo'),m=num('mente'),a=num('alma'), pr=!!state.pr_praticas;
+  var fis=pr?c:m, rows=[['Física',c,'Corpo',cmx(fis)+(pr?' (por Corpo)':'')],['Mental',m,'Mente',cmx(m)],['Mágica',a,'Alma',cmx(m)]];
+  $('#proezas').innerHTML='<div class="prz">'+rows.map(function(r){ return '<span class="lbl">'+r[0]+'</span><span>2d6 + '+r[2]+' <b>'+r[1]+'</b></span><span>até <b>'+r[3]+'</b></span>'; }).join('')+'</div><div class="hint">Estresse por Complexidade: '+Object.keys(estr).map(function(k){return k+' '+estr[k];}).join(' · ')+'. Proeza Composta: +1 de Estresse extra.</div>';
+}
+function drawItens(){
+  var mine=jget('mod_itens'), tot=0;
+  $('#meusitens').innerHTML=mine.length?mine.map(function(n,i){ var it=ITENS.filter(function(x){return x.nome===n;})[0]; if(!it) return ''; tot+=it.pp;
+    return '<div class="box mi"><h4>'+esc(it.nome)+'</h4><span class="pp">'+it.pp+' PP</span><button class="rm" data-ri="'+i+'" aria-label="Remover">✕</button><p>'+esc(it.efeito)+'</p><div class="v"><b>Veículos:</b> '+esc(it.veiculos)+'</div></div>'; }).join(''):'<div class="hint">Nenhum item ainda.</div>';
+  $('#ptotal').textContent=mine.length?('Total: '+tot+' PP em '+mine.length+' item(ns)'):'';
+  [].forEach.call($$('[data-ri]'),function(b){ b.onclick=function(){ var a=jget('mod_itens'); a.splice(+b.dataset.ri,1); jset('mod_itens',a); drawItens(); }; });
+  drawCat();
+}
+function drawCat(){
+  var q=($('#itq').value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(), mine=jget('mod_itens');
+  $('#itcat').innerHTML=ITENS.filter(function(i){ return mine.indexOf(i.nome)<0 && (!q||(i.nome+' '+i.efeito+' '+i.veiculos).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().indexOf(q)>=0); }).map(function(i){ return '<div class="cit" data-ai="'+esc(i.nome)+'"><i>'+i.pp+' PP</i><b>'+esc(i.nome)+'</b><br>'+esc(i.efeito)+'</div>'; }).join('')||'<div class="hint">Nada encontrado.</div>';
+  [].forEach.call($$('[data-ai]'),function(b){ b.onclick=function(){ var a=jget('mod_itens'); a.push(b.dataset.ai); jset('mod_itens',a); var o=$('#itpick').open; drawItens(); $('#itpick').open=o; }; });
+}
+$('#itq').addEventListener('input',drawCat);
+$('#pactor').innerHTML='<ul style="margin:0;padding-left:18px;font:13.5px/1.5 system-ui,sans-serif">'+(FAM.pacto||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';
+var fp=$('#famforca'), fpels=[]; for(var i=1;i<=4;i++)(function(i){ var b=document.createElement('button'); b.type='button'; b.className='pip'; b.setAttribute('aria-label','Força '+i); b.onclick=function(){ state.fam_forca=(num('fam_forca')===i)?i-1:i; save(); drawFam(); }; fpels.push(b); fp.appendChild(b); })(i);
+$('#famon').addEventListener('change',function(){ state.fam_on=this.checked; save(); drawFam(); });
+function drawFam(){
+  var on=!!state.fam_on; $('#famon').checked=on; $('#fambox').style.display=on?'block':'none'; if(!on) return;
+  var fo=Math.max(1,num('fam_forca')||1), sel=jget('fam_apts'), lim=fo+2;
+  fpels.forEach(function(e,i){ e.classList.toggle('on',i<fo); }); $('#famfp').textContent=lim+' Aptidões';
+  $('#v-fam_fer').textContent=num('fam_fer'); $('#v-fam_est').textContent=num('fam_est');
+  $('#famfmax').textContent=sel.indexOf('Robustez')>=0?4:2;
+  var n=sel.length; $('#famaptc').textContent='('+n+'/'+lim+')'+(n>lim?' — acima do limite':'');
+  $('#famapts').innerHTML=(FAM.aptidoes||[]).map(function(a){ var on2=sel.indexOf(a[0])>=0; return '<button type="button" class="tile apt'+(on2?' on':'')+'" data-ap="'+esc(a[0])+'"><div class="n">'+esc(a[0])+'</div><div class="c">'+esc(a[1])+'</div></button>'; }).join('');
+  [].forEach.call($$('[data-ap]'),function(b){ b.onclick=function(){ var a=jget('fam_apts'), k=b.dataset.ap, i=a.indexOf(k); if(i>=0) a.splice(i,1); else a.push(k); jset('fam_apts',a); drawFam(); }; });
+}
+function extras(){ $('#prat').checked=!!state.pr_praticas; drawProezas(); drawItens(); drawFam(); }
+
+function all(){ refresh.forEach(function(r){r();}); derive(); grimorio(); extras(); }
 all();
 
 /* PDF = ficha original, gerada em segundo plano (mesmos dados) */

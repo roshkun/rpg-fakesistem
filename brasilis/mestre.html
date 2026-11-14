@@ -58,7 +58,7 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
 <body>
 <header>
   <div class="top"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1>Área do Mestre</h1><a id="dic" href="dicionario.html">📖 Dicionário</a><a id="back" href="index.html">← Turma</a><a class="sair" id="sair" href="#">Sair</a></div>
-  <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="meso">Mesoamérica</button><button data-t="enc">Encontros</button></div>
+  <div class="tabs"><button class="on" data-t="cri">Criaturas</button><button data-t="ora">Oradores</button><button data-t="meso">Mesoamérica</button><button data-t="reg">Regras</button><button data-t="enc">Encontros</button></div>
 </header>
 <main>
 <div id="trava" class="lock"><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h2>Área do mestre</h2><p>Conteúdo reservado ao narrador. Digite a senha para entrar.</p><form id="f"><input id="pw" type="password" autocomplete="current-password" placeholder="Senha" aria-label="Senha"><div class="err" id="err" role="alert"></div><button type="submit">Entrar</button></form></div>
@@ -66,6 +66,7 @@ main{ max-width:980px; margin:0 auto; padding:12px; }
   <section class="panel on" id="p-cri"><div class="note">Fichas-base de criaturas do Fantástico, em três níveis de força.</div><div id="cri"></div></section>
   <section class="panel" id="p-ora"><div class="note">Oradores genéricos para usar como NPCs: o grimório de cada um já vem pronto.</div><div id="ora"></div></section>
   <section class="panel" id="p-meso"><div class="note">Módulo Bestiário: Mesoamérica. (*) marca as aptidões como aparecem no módulo.</div><div id="meso"></div></section>
+  <section class="panel" id="p-reg"><div class="note">Pontos dos módulos que cabem ao narrador.</div><div id="reg"></div></section>
   <section class="panel" id="p-enc"><div class="note">Role dados e veja quantos saíram iguais: 2 = simples, 3 = mediano, 4 = avançado, 5 ou mais = letal. Depois sorteie o encontro da faixa (o botão faz o sorteio por você).</div><div id="enc"></div></section>
 </div>
 </main>
@@ -106,6 +107,7 @@ document.getElementById('meso').innerHTML=(A.mesoamerica||[]).map(function(c){
   var st=[['Ferimentos',m['Limite de Ferimentos']],['Estresse',m['Estresse']],['Compl. máx.',m['Complexidade Máxima']],['Mov.',m['Movimentação']],['Comunica?',m['Comunicação?']],['Corpo',m['Corpo']],['Mente',m['Mente']],['Alma',m['Alma']]].map(function(x){return '<div>'+esc(x[0])+'<b>'+esc(x[1]||'—')+'</b></div>';}).join('');
   var tx=['Aptidões','Aptidões (Ataques)','Variantes'].filter(function(k){return m[k];}).map(function(k){return '<p><b>'+esc(k)+':</b> '+esc(m[k])+'</p>';}).join('');
   return '<div class="card mz"><h2>'+esc(c.nome)+'</h2><div class="tags">'+tags+'</div><div class="stats">'+st+'</div>'+tx+'</div>'; }).join('');
+document.getElementById('reg').innerHTML=(A.regras||[]).map(function(r){ return '<div class="card"><h2>'+esc(r.nome)+'</h2><ul style="margin:0 0 8px;padding-left:18px;font:14.5px/1.5 system-ui,sans-serif">'+r.itens.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'+(r.obs?'<p style="margin:0;font:13.5px/1.45 system-ui,sans-serif;opacity:.85"><b>Nota:</b> '+esc(r.obs)+'</p>':'')+'</div>'; }).join('');
 var enc=document.getElementById('enc');
 enc.innerHTML=(A.encontros||[]).map(function(t,i){
   return '<div class="card tier"><h2>'+esc(t.nome)+'<small>('+esc(t.dados)+')</small></h2><ul>'+t.itens.map(function(x){ return '<li><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></li>'; }).join('')+'</ul><button data-i="'+i+'">🎲 Sortear encontro</button></div>'; }).join('');

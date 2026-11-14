@@ -56,7 +56,7 @@ document.getElementById('p-pro').innerHTML=
  '<div class="note">'+esc(P.intro||'')+'</div>'
  +'<div class="card"><h2>Mecânica das Proezas</h2><p>'+esc(P.mecanica||'')+'</p><div class="grid">'+(P.tipos||[]).map(function(t){return '<div class="mini"><b>'+esc(t[0])+' ('+esc(t[1])+')</b>2d6 + '+esc(t[1])+'. '+esc(t[2])+'</div>';}).join('')+'</div></div>'
  +'<div class="card"><h2>Os Rudimentos</h2><p>Elementos básicos usados para justificar e estruturar uma Proeza.</p><div class="grid">'+(P.rudimentos||[]).map(function(r,i){return '<div class="mini"><b>'+(i+1)+'. '+esc(r[0])+'</b>'+esc(r[1])+'</div>';}).join('')+'</div></div>'
- +'<div class="card"><h2>Complexidade das Proezas</h2><p>'+esc(P.complexidade||'')+'</p><table><tr><th>Complexidade</th><th>Estresse</th></tr>'+(P.estresse||[]).map(function(e){return '<tr><td>'+esc(e[0])+'</td><td><b>'+e[1]+'</b></td></tr>';}).join('')+'</table><p style="margin-top:10px"><b>Parâmetros de Complexidade</b></p><ul>'+(P.parametros||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
+ +'<div class="card"><h2>Complexidade das Proezas</h2><p>'+esc(P.complexidade||'')+'</p><table><tr><th>Complexidade</th><th>Estresse</th></tr>'+(P.estresse||[]).map(function(e){return '<tr><td>'+esc(e[0])+'</td><td><b>'+e[1]+'</b></td></tr>';}).join('')+'</table></div>'
  +'<div class="card"><h2>Proeza Composta</h2><ul>'+(P.composta||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
  +(P.habilidade?'<div class="card"><h2>Nova Habilidade: '+esc(P.habilidade[0])+'</h2><p>'+esc(P.habilidade[1])+'</p></div>':'');
 var F=M.familiares||{};
@@ -65,7 +65,7 @@ document.getElementById('p-fam').innerHTML=
  +'<div class="card"><h2>O Pacto</h2><ul>'+(F.pacto||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
  +'<div class="card"><h2>Status base do Familiar</h2><div class="grid">'+(F.base||[]).map(function(b){return '<div class="mini"><b>'+esc(b[1])+'</b>'+esc(b[0])+'</div>';}).join('')+'</div></div>'
  +'<div class="card"><h2>Aptidões dos Familiares</h2><p>'+esc(F.aptintro||'')+'</p><div class="grid">'+(F.aptidoes||[]).map(function(a){return '<div class="mini"><b>'+esc(a[0])+'</b>'+esc(a[1])+'</div>';}).join('')+'</div></div>'
- +'<div class="card"><h2>Força do Pacto</h2><p>Determina o nível do companheiro (progressão narrativa decidida pelo Narrador).</p><div class="grid">'+(F.forca||[]).map(function(a){return '<div class="mini"><b>'+esc(a[0])+'</b>'+esc(a[1])+'</div>';}).join('')+'</div></div>';
+ +'<div class="card"><h2>Força do Pacto</h2><p>Determina quantas Aptidões o companheiro tem.</p><div class="grid">'+(F.forca||[]).map(function(a){return '<div class="mini"><b>'+esc(a[0])+'</b>'+esc(a[1])+'</div>';}).join('')+'</div></div>';
 var I=M.itens||[], pp=0, q='';
 var costs=[]; I.forEach(function(i){ if(costs.indexOf(i.pp)<0) costs.push(i.pp); }); costs.sort(function(a,b){return a-b;});
 var chips=document.getElementById('chips'); chips.innerHTML='<button data-p="0" aria-pressed="true">Todos ('+I.length+')</button>'+costs.map(function(c){return '<button data-p="'+c+'" aria-pressed="false">'+c+' PP</button>';}).join('');

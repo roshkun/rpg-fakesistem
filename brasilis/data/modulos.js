@@ -84,13 +84,6 @@ window.MODULOS = {
     7
    ]
   ],
-  "parametros": [
-   "Conhecimento/prática prévia necessária.",
-   "Lógica dos Rudimentos utilizados (quanto mais lógico, menos complexo).",
-   "Concentração exigida.",
-   "Rapidez da ação.",
-   "Ambiente e ferramentas à disposição (ferramentas adequadas reduzem a complexidade)."
-  ],
   "composta": [
    "Ocorre quando a ação engloba mais de um tipo de Proeza (ex: Proeza Mágica para se fortalecer + Proeza Física para quebrar uma parede simultaneamente).",
    "Atributo: o jogador escolhe qual atributo usar entre os envolvidos.",
