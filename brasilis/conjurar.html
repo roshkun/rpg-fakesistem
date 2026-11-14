@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#140c1c">
+<title>Mesa de Conjuração — Etmos RPG</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M16 2 28 16 16 30 4 16z%27 fill=%27%233e1c43%27/%3E%3C/svg%3E">
+<style>
+:root{ --ink:#3e1c43; --paper:#e4e2f1; --deep:#140c1c; --acc:#a77ac0; --F:#9a5ab0; --O:#4a8fa6; --C:#b8844a; --M:#4fa072; }
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; height:100%; }
+body{ background:radial-gradient(ellipse at 50% 0%,#2e1a3f 0%,#140c1c 60%); color:#f1ecf7; font-family:Georgia,"Times New Roman",serif; display:flex; flex-direction:column; overflow:hidden; user-select:none; -webkit-user-select:none; }
+header{ flex:none; display:flex; align-items:center; gap:8px; padding:8px 10px; border-bottom:1px solid #4a2e55; background:rgba(20,12,28,.9); }
+header .logo{ height:22px; filter:brightness(0) invert(.92); }
+header h1{ flex:1; margin:0; font-size:16px; letter-spacing:.04em; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+header a,header button{ font:600 12px/1 system-ui,sans-serif; color:#f1ecf7; background:transparent; border:1px solid #7b4a8a; padding:8px 10px; border-radius:8px; text-decoration:none; cursor:pointer; white-space:nowrap; }
+.board{ flex:1; min-height:0; overflow-y:auto; padding:10px 10px 6px; display:flex; flex-direction:column; gap:10px; max-width:900px; width:100%; margin:0 auto; }
+.board > *{ flex:none; }
+.row{ display:flex; gap:8px; align-items:stretch; }
+.slot{ position:relative; flex:1; min-height:156px; padding-top:18px; border:2px dashed rgba(167,122,192,.45); border-radius:12px; background:rgba(255,255,255,.03); display:flex; flex-wrap:wrap; gap:6px; align-items:center; justify-content:center; padding:8px; transition:box-shadow .15s,border-color .15s,background .15s; }
+.slot > .lab{ position:absolute; top:-9px; left:12px; font:700 10px system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; padding:2px 8px; border-radius:99px; background:var(--deep); color:#cdbbe0; }
+.slot .ph{ font:12px system-ui,sans-serif; opacity:.5; text-align:center; padding:0 8px; }
+.slot.fun{ border-color:color-mix(in srgb,var(--F) 70%,transparent); } .slot.obj{ border-color:color-mix(in srgb,var(--O) 70%,transparent); }
+.slot.car{ border-color:color-mix(in srgb,var(--C) 70%,transparent); } .slot.com{ border-color:color-mix(in srgb,var(--M) 70%,transparent); }
+.slot.ok{ border-style:solid; box-shadow:0 0 0 3px rgba(167,122,192,.25), 0 0 22px rgba(167,122,192,.45); background:rgba(167,122,192,.12); }
+.slot.hot{ box-shadow:0 0 0 3px rgba(255,255,255,.55), 0 0 30px rgba(220,190,255,.8); }
+.plus{ align-self:center; font:700 22px Georgia; opacity:.6; }
+.card{ position:relative; width:68px; flex:none; background:var(--paper); color:var(--ink); border-radius:10px; padding:5px 4px 6px; text-align:center; box-shadow:0 3px 8px rgba(0,0,0,.45); border-top:5px solid var(--cc,#888); cursor:grab; touch-action:none; }
+.card svg{ display:block; width:100%; height:auto; aspect-ratio:41/40; } .card svg path{ fill:var(--ink); fill-rule:evenodd; }
+.card .n{ font:700 10.5px/1.1 Georgia,serif; margin-top:1px; min-height:2.2em; display:flex; align-items:center; justify-content:center; }
+.card .c{ font:700 10px system-ui,sans-serif; letter-spacing:.14em; color:#6e3a7d; }
+.card[data-cat="Funções"]{ --cc:var(--F);} .card[data-cat="Objetos"]{ --cc:var(--O);} .card[data-cat="Características"]{ --cc:var(--C);} .card[data-cat="Complementos"]{ --cc:var(--M);}
+.slot .card{ width:76px; } .slot.big .card{ width:88px; }
+@keyframes pop{ from{ transform:scale(.6); opacity:0 } to{ transform:none; opacity:1 } }
+.card.pop{ animation:pop .22s ease-out; }
+.pre{ position:absolute; top:-8px; right:-6px; display:flex; flex-direction:column; gap:3px; }
+.pre b{ font:700 10px system-ui,sans-serif; background:var(--M); color:#04170d; border-radius:6px; padding:3px 5px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.5); }
+.ag{ position:absolute; bottom:-8px; right:-4px; transform:scale(.7); transform-origin:bottom right; }
+.card.merged{ width:auto; display:flex; gap:2px; padding:5px 4px 6px; }
+.card.merged .half{ width:64px; }
+.card.merged .agl{ align-self:center; font:700 11px system-ui,sans-serif; color:#2f6b3d; }
+
+/* frase */
+.frase{ background:rgba(0,0,0,.35); border:1px solid #4a2e55; border-radius:12px; padding:10px 12px; }
+.frase .txt{ font:700 clamp(22px,6vw,34px)/1.2 Georgia,serif; letter-spacing:.03em; color:#fff; min-height:1.2em; word-break:break-word; }
+.frase .txt i{ font-style:normal; opacity:.4; font-weight:400; }
+.frase .tr{ font:13px/1.4 system-ui,sans-serif; color:#b9a9c6; margin-top:2px; min-height:1.4em; }
+.btns{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+.btns button{ font:600 13px system-ui,sans-serif; color:#f1ecf7; background:transparent; border:1px solid #7b4a8a; padding:10px 13px; border-radius:8px; cursor:pointer; }
+.btns button.pri{ background:#5a2d66; } .btns button:disabled{ opacity:.45; cursor:not-allowed; }
+.regras{ list-style:none; margin:0; padding:0; font:13px/1.45 system-ui,sans-serif; display:grid; gap:4px; }
+.regras li{ display:flex; gap:8px; align-items:flex-start; padding:7px 10px; border-radius:8px; background:rgba(255,255,255,.04); }
+.regras li b{ flex:none; width:18px; text-align:center; }
+.regras li.ok b{ color:#7ee0a2; } .regras li.no b{ color:#ff8d9d; } .regras li.in b{ color:#c9a8e8; }
+.intent textarea{ width:100%; font:15px Georgia,serif; color:#f1ecf7; background:rgba(0,0,0,.3); border:1px solid #5b3a6b; border-radius:10px; padding:10px; resize:vertical; min-height:60px; user-select:text; -webkit-user-select:text; }
+h2.s{ margin:4px 2px 4px; font:700 11px system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#b9a9c6; }
+.saved{ display:grid; gap:6px; }
+.saved .it{ display:flex; gap:8px; align-items:center; background:rgba(255,255,255,.05); border-radius:8px; padding:8px 10px; font:13px system-ui,sans-serif; }
+.saved .it b{ font:700 16px Georgia,serif; color:#fff; } .saved .it span{ flex:1; min-width:0; opacity:.8; } .saved button{ background:none; border:1px solid #7b4a8a; color:#f1ecf7; border-radius:6px; padding:6px 8px; cursor:pointer; font:12px system-ui; }
+
+/* mão */
+.hand{ flex:none; border-top:2px solid #4a2e55; background:linear-gradient(#1c1127,#0f0916); padding:6px 0 calc(env(safe-area-inset-bottom) + 8px); }
+.tabs{ display:flex; gap:6px; padding:0 10px 6px; overflow-x:auto; scrollbar-width:none; }
+.tabs button{ flex:none; font:600 12px system-ui,sans-serif; color:#d9cbe6; background:#2a1a36; border:1px solid #5b3a6b; padding:8px 11px; border-radius:99px; cursor:pointer; }
+.tabs button[aria-pressed=true]{ background:var(--acc); color:#1d0d27; border-color:var(--acc); }
+.tabs .all{ margin-left:auto; } 
+.fan{ display:flex; padding:14px 14px 6px; overflow-x:auto; overflow-y:hidden; touch-action:pan-x; scrollbar-width:none; min-height:128px; align-items:flex-end; }
+.fan::-webkit-scrollbar{ display:none; }
+.fan .card{ margin-left:-14px; transform-origin:50% 120%; transition:transform .15s, margin .15s, filter .15s; touch-action:pan-x; }
+.fan .card:first-child{ margin-left:0; }
+.fan .card:hover{ transform:translateY(-8px) scale(1.04); z-index:5; margin-right:10px; }
+.fan .card.used{ filter:grayscale(1) brightness(.5); pointer-events:none; }
+.fan .empty{ font:13px system-ui,sans-serif; opacity:.6; padding:30px 10px; }
+.ghost{ position:fixed; z-index:200; pointer-events:none; width:84px; transform:translate(-50%,-60%) rotate(-4deg) scale(1.1); box-shadow:0 14px 30px rgba(0,0,0,.6); }
+.toast{ position:fixed; left:50%; top:60px; transform:translateX(-50%); background:#2a1536; color:#f4ecfa; font:600 13px system-ui,sans-serif; padding:10px 16px; border-radius:99px; border:1px solid #7b4a8a; opacity:0; transition:opacity .2s; z-index:300; pointer-events:none; max-width:92vw; text-align:center; }
+.toast.on{ opacity:1; }
+dialog{ border:0; border-radius:16px; padding:16px; background:var(--paper); color:var(--ink); max-width:92vw; width:420px; }
+dialog::backdrop{ background:rgba(10,5,15,.7); }
+dialog h3{ margin:0 0 10px; font-size:18px; } dialog .pick{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; max-height:50vh; overflow:auto; }
+dialog .pick .card{ cursor:pointer; touch-action:manipulation; }
+dialog button.x{ margin-top:12px; width:100%; font:600 14px system-ui; border:1px solid var(--ink); background:transparent; color:var(--ink); border-radius:8px; padding:10px; cursor:pointer; }
+@media (min-width:900px){ .slot{ min-height:176px; } .card{ width:92px; } .fan .card{ margin-left:-10px; } .slot .card{ width:96px; } }
+</style>
+</head>
+<body>
+<header><img class="logo" src="assets/ui/logo-etmos.svg" alt=""><h1 id="tit">Mesa de Conjuração</h1><button id="regrasbtn">Regras</button><a id="dic" href="dicionario.html">📖</a><a id="back" href="index.html">← Voltar</a></header>
+<div class="board" id="board"></div>
+<div class="hand">
+  <div class="tabs" id="tabs"></div>
+  <div class="fan" id="fan"></div>
+</div>
+<div class="toast" id="toast"></div>
+<dialog id="dlg"></dialog>
+<script src="data/alunos.js"></script>
+<script src="data/particulas.js"></script>
+<script>
+(function(){
+"use strict";
+var P=window.PARTICULAS||[], ALUNOS=window.ALUNOS||[], VB='120 15 410 400';
+var qs=new URLSearchParams(location.search), aid=qs.get('aluno');
+var ALUNO=ALUNOS.filter(function(a){return a.id===aid;})[0]||null;
+var st={}; if(ALUNO){ var base=ALUNO.ficha||{}; Object.keys(base).forEach(function(k){st[k]=base[k];});
+  try{ var sv=JSON.parse(localStorage.getItem('etmos-ficha-v2-'+ALUNO.id)||'{}'); Object.keys(sv).forEach(function(k){st[k]=sv[k];}); }catch(e){} }
+var lvl=parseInt(st.nivel,10)||1, mente=parseInt(st.mente,10)||0;
+var LIVRE=!ALUNO;      // sem aluno: todas as partículas (modo estudo)
+function known(p){ if(LIVRE) return true; if(p.cat==='Complementos') return (p.nivel||1)<=lvl; return !!st[p.key]; }
+var CATS=['Funções','Objetos','Características','Complementos'];
+var MOD={MOR:1,MIN:1,SAN:1,SAR:1,SIN:1,ITAM:1};
+var COMPTIP={
+  MOR:'Maior: aumenta o efeito total (mais potente, veloz, resistente ou duradouro). Vai no fim da frase.',
+  MIN:'Menor: reduz o efeito total. Vai no fim da frase.',
+  SAN:'Forma esfera/círculo/redoma. Vai no fim da frase.',
+  SAR:'Forma parede/muralha/linha. Vai no fim da frase.',
+  SIN:'Forma de objeto simples (espada, chave, óculos). Vai no fim da frase.',
+  ITAM:'Inerte: o efeito espera um "gatilho" definido na intenção. Quanto mais específico, improvável ou demorado, maior a Complexidade. Vai no fim da frase.',
+  ADA:'Variação: cria uma variação lógica da Característica à qual se liga (prefixo: adaQuan).',
+  NO:'Negação: cria a Característica oposta à qual se liga (prefixo: noOcul).',
+  AG:'Adição: une duas Características numa nova (IgAgQuan).',
+  MUT:'Derivação: prefixo de um Objeto, que passa a valer como Característica (Mutivi).'
+};
+var F=null,O=null,C=[],M=[];   // C: {p,pre:[],ag:null,mut:null}
+var tab='Funções', ver=false;
+function $(q){return document.querySelector(q);}
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function svg(d){ return '<svg viewBox="'+VB+'" aria-hidden="true"><path d="'+d+'"/></svg>'; }
+function cap(c){ c=String(c).toLowerCase(); return c.charAt(0).toUpperCase()+c.slice(1); }
+function low(c){ return String(c).toLowerCase(); }
+function toast(m){ var t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('on');},2000); }
+var STORE='etmos-magias-'+(ALUNO?ALUNO.id:'livre');
+if(ALUNO){ $('#tit').textContent='Conjurar — '+((ALUNO.ficha&&ALUNO.ficha.personagem)||ALUNO.nome); var e=encodeURIComponent(ALUNO.id); $('#back').href='ficha.html?aluno='+e+'#gri'; $('#dic').href='dicionario.html?aluno='+e; $('#back').textContent='← Ficha'; }
+
+function used(p){ return F===p||O===p||M.indexOf(p)>=0||C.some(function(c){ return c.p===p||c.ag===p||c.mut===p||c.pre.indexOf(p)>=0; }); }
+function frase(){
+  var w=[];
+  if(F&&O) w.push(cap(F.codigo)+low(O.codigo)); else if(F) w.push(cap(F.codigo)); else if(O) w.push(cap(O.codigo));
+  C.forEach(function(c){
+    if(c.mut){ w.push('Mut'+low(c.mut.codigo)); return; }
+    var t=c.pre.map(function(x){return low(x.codigo);}).join('')+cap(c.p.codigo);
+    if(c.ag) t=cap(c.p.codigo)+'Ag'+cap(c.ag.codigo), t=c.pre.map(function(x){return low(x.codigo);}).join('')+t;
+    w.push(t);
+  });
+  M.forEach(function(m){ w.push(cap(m.codigo)); });
+  return w.join(' ');
+}
+function traducao(){
+  var t=[]; if(F) t.push(F.nome); if(O) t.push(O.nome);
+  C.forEach(function(c){ var s=c.mut?('Derivação '+c.mut.nome):c.pre.map(function(x){return x.nome.toLowerCase()+' ';}).join('')+c.p.nome+(c.ag?' + '+c.ag.nome:''); t.push(s); });
+  M.forEach(function(m){ t.push(m.nome.replace('Forma: ','Forma ')); });
+  return t.join(' · ');
+}
+
+/* ---------- ações ---------- */
+function ret(p){ return p; }
+function place(p,tgt){
+  var k=p.codigo;
+  if(p.cat==='Funções'){ F=p; }
+  else if(p.cat==='Objetos'){ O=p; }
+  else if(p.cat==='Características'){ if(!C.some(function(c){return c.p===p;})) C.push({p:p,pre:[],ag:null,mut:null}); }
+  else if(MOD[k]){ if(M.indexOf(p)<0) M.push(p); }
+  else if(k==='ADA'||k==='NO'){
+    var c=(tgt!=null&&C[tgt])?C[tgt]:C[C.length-1];
+    if(!c||c.mut){ return toast((k==='ADA'?'Variação':'Negação')+' precisa de uma Característica para se ligar.'); }
+    c.pre.push(p);
+  }
+  else if(k==='AG'){
+    var plain=C.filter(function(c){return !c.mut&&!c.ag;});
+    if(C.length<2) return toast('Adição une duas Características: coloque as duas primeiro.');
+    var i=(tgt!=null&&tgt>0)?tgt:C.length-1, a=C[i-1], b=C[i];
+    if(a.mut||b.mut||a.ag||b.ag||b.pre.length) return toast('Não dá para somar essas duas Características.');
+    a.ag=b.p; C.splice(i,1);
+  }
+  else if(k==='MUT'){ return pickMut(); }
+  after(p);
+}
+function after(p){ draw(); }
+function remove(kind,i){
+  if(kind==='F') F=null; else if(kind==='O') O=null; else if(kind==='M') M.splice(i,1);
+  else if(kind==='C') C.splice(i,1);
+  else if(kind==='pre'){ var s=i.split('.'); C[+s[0]].pre.splice(+s[1],1); }
+  else if(kind==='ag'){ var c=C[i]; C.splice(i+1,0,{p:c.ag,pre:[],ag:null,mut:null}); c.ag=null; }
+  draw();
+}
+function pickMut(){
+  var mp=P.filter(function(p){return p.cat==='Objetos'&&known(p);});
+  var d=$('#dlg'); d.innerHTML='<h3>Derivação (Mut): qual Objeto vira Característica?</h3><div class="pick">'+mp.map(function(p,i){ return '<div class="card" data-cat="Objetos" data-i="'+i+'">'+svg(p.d)+'<div class="n">'+esc(p.nome)+'</div><div class="c">'+esc(p.codigo)+'</div></div>'; }).join('')+'</div><button class="x" id="dx">Cancelar</button>';
+  d.showModal(); d.querySelector('#dx').onclick=function(){d.close();};
+  [].forEach.call(d.querySelectorAll('.card'),function(el){ el.onclick=function(){ var o=mp[+el.dataset.i]; d.close(); var mut=P.filter(function(x){return x.codigo==='MUT';})[0]; C.push({p:mut,pre:[],ag:null,mut:o}); draw(); }; });
+}
+
+/* ---------- renderização ---------- */
+function cardHtml(p,extra){ return '<div class="card'+(extra||'')+'" data-cat="'+esc(p.cat)+'">'+svg(p.d)+'<div class="n">'+esc(p.nome.replace('Forma: ','Forma '))+'</div><div class="c">'+esc(p.codigo)+'</div></div>'; }
+function draw(){
+  var okF=!!F, okO=!!O, text=frase();
+  var h='';
+  h+='<div class="row"><div class="slot fun big" data-drop="F"><span class="lab">Função (1)</span>'+(F?'<span data-rm="F">'+cardHtml(F,' pop')+'</span>':'<span class="ph">o que a magia faz<br><small>(verbo)</small></span>')+'</div><div class="plus">+</div>'
+    +'<div class="slot obj big" data-drop="O"><span class="lab">Objeto (1)</span>'+(O?'<span data-rm="O">'+cardHtml(O,' pop')+'</span>':'<span class="ph">o que é afetado</span>')+'</div></div>';
+  h+='<div class="slot car" data-drop="C"><span class="lab">Características (quantas precisar)</span>'
+    +(C.length?C.map(function(c,i){
+        var inner;
+        if(c.mut) inner='<div class="card pop" data-cat="Complementos" data-ci="'+i+'" data-rm="C" data-i="'+i+'">'+svg(c.mut.d)+'<div class="n">Mut + '+esc(c.mut.nome)+'</div><div class="c">MUT'+esc(c.mut.codigo)+'</div></div>';
+        else if(c.ag) inner='<div class="card merged pop" data-cat="Características" data-ci="'+i+'"><div class="half" data-rm="ag" data-i="'+i+'">'+svg(c.p.d)+'<div class="c">'+esc(c.p.codigo)+'</div></div><div class="agl">Ag</div><div class="half" data-rm="ag" data-i="'+i+'">'+svg(c.ag.d)+'<div class="c">'+esc(c.ag.codigo)+'</div></div></div>';
+        else inner='<div class="card pop" data-cat="Características" data-ci="'+i+'" data-rm="C" data-i="'+i+'">'+svg(c.p.d)+'<div class="n">'+esc(c.p.nome)+'</div><div class="c">'+esc(c.p.codigo)+'</div></div>';
+        var pre=c.pre.map(function(x,j){ return '<b data-rm="pre" data-i="'+i+'.'+j+'">'+esc(x.codigo)+' ✕</b>'; }).join('');
+        return '<div style="position:relative" data-ci="'+i+'">'+inner+(pre?'<div class="pre">'+pre+'</div>':'')+'</div>'; }).join(''):'<span class="ph">detalham o efeito (ex.: Água, Fogo, Corpo…).<br>Vêm sempre depois de Função + Objeto.</span>')+'</div>';
+  h+='<div class="slot com" data-drop="M"><span class="lab">Complementos modificadores</span>'
+    +(M.length?M.map(function(m,i){ return '<span data-rm="M" data-i="'+i+'">'+cardHtml(m,' pop')+'</span>'; }).join(''):'<span class="ph">Maior, Menor, Formas, Inerte — vão no fim da frase.<br>Variação, Negação, Adição e Derivação: solte-os sobre uma Característica.</span>')+'</div>';
+  h+='<div class="frase"><div class="txt" id="ftxt">'+(text?esc(text):'<i>— monte sua frase mágica —</i>')+'</div><div class="tr">'+esc(traducao())+'</div>'
+    +'<div class="btns"><button id="bcopy" class="pri"'+(okF&&okO?'':' disabled')+'>Copiar frase</button><button id="bsave"'+(okF&&okO?'':' disabled')+'>Salvar magia</button><button id="bclr">Limpar mesa</button></div></div>';
+  h+='<div class="intent"><h2 class="s">Intenção (o que você quer que aconteça)</h2><textarea id="intent" placeholder="A frase só funciona se casar com a sua intenção. Descreva aqui o efeito que você quer."></textarea></div>';
+  h+='<h2 class="s">Conferência das regras</h2><ul class="regras" id="regras"></ul>';
+  h+='<h2 class="s">Magias salvas</h2><div class="saved" id="saved"></div>';
+  var keep=$('#intent')?$('#intent').value:'';
+  $('#board').innerHTML=h; $('#intent').value=keep;
+  regras(); saved(); bind(); drawHand();
+}
+function regras(){
+  var L=[], nF=F?1:0, nO=O?1:0;
+  L.push([nF===1?'ok':'no','Exatamente <b>1 Função</b>'+(nF?'':' — falta escolher')]);
+  L.push([nO===1?'ok':'no','Exatamente <b>1 Objeto</b>'+(nO?'':' — falta escolher')]);
+  L.push(['in','Função e Objeto formam <b>uma só palavra</b>; Características e Complementos modificadores ficam como palavras separadas, sempre depois.']);
+  L.push([C.length?'ok':'in','Características: '+C.length+(C.length?'':' (opcional, mas sem elas a magia é bem genérica)')]);
+  var seen={}; M.forEach(function(m){ seen[m.codigo]=1; }); C.forEach(function(c){ c.pre.forEach(function(x){seen[x.codigo]=1;}); if(c.ag) seen.AG=1; if(c.mut) seen.MUT=1; });
+  Object.keys(seen).forEach(function(k){ if(COMPTIP[k]) L.push(['in',COMPTIP[k]]); });
+  if(ALUNO){
+    var c=['Regular','Difícil','Difícil','Complexa','Complexa','Milagre','Milagre'][Math.min(6,mente)]; if(mente<2) c='Regular';
+    L.push(['in','Complexidade máxima da sua personagem: <b>'+(mente>=6?'Milagre':mente>=4?'Complexa':mente>=2?'Difícil':'Regular')+'</b> (Mente '+mente+'). Complementos tendem a aumentar a Complexidade; combine com o narrador.']);
+    if(/Mundano/i.test(st.origens||'')) L.push(['in','Origem Mundana: para conjurar no mundo Mundano é preciso um <b>Totem</b>.']);
+  }
+  L.push(['in','Fale a frase em voz alta e use só partículas do seu <b>Grimório</b>. A frase precisa casar com a sua <b>intenção</b>.']);
+  $('#regras').innerHTML=L.map(function(l){ return '<li class="'+l[0]+'"><b>'+(l[0]==='ok'?'✓':l[0]==='no'?'✕':'i')+'</b><span>'+l[1]+'</span></li>'; }).join('');
+}
+function saved(){
+  var a=[]; try{ a=JSON.parse(localStorage.getItem(STORE)||'[]'); }catch(e){}
+  $('#saved').innerHTML=a.length?a.map(function(m,i){ return '<div class="it"><b>'+esc(m.frase)+'</b><span>'+esc(m.intencao||'')+'</span><button data-cp="'+i+'">copiar</button><button data-dl="'+i+'">✕</button></div>'; }).join(''):'<div style="font:13px system-ui;opacity:.55;padding:4px 2px">Nenhuma magia salva ainda.</div>';
+}
+function bind(){
+  [].forEach.call(document.querySelectorAll('[data-rm]'),function(el){ el.addEventListener('click',function(ev){ ev.stopPropagation(); var k=el.dataset.rm; remove(k, k==='pre'?el.dataset.i:(el.dataset.i!=null?+el.dataset.i:0)); }); });
+  $('#bcopy').onclick=function(){ copy(frase()); };
+  $('#bclr').onclick=function(){ F=O=null; C=[]; M=[]; draw(); };
+  $('#bsave').onclick=function(){ var a=[]; try{ a=JSON.parse(localStorage.getItem(STORE)||'[]'); }catch(e){} a.unshift({frase:frase(),intencao:$('#intent').value}); try{ localStorage.setItem(STORE,JSON.stringify(a.slice(0,30))); }catch(e){} saved(); bind2(); toast('Magia salva'); };
+  bind2();
+}
+function bind2(){
+  [].forEach.call(document.querySelectorAll('[data-cp]'),function(b){ b.onclick=function(){ var a=JSON.parse(localStorage.getItem(STORE)||'[]'); copy(a[+b.dataset.cp].frase); }; });
+  [].forEach.call(document.querySelectorAll('[data-dl]'),function(b){ b.onclick=function(){ var a=JSON.parse(localStorage.getItem(STORE)||'[]'); a.splice(+b.dataset.dl,1); localStorage.setItem(STORE,JSON.stringify(a)); saved(); bind2(); }; });
+}
+function copy(t){ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){toast('Frase copiada');},function(){toast(t);}); else toast(t); }
+
+/* ---------- mão ---------- */
+function tabs(){
+  var t=$('#tabs'); t.innerHTML=CATS.map(function(c){ var n=P.filter(function(p){return p.cat===c&&known(p);}).length; return '<button type="button" data-t="'+c+'" aria-pressed="'+(c===tab)+'">'+c+' <small>'+n+'</small></button>'; }).join('')+(ALUNO?'<button type="button" class="all" id="tall" aria-pressed="'+ver+'">'+(ver?'Só meu grimório':'Ver todas')+'</button>':'');
+  [].forEach.call(t.querySelectorAll('[data-t]'),function(b){ b.onclick=function(){ tab=b.dataset.t; tabs(); drawHand(); }; });
+  var ta=$('#tall'); if(ta) ta.onclick=function(){ ver=!ver; LIVRE_ALL=ver; tabs(); drawHand(); };
+}
+var LIVRE_ALL=false;
+function handList(){ return P.filter(function(p){ return p.cat===tab && (LIVRE_ALL||known(p)); }); }
+function drawHand(){
+  var l=handList(), fan=$('#fan');
+  fan.innerHTML=l.length?l.map(function(p,i){ var rot=((i-(l.length-1)/2)*(l.length>8?0.6:1.4)).toFixed(1); return '<div class="card'+(used(p)?' used':'')+'" data-cat="'+esc(p.cat)+'" data-i="'+i+'" style="transform:rotate('+rot+'deg)" title="'+esc(p.nome)+'">'+svg(p.d)+'<div class="n">'+esc(p.nome.replace('Forma: ','Forma '))+'</div><div class="c">'+esc(p.codigo)+'</div></div>'; }).join(''):'<div class="empty">Nenhuma partícula desta categoria no seu grimório.</div>';
+  [].forEach.call(fan.querySelectorAll('.card'),function(el){ el.addEventListener('pointerdown',function(ev){ startDrag(ev,el,l[+el.dataset.i]); }); });
+}
+
+/* ---------- arrastar e soltar ---------- */
+function acceptZone(p,z){ if(z==='F') return p.cat==='Funções'; if(z==='O') return p.cat==='Objetos'; if(z==='C') return p.cat==='Características'||p.codigo==='MUT'||p.codigo==='AG'||p.codigo==='ADA'||p.codigo==='NO'; if(z==='M') return !!MOD[p.codigo]; return false; }
+function zoneOf(p){ if(p.cat==='Funções') return 'F'; if(p.cat==='Objetos') return 'O'; if(p.cat==='Características') return 'C'; return MOD[p.codigo]?'M':'C'; }
+function startDrag(ev,el,p){
+  if(ev.button>0||used(p)) return;
+  var sx=ev.clientX, sy=ev.clientY, g=null, moved=false, pid=ev.pointerId, hot=null;
+  function zones(on){ [].forEach.call(document.querySelectorAll('[data-drop]'),function(z){ z.classList.toggle('ok',on&&acceptZone(p,z.dataset.drop)); if(!on) z.classList.remove('hot'); }); }
+  function move(e){
+    var dx=e.clientX-sx, dy=e.clientY-sy;
+    if(!g){ var touch=e.pointerType==='touch'; if(touch? (Math.abs(dy)>10&&Math.abs(dy)>Math.abs(dx)) : (Math.abs(dx)+Math.abs(dy)>6)){ g=el.cloneNode(true); g.className='card ghost'; g.removeAttribute('style'); g.setAttribute('data-cat',p.cat); document.body.appendChild(g); zones(true); try{ el.setPointerCapture(pid); }catch(_){}; moved=true; } else return; }
+    e.preventDefault(); g.style.left=e.clientX+'px'; g.style.top=e.clientY+'px';
+    g.style.display='none'; var t=document.elementFromPoint(e.clientX,e.clientY); g.style.display='';
+    var z=t&&t.closest?t.closest('[data-drop]'):null; if(hot&&hot!==z) hot.classList.remove('hot'); hot=z&&acceptZone(p,z.dataset.drop)?z:null; if(hot) hot.classList.add('hot');
+  }
+  function up(e){
+    document.removeEventListener('pointermove',move); document.removeEventListener('pointerup',up); document.removeEventListener('pointercancel',up);
+    if(!g){ if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)<8) tap(p,el); return; }
+    g.style.display='none'; var t=document.elementFromPoint(e.clientX,e.clientY); var z=t&&t.closest?t.closest('[data-drop]'):null; var ci=t&&t.closest?t.closest('[data-ci]'):null; g.remove(); zones(false);
+    if(z&&acceptZone(p,z.dataset.drop)) place(p, ci?+ci.dataset.ci:null);
+    else if(z||t&&t.closest&&t.closest('.board')) toast('Essa carta não vai aí: '+p.cat.toLowerCase().replace(/s$/,'')+' vai em "'+({F:'Função',O:'Objeto',C:'Características',M:'Complementos'})[zoneOf(p)]+'".');
+  }
+  document.addEventListener('pointermove',move,{passive:false}); document.addEventListener('pointerup',up); document.addEventListener('pointercancel',up);
+}
+function tap(p,el){ place(p,null); }
+$('#regrasbtn').onclick=function(){ var d=$('#dlg'); d.innerHTML='<h3>Como montar uma frase mágica</h3><div style="font:14px/1.55 system-ui,sans-serif"><p><b>1.</b> Exatamente <b>1 Função</b> (o verbo) e <b>1 Objeto</b> (o que é afetado). Eles se juntam numa palavra: Ev + Eli = <b>Eveli</b>.</p><p><b>2.</b> Depois, quantas <b>Características</b> precisar, cada uma como palavra separada: Eveli <b>Quan</b>.</p><p><b>3.</b> <b>Complementos modificadores</b> (Maior, Menor, Formas, Inerte) vão no fim: Eveli Quan <b>Mor</b>.</p><p><b>4.</b> <b>Complementos criadores</b> geram Características: Variação e Negação viram prefixo (<b>adaQuan</b>, <b>noOcul</b>), Adição une duas (<b>IgAgQuan</b>), Derivação transforma um Objeto em Característica (<b>Mutivi</b>).</p><p><b>5.</b> Use só partículas do seu Grimório e diga a frase em voz alta, com a intenção clara.</p><p style="opacity:.7">Toque numa carta para jogá-la na mesa ou arraste-a até o espaço certo. Toque numa carta da mesa para devolvê-la.</p></div><button class="x" id="dx">Entendi</button>'; d.showModal(); d.querySelector('#dx').onclick=function(){d.close();}; };
+tabs(); draw();
+})();
+</script>
+</body>
+</html>

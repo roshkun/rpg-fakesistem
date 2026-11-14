@@ -35,8 +35,18 @@ window.ALUNOS = [
       "car_1": true,
       "car_11": true,
       "car2_4": true,
-      "car_5": true
-    }
+      "car_5": true,
+      "pr_praticas": true,
+      "mod_itens": "[\"Repulsão\", \"Respiração Aquática\"]",
+      "pr_notas": "Aparar um golpe com o escudo ou o antebraço (Física · Técnica + Potência · Regular)\nSegurar uma porta que alguém tenta arrombar (Física · Potência + Vigor · Regular)\nCobrir a fuga do grupo contra uma ameaça (Física · Mobilidade + Instinto · Difícil)",
+      "fam_on": true,
+      "fam_nome": "Jabuti-Muralha",
+      "fam_tipo": "Afetivo",
+      "fam_forca": 1,
+      "fam_apts": "[\"Corpo Fechado\", \"Robustez\", \"Fôlego Sem Fim\"]",
+      "fam_notas": "Um jabuti de casco enorme, coberto de musgo e gotas de orvalho, calmo e teimoso. Fica sempre entre o grupo e o perigo, igual à sua pactária. Casco liso como pedra de rio."
+    },
+    "familiar_img": "assets/familiares/aluno1.webp"
   },
   {
     "id": "aluno2",
@@ -72,8 +82,18 @@ window.ALUNOS = [
       "car_10": true,
       "car_11": true,
       "car_7": true,
-      "car_18": true
-    }
+      "car_18": true,
+      "pr_praticas": false,
+      "mod_itens": "[\"Chama Aderente\", \"Passo Silente\"]",
+      "pr_notas": "Arrombar uma fechadura com um grampo (Física · Precisão + Técnica · Regular)\nSumir pelos fundos sem ser percebido (Física · Furtividade + Mobilidade · Regular)\nProvocar um professor para desviar a atenção (Mental · Expressão + Improviso · Regular)",
+      "fam_on": true,
+      "fam_nome": "Brasinha",
+      "fam_tipo": "Espiritual",
+      "fam_forca": 1,
+      "fam_apts": "[\"Golpe Simples\", \"Resistência Elemental\", \"Extensão de Sentidos\"]",
+      "fam_notas": "Um catitu (porquinho-do-mato) pequeno e atrevido, com cerdas que soltam faíscas quando fica bravo. Adora fuçar onde não deve, como o dono. Resistência Elemental: Fogo."
+    },
+    "familiar_img": "assets/familiares/aluno2.webp"
   },
   {
     "id": "aluno3",
@@ -109,8 +129,18 @@ window.ALUNOS = [
       "car_8": true,
       "car_16": true,
       "car2_9": true,
-      "car_5": true
-    }
+      "car_5": true,
+      "pr_praticas": false,
+      "mod_itens": "[\"Cura Menor\", \"Audição Amplificada\"]",
+      "pr_notas": "Acalmar alguém em pânico com palavras e presença (Mental · Expressão + Instinto · Regular)\nPerceber que alguém está mentindo ou escondendo dor (Mental · Instinto + Raciocínio · Regular)\nFazer um curativo improvisado em um ferido (Física · Precisão + Técnica · Regular)",
+      "fam_on": true,
+      "fam_nome": "Cantiga",
+      "fam_tipo": "Afetivo",
+      "fam_forca": 1,
+      "fam_apts": "[\"Presença Calmante\", \"Voo\", \"Extensão de Sentidos\"]",
+      "fam_notas": "Um beija-flor de penas azuis e douradas que canta baixinho perto de quem está tenso. Pousa no ombro da pactária, como o broche. Presença Calmante: 1x/dia recupera 3 de Estresse."
+    },
+    "familiar_img": "assets/familiares/aluno3.webp"
   },
   {
     "id": "aluno4",
@@ -147,8 +177,18 @@ window.ALUNOS = [
       "car_13": true,
       "car_16": true,
       "car_6": true,
-      "car_7": true
-    }
+      "car_7": true,
+      "pr_praticas": false,
+      "mod_itens": "[\"Revelação Invisível\", \"Trivia Inútil\"]",
+      "pr_notas": "Decifrar uma cifra ou escrita antiga (Mental · Raciocínio + Técnica · Difícil)\nPerceber algo fora do lugar numa sala (Mental · Instinto + Raciocínio · Regular)\nUsar um sistema ou computador da escola (Mental · Técnica + Raciocínio · Regular)",
+      "fam_on": true,
+      "fam_nome": "Verbete",
+      "fam_tipo": "Contrato Escrito",
+      "fam_forca": 1,
+      "fam_apts": "[\"Grimório Compartilhado\", \"Fala\", \"Extensão de Sentidos\"]",
+      "fam_notas": "Uma coruja-buraqueira de óculos improvisados feitos de aro de tinta, que pousa sobre pilhas de livros. Fala bastante e corrige quem erra. O pacto foi assinado numa página de caderno."
+    },
+    "familiar_img": "assets/familiares/aluno4.webp"
   },
   {
     "id": "aluno5",
@@ -184,8 +224,18 @@ window.ALUNOS = [
       "car_14": true,
       "car_16": true,
       "car2_8": true,
-      "car2_14": true
-    }
+      "car2_14": true,
+      "pr_praticas": false,
+      "mod_itens": "[\"Muitas Faces\", \"Ventania Heroica\"]",
+      "pr_notas": "Enganar um monitor com uma desculpa convincente (Mental · Expressão + Improviso · Regular)\nSe esgueirar atrás de alguém sem ser visto (Física · Furtividade + Mobilidade · Regular)\nBater a carteira de um aluno distraído (Física · Precisão + Furtividade · Difícil)",
+      "fam_on": true,
+      "fam_nome": "Miragem",
+      "fam_tipo": "Fenômeno Místico",
+      "fam_forca": 1,
+      "fam_apts": "[\"Grimório Compartilhado\", \"Fala\", \"Fôlego Sem Fim\"]",
+      "fam_notas": "Um camaleão de pele que ondula como superfície de rio e muda de cor com o humor do dono. Sussurra gracinhas. Não precisa respirar, como o boto que ronda as águas."
+    },
+    "familiar_img": "assets/familiares/aluno5.webp"
   },
   {
     "id": "aluno6",
@@ -221,7 +271,17 @@ window.ALUNOS = [
       "car_12": true,
       "car_18": true,
       "car_11": true,
-      "car2_12": true
-    }
+      "car2_12": true,
+      "pr_praticas": true,
+      "mod_itens": "[\"Celeridade\", \"Passos de Aranha\"]",
+      "pr_notas": "Escalar um muro e pular o portão (Física · Mobilidade + Potência · Regular)\nDriblar uma pessoa e sair em disparada (Física · Mobilidade + Instinto · Regular)\nAguentar um treino pesado sem desistir (Física · Vigor + Técnica · Regular)",
+      "fam_on": true,
+      "fam_nome": "Corisco",
+      "fam_tipo": "Afetivo",
+      "fam_forca": 1,
+      "fam_apts": "[\"Golpe Simples\", \"Treinado\", \"Robustez\"]",
+      "fam_notas": "Uma seriema de pernas longas e pose de corredora, que dispara pelo pátio e bica quem a provoca. Treinado: +2 em um Atributo (escolha com o narrador)."
+    },
+    "familiar_img": "assets/familiares/aluno6.webp"
   }
 ];
