@@ -12,6 +12,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "val_l1": "Proteção",
+      "val_r1": "Controle",
+      "val_l2": "Estrutura",
+      "val_r2": "Espontaneidade",
       "ano": "1º",
       "idade": "16",
       "nivel": "1",
@@ -59,6 +63,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "val_l1": "Caos",
+      "val_r1": "Ordem",
+      "val_l2": "Liberdade",
+      "val_r2": "Obediência",
       "ano": "1º",
       "idade": "15",
       "nivel": "1",
@@ -106,6 +114,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "val_l1": "União",
+      "val_r1": "Autopreservação",
+      "val_l2": "Empatia",
+      "val_r2": "Frieza",
       "ano": "1º",
       "idade": "15",
       "nivel": "1",
@@ -153,6 +165,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "val_l1": "Teoria",
+      "val_r1": "Prática",
+      "val_l2": "Coragem",
+      "val_r2": "Cautela",
       "ano": "1º",
       "idade": "16",
       "nivel": "1",
@@ -201,6 +217,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "val_l1": "Fantástico",
+      "val_r1": "Mundano",
+      "val_l2": "Enigma",
+      "val_r2": "Franqueza",
       "ano": "1º",
       "idade": "15",
       "nivel": "1",
@@ -248,6 +268,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
+      "val_l1": "Impulso",
+      "val_r1": "Planejamento",
+      "val_l2": "Competição",
+      "val_r2": "Cooperação",
       "ano": "1º",
       "idade": "16",
       "nivel": "1",
