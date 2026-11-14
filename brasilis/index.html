@@ -53,6 +53,10 @@
            font:600 12px/1 system-ui,sans-serif; color:#f4ecfa; background:rgba(29,20,36,.78); border:1px solid #7b4a8a; padding:9px 12px; border-radius:99px; }
   #motion.show{ display:block; }
 
+  #dic{ position:absolute; top:calc(env(safe-area-inset-top) + 12px); left:12px; z-index:20; font:600 13px/1 system-ui,sans-serif; color:#f4ecfa;
+        background:rgba(29,20,36,.78); border:1px solid #7b4a8a; padding:10px 13px; border-radius:99px; text-decoration:none; backdrop-filter:blur(6px); }
+  #dic:hover{ background:rgba(58,35,80,.9); }
+  #scene.picked #dic{ opacity:0; pointer-events:none; }
   /* véu de transição */
   #veil{ position:absolute; inset:0; z-index:30; background:radial-gradient(circle at 50% 45%, #4a2e66, #1d1424 75%); opacity:0; pointer-events:none; transition:opacity .55s ease-in .25s; }
   #bg, #ground{ transition:filter .8s ease, opacity .8s ease; }
@@ -88,6 +92,7 @@
   <div id="chars"></div>
   <div id="hint">Toque em um aluno para abrir a ficha</div>
   <button id="motion" type="button">Ativar movimento</button>
+  <a id="dic" href="dicionario.html">📖 Dicionário</a>
   <div id="veil"></div>
 </main>
 
@@ -158,6 +163,7 @@
   }
   requestAnimationFrame(frame);
   addEventListener('pointerdown',function(){ hint.classList.add('off'); },{once:true});
+  document.getElementById('dic').addEventListener('pointerdown',function(e){ e.stopPropagation(); });
   setTimeout(function(){ hint.classList.add('off'); },9000);
 
   /* ---------- transição ao escolher o aluno ---------- */

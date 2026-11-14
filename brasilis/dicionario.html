@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d1424">
+<title>Dicionário de Partículas — Etmos RPG</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M16 2 28 16 16 30 4 16z%27 fill=%27%233e1c43%27/%3E%3C/svg%3E">
+<style>
+  :root{ --ink:#3e1c43; --paper:#e4e2f1; --paper2:#f1effa; --line:#c9c2dc; --deep:#1d1424; --acc:#6e3a7d; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; }
+  body{ background:var(--deep); color:#f1ecf7; font-family:Georgia,"Times New Roman",serif; min-height:100vh; padding-bottom:calc(env(safe-area-inset-bottom) + 24px); }
+  @keyframes veilout{ from{opacity:1} to{opacity:0} }
+  body::before{ content:""; position:fixed; inset:0; background:var(--deep); z-index:100; pointer-events:none; animation:veilout .5s ease-out both; }
+
+  header{ position:sticky; top:0; z-index:20; background:rgba(29,20,36,.96); backdrop-filter:blur(8px); border-bottom:1px solid #4a2e55; padding:10px 12px 10px; }
+  .top{ display:flex; align-items:center; gap:10px; }
+  .top h1{ flex:1; margin:0; font-size:18px; letter-spacing:.04em; }
+  .top a{ font:600 13px/1 system-ui,sans-serif; color:#f1ecf7; text-decoration:none; background:transparent; border:1px solid #7b4a8a; padding:9px 12px; border-radius:8px; white-space:nowrap; }
+  .top a:hover{ background:#3a2350; }
+  .search{ margin-top:10px; position:relative; }
+  .search input{ width:100%; font:16px system-ui,sans-serif; color:#f1ecf7; background:#2a1a36; border:1px solid #5b3a6b; border-radius:10px; padding:12px 14px 12px 40px; outline:none; }
+  .search input:focus{ border-color:#a77ac0; box-shadow:0 0 0 2px rgba(167,122,192,.35); }
+  .search svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.7; }
+  .chips{ display:flex; gap:8px; overflow-x:auto; padding:10px 0 2px; scrollbar-width:none; }
+  .chips::-webkit-scrollbar{ display:none; }
+  .chip{ flex:none; font:600 13px/1 system-ui,sans-serif; color:#d9cbe6; background:#2a1a36; border:1px solid #5b3a6b; padding:9px 13px; border-radius:99px; cursor:pointer; }
+  .chip[aria-pressed="true"]{ background:var(--acc); color:#fff; border-color:#a77ac0; }
+  .info{ font:13px system-ui,sans-serif; color:#b9a9c6; padding:12px 14px 4px; display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+  .howto{ margin:12px; padding:12px 14px; border:1px solid #4a2e55; border-radius:12px; background:#26172f; font:14px/1.5 system-ui,sans-serif; color:#d9cbe6; }
+  .howto b{ color:#fff; }
+
+  .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:10px 12px; max-width:1100px; margin:0 auto; }
+  @media (min-width:560px){ .grid{ grid-template-columns:repeat(4,1fr); } }
+  @media (min-width:820px){ .grid{ grid-template-columns:repeat(6,1fr); } }
+  .card{ position:relative; background:var(--paper); color:var(--ink); border:0; border-radius:12px; padding:8px 6px 10px; text-align:center; cursor:pointer; font-family:inherit;
+         box-shadow:0 2px 0 rgba(0,0,0,.25); transition:transform .12s; }
+  .card:active{ transform:scale(.97); }
+  .card:hover{ background:var(--paper2); }
+  .card svg{ display:block; width:100%; height:auto; aspect-ratio:41/40; }
+  .card svg path{ fill:var(--ink); fill-rule:evenodd; }
+  .card .cat{ font:600 9px/1 system-ui,sans-serif; letter-spacing:.06em; text-transform:uppercase; opacity:.65; margin-top:2px; }
+  .card .nome{ font-weight:bold; font-size:13px; line-height:1.15; margin-top:4px; min-height:2.3em; display:flex; align-items:center; justify-content:center; }
+  .card .cod{ font:700 12px/1 Georgia,serif; letter-spacing:.14em; margin-top:4px; color:var(--acc); }
+  .card .tag{ position:absolute; top:6px; right:6px; width:18px; height:18px; border-radius:50%; background:var(--ink); color:#fff; font:700 11px/18px system-ui,sans-serif; display:none; }
+  .card.mine .tag{ display:block; }
+  .card .niv{ position:absolute; top:6px; left:6px; font:700 10px/1 system-ui,sans-serif; background:#cdbfe8; color:var(--ink); border-radius:6px; padding:3px 5px; }
+  .empty{ grid-column:1/-1; text-align:center; padding:40px 10px; color:#b9a9c6; font:15px system-ui,sans-serif; }
+
+  /* detalhe */
+  dialog{ border:0; padding:0; background:transparent; max-width:none; max-height:none; width:100%; height:100%; }
+  dialog::backdrop{ background:rgba(10,5,15,.7); backdrop-filter:blur(3px); }
+  .sheet{ position:fixed; left:0; right:0; bottom:0; background:var(--paper); color:var(--ink); border-radius:22px 22px 0 0; padding:18px 18px calc(env(safe-area-inset-bottom) + 18px); max-width:520px; margin:0 auto; animation:up .25s ease-out; }
+  @keyframes up{ from{ transform:translateY(40px); opacity:0 } to{ transform:none; opacity:1 } }
+  .sheet .big{ width:min(62vw,260px); margin:0 auto; display:block; }
+  .sheet .big path{ fill:var(--ink); fill-rule:evenodd; }
+  .sheet h2{ text-align:center; margin:6px 0 2px; font-size:22px; }
+  .sheet .sub{ text-align:center; font:600 13px system-ui,sans-serif; opacity:.75; }
+  .sheet .cod{ text-align:center; font:700 22px Georgia,serif; letter-spacing:.2em; color:var(--acc); margin:6px 0 10px; }
+  .sheet .mine{ text-align:center; font:600 13px system-ui,sans-serif; color:#fff; background:var(--ink); border-radius:99px; padding:7px 12px; width:max-content; margin:0 auto 10px; }
+  .btns{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .btns button{ font:600 14px system-ui,sans-serif; border-radius:10px; padding:11px 14px; border:1px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer; }
+  .btns button.pri{ background:var(--ink); color:#fff; }
+  .nav{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(62,28,67,.1); border:0; width:40px; height:40px; border-radius:50%; font-size:20px; color:var(--ink); cursor:pointer; }
+  .nav.l{ left:8px; } .nav.r{ right:8px; }
+  .toast{ position:fixed; left:50%; bottom:calc(env(safe-area-inset-bottom) + 20px); transform:translateX(-50%); background:#2a1536; color:#f4ecfa; font:600 13px system-ui,sans-serif; padding:10px 16px; border-radius:99px; border:1px solid #7b4a8a; opacity:0; pointer-events:none; transition:opacity .2s; z-index:200; }
+  .toast.on{ opacity:1; }
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1>Dicionário de Partículas</h1>
+    <a id="back" href="index.html">← Voltar</a>
+  </div>
+  <label class="search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f1ecf7" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Buscar nome ou código" autocomplete="off" aria-label="Buscar partícula">
+  </label>
+  <div class="chips" id="chips"></div>
+</header>
+
+<div class="howto"><b>Como ler:</b> uma magia combina <b>Função</b> (o que faz) + <b>Objeto</b> (em quê) + <b>Característica</b> (como) + <b>Complementos</b>. Toque em uma partícula para ver o glifo grande.</div>
+<div class="info"><span id="count"></span><span id="mineinfo"></span></div>
+<main class="grid" id="grid" aria-live="polite"></main>
+
+<dialog id="dlg"><div class="sheet" id="sheet"></div></dialog>
+<div class="toast" id="toast"></div>
+
+<script src="data/alunos.js"></script>
+<script src="data/particulas.js"></script>
+<script>
+(function(){
+  "use strict";
+  var P=window.PARTICULAS||[], ALUNOS=window.ALUNOS||[];
+  var VB='120 15 410 400';
+  var qs=new URLSearchParams(location.search), aid=qs.get('aluno');
+  var ALUNO=ALUNOS.filter(function(a){return a.id===aid;})[0]||null;
+  var CATS=['Todas','Funções','Objetos','Características','Complementos'];
+  var cat='Todas', q='', onlyMine=false;
+
+  /* partículas do grimório do aluno (ficha base + alterações salvas no navegador) */
+  var known={};
+  if(ALUNO){
+    var st={}; var base=ALUNO.ficha||{};
+    Object.keys(base).forEach(function(k){ st[k]=base[k]; });
+    try{ var s=JSON.parse(localStorage.getItem('etmos-ficha-v2-'+ALUNO.id)||'{}'); Object.keys(s).forEach(function(k){ st[k]=s[k]; }); }catch(e){}
+    Object.keys(st).forEach(function(k){ if(st[k]===true) known[k]=true; });
+    document.getElementById('back').href='ficha.html?aluno='+encodeURIComponent(ALUNO.id);
+    document.getElementById('back').textContent='← Ficha';
+  }
+  P.forEach(function(p){ p.mine=!!(p.key&&known[p.key]); p._s=norm(p.nome+' '+p.codigo+' '+p.cat); });
+  function norm(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
+  function svg(d,cls){ return '<svg viewBox="'+VB+'" '+(cls?'class="'+cls+'" ':'')+'role="img" aria-hidden="true"><path d="'+d+'"/></svg>'; }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  /* chips */
+  var chipsEl=document.getElementById('chips');
+  var chipList=CATS.slice(); if(ALUNO) chipList.push('Meu grimório');
+  chipList.forEach(function(c){
+    var b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=c; b.dataset.c=c;
+    b.setAttribute('aria-pressed',c==='Todas'?'true':'false');
+    b.addEventListener('click',function(){
+      if(c==='Meu grimório'){ onlyMine=!onlyMine; b.setAttribute('aria-pressed',onlyMine); }
+      else{ cat=c; [].forEach.call(chipsEl.children,function(x){ if(x.dataset.c!=='Meu grimório') x.setAttribute('aria-pressed',x.dataset.c===cat); }); }
+      render();
+    });
+    chipsEl.appendChild(b);
+  });
+  document.getElementById('q').addEventListener('input',function(e){ q=norm(e.target.value.trim()); render(); });
+
+  var gridEl=document.getElementById('grid'), shown=[];
+  function render(){
+    shown=P.filter(function(p){
+      if(cat!=='Todas' && p.cat!==cat) return false;
+      if(onlyMine && !p.mine) return false;
+      if(q && p._s.indexOf(q)<0) return false;
+      return true;
+    });
+    gridEl.innerHTML='';
+    if(!shown.length){ gridEl.innerHTML='<div class="empty">Nenhuma partícula encontrada.</div>'; }
+    shown.forEach(function(p,i){
+      var b=document.createElement('button'); b.type='button'; b.className='card'+(p.mine?' mine':'');
+      b.setAttribute('aria-label',p.nome+' ('+p.codigo+')');
+      b.innerHTML=svg(p.d)+'<div class="cat">'+esc(p.cat.replace(/s$/,''))+'</div><div class="nome">'+esc(p.nome)+'</div><div class="cod">'+esc(p.codigo)+'</div>'+(p.mine?'<span class="tag" title="No seu grimório">✓</span>':'')+(p.nivel?'<span class="niv">'+p.nivel+'º nível</span>':'');
+      b.addEventListener('click',function(){ openDetail(i); });
+      gridEl.appendChild(b);
+    });
+    document.getElementById('count').textContent=shown.length+' de '+P.length+' partículas';
+    var m=P.filter(function(p){return p.mine;}).length;
+    document.getElementById('mineinfo').textContent=ALUNO?('✓ = no grimório de '+(ALUNO.ficha&&ALUNO.ficha.personagem||ALUNO.nome)+' ('+m+')'):'';
+  }
+  render();
+
+  /* detalhe */
+  var dlg=document.getElementById('dlg'), sheet=document.getElementById('sheet'), cur=0;
+  function openDetail(i){
+    cur=i; var p=shown[i];
+    var sub=p.cat.replace(/s$/,'')+(p.nivel?' · '+p.nivel+'º nível':'');
+    sheet.innerHTML='<button class="nav l" aria-label="Anterior">‹</button><button class="nav r" aria-label="Próxima">›</button>'
+      +svg(p.d,'big')+'<h2>'+esc(p.nome)+'</h2><div class="sub">'+esc(sub)+'</div><div class="cod">'+esc(p.codigo)+'</div>'
+      +(p.mine?'<div class="mine">✓ No seu grimório</div>':'')
+      +'<div class="btns"><button id="cpy">Copiar código</button><button id="dl">Baixar SVG</button><button class="pri" id="cls">Fechar</button></div>';
+    if(!dlg.open) dlg.showModal();
+    sheet.querySelector('.l').onclick=function(e){ e.stopPropagation(); openDetail((cur-1+shown.length)%shown.length); };
+    sheet.querySelector('.r').onclick=function(e){ e.stopPropagation(); openDetail((cur+1)%shown.length); };
+    sheet.querySelector('#cls').onclick=function(){ dlg.close(); };
+    sheet.querySelector('#cpy').onclick=function(){ copy(p.codigo); };
+    sheet.querySelector('#dl').onclick=function(){ download(p); };
+  }
+  dlg.addEventListener('click',function(e){ if(e.target===dlg) dlg.close(); });
+  document.addEventListener('keydown',function(e){ if(!dlg.open) return; if(e.key==='ArrowLeft') sheet.querySelector('.l').click(); if(e.key==='ArrowRight') sheet.querySelector('.r').click(); });
+  var toastEl=document.getElementById('toast'), tt;
+  function toast(m){ toastEl.textContent=m; toastEl.classList.add('on'); clearTimeout(tt); tt=setTimeout(function(){ toastEl.classList.remove('on'); },1600); }
+  function copy(t){
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){ toast('Código copiado'); },function(){ toast(t); }); }
+    else toast(t);
+  }
+  function download(p){
+    var x='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+VB+'" width="410" height="400"><title>'+esc(p.nome)+' ('+p.codigo+')</title><path fill="#3e1c43" fill-rule="evenodd" d="'+p.d+'"/></svg>';
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([x],{type:'image/svg+xml'}));
+    a.download=p.codigo.toLowerCase()+'_'+norm(p.nome).replace(/[^a-z0-9]+/g,'-')+'.svg';
+    document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500);
+  }
+})();
+</script>
+</body>
+</html>
