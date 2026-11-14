@@ -234,7 +234,7 @@ details.pick .in{ padding:4px 10px 12px; }
     </div>
     <div class="sec"><span class="hd">Complementos</span>
       <div class="help">Os complementos de 1º nível já são conhecidos.</div><div class="tiles" id="comps"></div></div>
-    <div class="links"><a id="conj2" href="conjurar.html">✨ Montar uma magia (mesa de cartas)</a> &nbsp;·&nbsp; <a id="dic2" href="dicionario.html">📖 Dicionário completo</a></div>
+    <div class="links"><a id="conj2" href="conjurar.html">✨ Montar uma magia (mesa de cartas)</a> &nbsp;·&nbsp; <a id="dic2" href="dicionario.html">📖 Dicionário completo</a> &nbsp;·&nbsp; <a id="mod2" href="modulos.html">📘 Módulos (proezas, itens, familiares)</a></div>
   </section>
 
   <div class="foot">
@@ -254,6 +254,7 @@ var ALUNO=ALUNOS.filter(function(a){return a.id===qs.get('aluno');})[0]||ALUNOS[
 var BASE=ALUNO.ficha||{}, STORE='etmos-ficha-v2-'+ALUNO.id, id=encodeURIComponent(ALUNO.id);
 document.getElementById('dic').href=document.getElementById('dic2').href='dicionario.html?aluno='+id;
 document.getElementById('conj2').href='conjurar.html?aluno='+id;
+document.getElementById('mod2').href='modulos.html?aluno='+id;
 document.getElementById('orig').href='ficha-original.html?aluno='+id;
 document.title='Ficha — '+(BASE.personagem||ALUNO.nome)+' · Etmos RPG';
 var state={}, saved={};
