@@ -150,6 +150,16 @@ function gerarPaginas(o,imgs){
   if(norm(st.praticas)){ label('Habilidades práticas'); para(norm(st.praticas),{size:28}); }
   if(norm(st.teoricas)){ label('Habilidades teóricas'); para(norm(st.teoricas),{size:28}); }
 
+  /* totem */
+  if(A.totem){
+    var T=A.totem; title('Totem',300); ensure(270);
+    var tw=0; if(imgs.totem){ var th=Math.min(240,imgs.totem.naturalHeight); tw=th*imgs.totem.naturalWidth/imgs.totem.naturalHeight; if(tw>240){ tw=240; th=tw*imgs.totem.naturalHeight/imgs.totem.naturalWidth; } ctx.drawImage(imgs.totem,M,y,tw,th); tw+=30; }
+    txt(T.nome,M+tw,y+40,{font:'700 36px '+SERIF,color:PUR}); txt('RANK '+T.rank,M+tw,y+86,{font:'700 24px '+SANS,color:ACC,ls:3});
+    var tl=wrap(T.desc||'',CW-tw,'400 28px '+SERIF), ty=y+134; tl.forEach(function(l){ txt(l,M+tw,ty,{font:'400 28px '+SERIF}); ty+=40; });
+    var tr=wrap('Cada magia não Trivial conjurada no Mundano soma Estresse extra, conforme o Rank. Sintoniza no primeiro uso; perde a sintonia após 100 anos sem uso.',CW-tw,'400 24px '+SERIF); ty+=10; tr.forEach(function(l){ txt(l,M+tw,ty,{font:'italic 400 24px '+SERIF,color:ACC}); ty+=34; });
+    y=Math.max(y+250,ty+10);
+  }
+
   /* itens */
   var mine=jget(st,'mod_itens').map(function(n){ return ITENS.filter(function(x){return x.nome===n;})[0]; }).filter(Boolean);
   if(mine.length||norm(st.inventario)){
@@ -245,8 +255,8 @@ function paraJpegs(pages){
 window.PDFFicha={
   gerar:function(o){
     var A=o.aluno;
-    return Promise.all([loadImg('assets/ui/logo-etmos.svg'),loadImg(A.imagem),loadImg(A.familiar_img)]).then(function(r){
-      var imgs={logo:r[0],corpo:r[1],fam:o.state.fam_on?r[2]:null};
+    return Promise.all([loadImg('assets/ui/logo-etmos.svg'),loadImg(A.imagem),loadImg(A.familiar_img),loadImg(A.totem&&A.totem.img)]).then(function(r){
+      var imgs={logo:r[0],corpo:r[1],fam:o.state.fam_on?r[2]:null,totem:r[3]};
       var go=function(im){ return paraJpegs(gerarPaginas(o,im)); };
       return go(imgs).catch(function(){ return go({}); });
     }).then(buildPdf);
