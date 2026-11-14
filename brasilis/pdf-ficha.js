@@ -139,6 +139,13 @@ function gerarPaginas(o,imgs){
   y+=6; ensure(130);
   var bw3=(CW-40)/3, fmax=num(st,'feridas_max')||(4+Math.floor(c/2)), emax=num(st,'estresse_max')||(4+a);
   field('Dados de empenho',st.dados,M,y,bw3); field('Limite de ferimentos',String(fmax),M+bw3+20,y,bw3); field('Limite de estresse',String(emax),M+2*(bw3+20),y,bw3); y+=130;
+  /* fadiga: caixas para marcar à mão (vêm marcadas só se o jogador marcou no digital) */
+  ensure(190); label('Estados de fadiga');
+  var fman=(st.fadiga_est===undefined||st.fadiga_est===''||st.fadiga_est===null)?-1:parseInt(st.fadiga_est,10), fcw=CW/4, fnm=[['Normal','sem fadiga'],['Cansado','5 acima do limite'],['Exausto','6 a 8 acima'],['Esgotado','9 ou mais acima']];
+  box(M,y,CW,128);
+  fnm.forEach(function(f,i){ var fx=M+i*fcw+22; ctx.save(); ctx.lineWidth=4; ctx.strokeStyle=LINE; ctx.strokeRect(fx,y+30,48,48); if(i===fman){ ctx.fillStyle=PUR; ctx.fillRect(fx+9,y+39,30,30); } ctx.restore();
+    txt(f[0],fx+62,y+60,{font:'700 32px '+SERIF,color:PUR}); txt(f[1],fx+62,y+96,{font:'400 22px '+SANS,color:ACC}); });
+  y+=150;
 
   /* proezas */
   title('Proezas');
