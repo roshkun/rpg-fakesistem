@@ -182,7 +182,7 @@
     var cur=getComputedStyle(b).transform;
     var base=b.style.transform;
     b.animate([{transform:base},{transform:base+' translate3d('+dx+'px,'+dy+'px,0) scale('+s+')'}],{duration:750,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
-    setTimeout(function(){ location.href='ficha.html?aluno='+encodeURIComponent(a.id); },820);
+    setTimeout(function(){ location.href='ficha.html?aluno='+encodeURIComponent(a.id)+'&v=3'; },820);
   }
   // volta pelo histórico: restaura a cena
   addEventListener('pageshow',function(e){
