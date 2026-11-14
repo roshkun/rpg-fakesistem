@@ -352,6 +352,8 @@ details.pick .in{ padding:4px 10px 12px; }
 <script src="data/alunos.js"></script>
 <script src="data/particulas.js"></script>
 <script src="data/modulos.js"></script>
+<script src="data/glossario.js"></script>
+<script src="pdf-ficha.js"></script>
 <script>
 (function(){
 "use strict";
@@ -540,10 +542,12 @@ all(); setLock(true);
 /* PDF = ficha original, gerada em segundo plano (mesmos dados) */
 var pb=$('#pdf');
 pb.onclick=function(){
-  pb.disabled=true; var old=pb.textContent; pb.textContent='Gerando…';
-  var fr=document.createElement('iframe'); fr.style.cssText='position:fixed;left:-9999px;width:800px;height:1100px;border:0'; fr.src='ficha-original.html?aluno='+id+'&auto=pdf';
-  document.body.appendChild(fr);
-  setTimeout(function(){ fr.remove(); pb.disabled=false; pb.textContent=old; },9000);
+  pb.disabled=true; var old=pb.innerHTML; pb.textContent='Gerando…';
+  var o={aluno:ALUNO,state:state,part:PART,glossario:window.GLOSSARIO||{},modulos:window.MODULOS||{}};
+  PDFFicha.gerar(o).then(function(pdf){
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([pdf],{type:'application/pdf'})); a.download=PDFFicha.nomeArquivo(o);
+    document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },4000);
+  }).catch(function(e){ alert('Não foi possível gerar o PDF.'); console.error(e); }).then(function(){ pb.disabled=false; pb.innerHTML=old; });
 };
 $('#reset').onclick=function(){ if(!confirm('Voltar aos dados originais deste aluno? As alterações serão perdidas.')) return; state={}; Object.keys(BASE).forEach(function(k){state[k]=BASE[k];}); save(); all(); };
 $('#export').onclick=function(){ var o={}; Object.keys(state).forEach(function(k){var v=state[k]; if(!empty(v)) o[k]=v;});

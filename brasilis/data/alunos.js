@@ -12,7 +12,7 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Veio do interior do estado, direto do Mundano, com postura rígida, estruturada e defensiva. Não tem nenhuma facilidade inata para o Etmos, e cada conquista na língua vem de esforço deliberado.",
+      "dos_chegada": "Veio do interior do estado, direto do Mundano, com postura rígida, estruturada e defensiva. Não tem nenhuma facilidade inata para o Fantástico, e cada conquista na língua vem de esforço deliberado.",
       "dos_postura": "Estuda as frases mágicas como quem treina artes marciais: repete até a exaustão, até a fonética sair perfeita. A atitude é de controle e hipervigilância, com tendência a ditar as ações do pelotão durante as simulações práticas.",
       "dos_atencao": "Usa a água de canos quebrados e poças para erguer barreiras protetoras ao redor dos colegas mais imprudentes. Exige supervisão constante para que a rigidez moral não gere conflitos internos na turma.",
       "val_l1": "Proteção",
@@ -174,7 +174,7 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Produto do ensino formal da capital paulista, tropeçou numa seção esquecida da biblioteca e deu de cara com o Etmos. A reação divide-se, em partes iguais, entre fascínio e terror.",
+      "dos_chegada": "Produto do ensino formal da capital paulista, tropeçou numa seção esquecida da biblioteca e deu de cara com o Fantástico. A reação divide-se, em partes iguais, entre fascínio e terror.",
       "dos_postura": "Decorou o Léxico em três dias, tratando as partículas como linhas de código. O intelectualismo rende arrogância nas discussões de classe, com ares de quem já leu tudo sobre o assunto e discorda do resto.",
       "dos_atencao": "Trava por completo na hora de dizer as partículas em voz alta para o efeito se manifestar. Ao encontrar um filhote de curupira nos jardins, passou vinte minutos se escondendo atrás de um orelhão. Falta prática de campo e a tolerância ao estresse físico é baixa: a teoria sobra, a coragem sob pressão real ainda precisa ser construída.",
       "val_l1": "Teoria",
@@ -230,7 +230,7 @@ window.ALUNOS = [
     },
     "ficha": {
       "dos_chegada": "Carrega ancestralidade do Fantástico, da linhagem do Boto, e chegou à Brasilis com intimidade natural com o Outro Lado, que sempre pareceu mais real que as salas do Mundano. Articulou a partícula Vis (Luz) sem esforço, antes mesmo de abrir qualquer apostila.",
-      "dos_postura": "Não entende a gramática formal do Etmos, mas sente o ritmo das palavras como quem entoa uma cantiga de roda. A cabeça vive no Outro Lado: dispersão, risadas de piadas internas e peças pregadas nos inspetores com partículas efêmeras de luz. É o arquétipo do caos encantador do Fantástico.",
+      "dos_postura": "Não entende a gramática formal do Fantástico, mas sente o ritmo das palavras como quem entoa uma cantiga de roda. A cabeça vive no Outro Lado: dispersão, risadas de piadas internas e peças pregadas nos inspetores com partículas efêmeras de luz. É o arquétipo do caos encantador do Fantástico.",
       "dos_atencao": "Tem aversão à rigidez das salas de aula do Mundano e enorme dificuldade para sustentar o foco nas lições teóricas. A coordenação observa talento natural fora do comum, acompanhado do risco de se perder no próprio encanto. Precisa de âncoras no mundo Mundano para não se dispersar no meio da aula, ou no meio de uma conjuração.",
       "val_l1": "Fantástico",
       "val_r1": "Mundano",
@@ -283,7 +283,7 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Chegou da periferia de São Paulo por puro acaso: cruzou um Portal do Meio no terminal de ônibus sem fazer ideia do que era. Entrou no campus sem nenhuma bagagem teórica, sem nunca ter ouvido falar dos Oradores, do Outro Lado ou do Etmos. Para quem vem do Mundano, a escola inteira soa como um desafio novo a ser vencido, e é nesse ponto que o interesse se acende.",
+      "dos_chegada": "Chegou da periferia de São Paulo por puro acaso: cruzou um Portal do Meio no terminal de ônibus sem fazer ideia do que era. Entrou no campus sem nenhuma bagagem teórica, sem nunca ter ouvido falar dos Oradores, do Outro Lado ou do Fantástico. Para quem vem do Mundano, a escola inteira soa como um desafio novo a ser vencido, e é nesse ponto que o interesse se acende.",
       "dos_postura": "A atitude é de pragmatismo físico: age primeiro e pensa depois. Enxerga a magia como prova de resistência e de habilidade, não como ciência das palavras, e as aulas de Semântica rendem tédio visível. A competitividade é extrema: tudo vira disputa, da corrida no pátio a quem pronuncia a partícula com mais força.",
       "dos_atencao": "Na primeira tentativa de conjurar, Etivi (Controlar + Corpo) para saltar um muro alto na aula de educação física, o peso do próprio corpo saiu de controle e a queda terminou de cara no mato. A coordenação registra impulsividade alta, paciência quase nula com teoria e grande potencial físico. Vale acompanhar de perto as travessias de Portais, que costumam acontecer sem planejamento.",
       "val_l1": "Impulso",
