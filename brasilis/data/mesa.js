@@ -15,6 +15,10 @@ window.MESA={
   "crv": "P-256"
  },
  "imagens": [
+ {"c":"npcs","t":"Caipora","s":"assets/npcs/caipora.webp"},
+ {"c":"npcs","t":"Perna Cabeluda","s":"assets/npcs/perna-cabeluda.webp"},
+ {"c":"npcs","t":"Professor Jonas \"Fagulha\"","s":"assets/npcs/professor-jonas-fagulha.webp"},
+ {"c":"npcs","t":"Orador Buscador","s":"assets/npcs/orador-buscador.webp"},
   {
    "c": "cenario",
    "t": "Escola Brasilis",
@@ -81,7 +85,7 @@ window.MESA={
    "s": "assets/mascotes/corisco.webp"
   }
  ],
- "titulos": {"escola-brasilis": "Escola Brasilis", "a-vanguarda": "A Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "O Rebelde", "brasinha": "Brasinha", "o-curandeiro": "O Curandeiro", "cantiga": "Cantiga", "o-academico": "O Acadêmico", "verbete": "Verbete", "o-ilusionista": "O Ilusionista", "miragem": "Miragem", "o-atleta": "O Atleta", "corisco": "Corisco"},
+ "titulos": {"caipora":"Caipora","perna-cabeluda":"Perna Cabeluda","professor-jonas-fagulha":"Professor Jonas \"Fagulha\"","orador-buscador":"Orador Buscador","escola-brasilis": "Escola Brasilis", "a-vanguarda": "A Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "O Rebelde", "brasinha": "Brasinha", "o-curandeiro": "O Curandeiro", "cantiga": "Cantiga", "o-academico": "O Acadêmico", "verbete": "Verbete", "o-ilusionista": "O Ilusionista", "miragem": "Miragem", "o-atleta": "O Atleta", "corisco": "Corisco"},
  "categorias": [["personagens","Personagens"],["mascotes","Mascotes"],["npcs","NPCs"],["cenario","Cenário"]],
  "repo": {"nome":"roshkun/rpg-fakesistem","ramo":"main","pasta":"brasilis/assets"}
 };
