@@ -11,4 +11,4 @@ fun_0…fun_16, obj_0…obj_18, car_0…car_18, car2_0…car2_14 (true = marcada
 O botão "Exportar dados" na ficha gera um JSON nesse formato.
 
 ## Publicar (GitHub Pages)
-Publicado junto com o resto do repositório: `<url-do-pages>/brasilis/`.
+Settings → Pages → Deploy from a branch → `main` / root.

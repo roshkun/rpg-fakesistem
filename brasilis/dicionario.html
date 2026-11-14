@@ -59,6 +59,13 @@
   .sheet .sub{ text-align:center; font:600 13px system-ui,sans-serif; opacity:.75; }
   .sheet .cod{ text-align:center; font:700 22px Georgia,serif; letter-spacing:.2em; color:var(--acc); margin:6px 0 10px; }
   .sheet .mine{ text-align:center; font:600 13px system-ui,sans-serif; color:#fff; background:var(--ink); border-radius:99px; padding:7px 12px; width:max-content; margin:0 auto 10px; }
+  .sheet .desc{ font:15px/1.5 Georgia,serif; margin:0 0 10px; text-align:center; }
+  .sheet .ex{ background:rgba(62,28,67,.09); border-radius:10px; padding:9px 12px; margin:0 0 12px; font:13.5px/1.45 system-ui,sans-serif; }
+  .sheet .ex b{ font-family:Georgia,serif; color:var(--acc); }
+  .sheet{ max-height:92vh; overflow-y:auto; }
+  details.gl{ margin:0 12px 12px; border:1px solid #4a2e55; border-radius:12px; background:#26172f; color:#d9cbe6; font:14px/1.5 system-ui,sans-serif; }
+  details.gl summary{ cursor:pointer; padding:12px 14px; font-weight:700; color:#fff; }
+  details.gl .in{ padding:0 14px 12px; } details.gl dt{ font-weight:700; color:#fff; margin-top:8px; } details.gl dd{ margin:0; }
   .btns{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
   .btns button{ font:600 14px system-ui,sans-serif; border-radius:10px; padding:11px 14px; border:1px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer; }
   .btns button.pri{ background:var(--ink); color:#fff; }
@@ -81,6 +88,7 @@
   <div class="chips" id="chips"></div>
 </header>
 
+<details class="gl"><summary>Glossário e como usar este dicionário</summary><div class="in" id="gl"></div></details>
 <div class="howto"><b>Como ler:</b> uma magia combina <b>Função</b> (o que faz) + <b>Objeto</b> (em quê) + <b>Característica</b> (como) + <b>Complementos</b>. Toque em uma partícula para ver o glifo grande.</div>
 <div class="info"><span id="count"></span><span id="mineinfo"></span></div>
 <main class="grid" id="grid" aria-live="polite"></main>
@@ -90,6 +98,7 @@
 
 <script src="data/alunos.js"></script>
 <script src="data/particulas.js"></script>
+<script src="data/glossario.js"></script>
 <script>
 (function(){
   "use strict";
@@ -155,12 +164,14 @@
 
   /* detalhe */
   var dlg=document.getElementById('dlg'), sheet=document.getElementById('sheet'), cur=0;
+  function descHtml(p){ var g=(window.GLOSSARIO||{}).d||{}, x=g[p.codigo]; if(!x) return ''; var h='<p class="desc">'+esc(x[0])+'</p>'; if(x[1]) h+='<div class="ex"><b>'+esc(x[1][0])+'</b> — '+esc(x[1][1])+' <i>('+esc(x[1][2])+')</i></div>'; return h; }
+  (function(){ var G=window.GLOSSARIO; if(!G) return; var h='<p>'+esc(G.como)+'</p><dl>'; G.termos.forEach(function(t){ h+='<dt>'+esc(t[0])+'</dt><dd>'+esc(t[1])+'</dd>'; }); document.getElementById('gl').innerHTML=h+'</dl>'; })();
   function openDetail(i){
     cur=i; var p=shown[i];
     var sub=p.cat.replace(/s$/,'')+(p.nivel?' · '+p.nivel+'º nível':'');
     sheet.innerHTML='<button class="nav l" aria-label="Anterior">‹</button><button class="nav r" aria-label="Próxima">›</button>'
       +svg(p.d,'big')+'<h2>'+esc(p.nome)+'</h2><div class="sub">'+esc(sub)+'</div><div class="cod">'+esc(p.codigo)+'</div>'
-      +(p.mine?'<div class="mine">✓ No seu grimório</div>':'')
+      +(p.mine?'<div class="mine">✓ No seu grimório</div>':'')+descHtml(p)
       +'<div class="btns"><button id="cpy">Copiar código</button><button id="dl">Baixar SVG</button><button class="pri" id="cls">Fechar</button></div>';
     if(!dlg.open) dlg.showModal();
     sheet.querySelector('.l').onclick=function(e){ e.stopPropagation(); openDetail((cur-1+shown.length)%shown.length); };
