@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex,nofollow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://docs.google.com https://*.googleusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
     <title>SoftMed Solutions - Sistema Integrado</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -414,6 +417,68 @@
             funeraria: { doctors: 991544728, patients: 694307237 }
         };
         
+
+        // ==================== SEGURANÇA ====================
+        // Os dados vêm de uma planilha editável: tudo é tratado como texto, não como HTML.
+        // Só <br>, <b>, <i>, <strong> e <em> são mantidos para formatação simples.
+        function safe(v) {
+            if (v === null || v === undefined) return '';
+            let x = String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            return x.replace(/&lt;(\/?)(b|i|strong|em)&gt;/gi, '<$1$2>').replace(/&lt;br\s*\/?&gt;/gi, '<br>');
+        }
+        function safeUrl(u) {
+            u = String(u || '').trim();
+            if (!u) return '';
+            if (/^https:\/\//i.test(u) || /^data:image\/(png|jpe?g|gif|webp|svg\+xml);/i.test(u)) return u.replace(/["'<>\s]/g, encodeURIComponent);
+            if (/^(img\/|\.\/img\/)[^:]*$/i.test(u)) { try { return encodeURI(decodeURI(u)).replace(/["'<>]/g, ''); } catch (e) { return ''; } }
+            return '';
+        }
+        function plain(v) { return String(v || '').replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&'); }
+        function safeColor(c) { return /^#[0-9a-f]{3,8}$/i.test(String(c || '').trim()) ? String(c).trim() : '#6c757d'; }
+        function safeInitials(i) { return String(i || '??').replace(/[^A-Za-zÀ-ÿ0-9]/g, '').slice(0, 3) || '??'; }
+        const PAT_TEXT = ['name','gender','bloodType','room','diagnosis','medicalHistory','patientHistory','medications','allergies','medicalNotes','lastUpdate','admissionDate','deathDate','phone','address','familyPhone','familyAddress','protocol','age'];
+        function sanitizePatient(p) {
+            const o = Object.assign({}, p);
+            PAT_TEXT.forEach(k => { if (o[k] !== undefined) o[k] = (k === 'medicalNotes' && String(o[k]).startsWith('enc:')) ? String(o[k]) : safe(o[k]); });
+            const n = Number(o.id); o.id = Number.isFinite(n) ? n : o.id;
+            o.photoUrl = safeUrl(o.photoUrl); o.color = safeColor(o.color); o.initials = safeInitials(o.initials);
+            return o;
+        }
+        function sanitizeDoctor(d) {
+            const o = Object.assign({}, d);
+            ['name','crm','lastPasswordChange'].forEach(k => { o[k] = safe(o[k]); });
+            if (o.certificate) Object.keys(o.certificate).forEach(k => { o.certificate[k] = safe(o.certificate[k]); });
+            return o;
+        }
+        // Códigos podem ficar na planilha como "sha256:<hex>" (hash de "<id do médico>:<código>") em vez de texto puro,
+        // e as observações como "enc:<base64>" (AES-GCM, chave = código). Texto puro continua funcionando.
+        const _hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+        async function codeMatches(entered, stored, doctorId) {
+            if (!stored) return false;
+            if (String(stored).startsWith('sha256:')) {
+                if (!(window.crypto && crypto.subtle)) return false;
+                const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(doctorId + ':' + entered));
+                return 'sha256:' + _hex(h) === String(stored).toLowerCase();
+            }
+            return entered === stored;
+        }
+        async function decryptNotes(blob, code, patientId) {
+            try {
+                const raw = Uint8Array.from(atob(blob.slice(4)), c => c.charCodeAt(0));
+                const salt = new TextEncoder().encode('softmed:' + patientId);
+                const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(code), 'PBKDF2', false, ['deriveKey']);
+                const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 120000, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+                const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: raw.slice(0, 12) }, key, raw.slice(12));
+                return safe(new TextDecoder().decode(pt));
+            } catch (e) { return '[conteúdo cifrado: não foi possível abrir]'; }
+        }
+        async function unlockEncrypted(code) {
+            for (const p of patients) {
+                if (String(p.medicalNotes || '').startsWith('enc:')) p.medicalNotes = await decryptNotes(p.medicalNotes, code, p.id);
+            }
+        }
+        function lockedNote(p) { return String(p.medicalNotes || '').startsWith('enc:') ? '[conteúdo cifrado: só abre com o código correto]' : p.medicalNotes; }
+
         // Função para parsear CSV
         function parseCSV(csvText) {
             if (!csvText || csvText.trim() === '') return [];
@@ -494,15 +559,28 @@
                     };
                 });
                 
-                doctorsDB = doctors;
-                patients = patientsArray;
+                doctorsDB = {}; Object.keys(doctors).forEach(k => { doctorsDB[k] = sanitizeDoctor(doctors[k]); });
+                patients = patientsArray.map(sanitizePatient);
                 console.log(`✅ Dados carregados: ${Object.keys(doctorsDB).length} médicos, ${patients.length} pacientes`);
                 return true;
                 
             } catch (error) {
                 console.error('❌ Erro ao carregar Google Sheets:', error);
-                return false;
+                return await loadLocal();
             }
+        }
+        
+        // Plano B: se a planilha não responder, usa os dados salvos em dados/*.json
+        async function loadLocal() {
+            try {
+                const r = await fetch(`./dados/dados-${mode}.json`, { cache: 'no-store' });
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                const j = await r.json();
+                doctorsDB = {}; Object.keys(j.doctors || {}).forEach(k => { doctorsDB[k] = sanitizeDoctor(j.doctors[k]); });
+                patients = (j.patients || []).map(sanitizePatient);
+                console.warn('⚠️ Usando dados locais (planilha indisponível)');
+                return Object.keys(doctorsDB).length > 0;
+            } catch (e) { console.error('❌ Dados locais indisponíveis:', e); return false; }
         }
         
         function updateDoctorSelect() {
@@ -513,7 +591,7 @@
                 const option = document.createElement('option');
                 option.value = id;
                 const statusIcon = doc.certificate?.status === 'Expirado' ? '⚠️' : '✅';
-                option.textContent = `${doc.name} - ${doc.crm} ${statusIcon}`;
+                option.textContent = `${plain(doc.name)} - ${plain(doc.crm)} ${statusIcon}`;
                 select.appendChild(option);
             }
         }
@@ -553,7 +631,7 @@
         function getFilteredPatients() {
             if (!patients.length) return [];
             if (!searchTerm) return patients;
-            return patients.filter(p => p.name?.toLowerCase().includes(searchTerm.toLowerCase()) || p.room?.toLowerCase().includes(searchTerm.toLowerCase()));
+            return patients.filter(p => plain(p.name).toLowerCase().includes(searchTerm.toLowerCase()) || plain(p.room).toLowerCase().includes(searchTerm.toLowerCase()));
         }
         
         function renderPatientsList() {
@@ -648,7 +726,7 @@
                     ${contactHtml}
                     ${protocolHtml}
                     <div class="protected-notes"><div class="protected-title">${t.medicalNotesTitle}</div>
-                    ${observationsUnlocked ? `<div class="section-content" style="white-space: pre-line;">${patient.medicalNotes}</div>` : `<div class="password-prompt"><p>${t.unlockMessage}</p><button class="btn-unlock" onclick="showCodeModal()">🔓 Autorizar Acesso</button></div>`}
+                    ${observationsUnlocked ? `<div class="section-content" style="white-space: pre-line;">${lockedNote(patient)}</div>` : `<div class="password-prompt"><p>${t.unlockMessage}</p><button class="btn-unlock" onclick="showCodeModal()">🔓 Autorizar Acesso</button></div>`}
                     </div>
                     <div class="action-buttons"><button class="btn btn-primary" onclick="showFullRecord(${patient.id})">${t.fullRecordLabel}</button><button class="btn btn-secondary" onclick="showExams(${patient.id})">${t.examsLabel}</button></div>
                 </div>
@@ -687,7 +765,7 @@
                     ${protocolInfo}
                     <p><strong>💊 ${mode === 'hospitalar' ? 'Medicações' : 'Medicações Prévias'}:</strong> ${p.medications}</p>
                     <p><strong>⚠️ Alergias:</strong> ${p.allergies}</p>
-                    ${observationsUnlocked ? `<p><strong>${mode === 'hospitalar' ? '🔒 Observações' : '🔒 Laudo'}:</strong><br><pre style="white-space: pre-line; font-family: inherit;">${p.medicalNotes}</pre></p>` : '<p><em>🔒 Informações protegidas. Autorize acesso.</em></p>'}
+                    ${observationsUnlocked ? `<p><strong>${mode === 'hospitalar' ? '🔒 Observações' : '🔒 Laudo'}:</strong><br><pre style="white-space: pre-line; font-family: inherit;">${lockedNote(p)}</pre></p>` : '<p><em>🔒 Informações protegidas. Autorize acesso.</em></p>'}
                     <p><strong>📅 Última Atualização:</strong> ${p.lastUpdate}</p>
                 </div>
             `;
@@ -715,7 +793,7 @@
             document.getElementById('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
             
             // Pré-preenche com a senha salva
-            if (currentDoctor?.savedPassword && failedAttempts === 0) {
+            if (currentDoctor?.savedPassword && !String(currentDoctor.savedPassword).startsWith('sha256:') && failedAttempts === 0) {
                 document.getElementById('accessCode').value = currentDoctor.savedPassword;
                 setTimeout(() => {
                     const input = document.getElementById('accessCode');
@@ -727,7 +805,7 @@
             document.getElementById('codeModal').style.display = 'flex';
         }
         
-        function verifyCode() {
+        async function verifyCode() {
             // Se o sistema foi "hackeado", libera direto
             if (systemHacked) { 
                 observationsUnlocked = true; 
@@ -737,19 +815,21 @@
             }
             
             const enteredCode = document.getElementById('accessCode').value;
-            const realCode = currentDoctorCode;
-            const savedCode = currentDoctor?.savedPassword;
+            const docId = currentDoctor?.id;
+            const ok = await codeMatches(enteredCode, currentDoctorCode, docId);
             
-            if (enteredCode === realCode) {
+            if (ok) {
                 observationsUnlocked = true;
                 failedAttempts = 0;
+                await unlockEncrypted(enteredCode);
                 closeCodeModal();
                 renderPatientContent();
             } else {
                 failedAttempts++;
                 const errorDiv = document.getElementById('codeError');
+                const usedSaved = enteredCode && await codeMatches(enteredCode, currentDoctor?.savedPassword, docId);
                 
-                if (enteredCode === savedCode && savedCode !== realCode) {
+                if (usedSaved) {
                     errorDiv.innerHTML = `❌ Senha incorreta. Você usou a senha salva no navegador, mas a senha atual é diferente.<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
                 } else {
                     errorDiv.innerHTML = `❌ Código incorreto. Tentativa ${failedAttempts}/3<br>🔐 Última alteração: ${currentDoctor?.lastPasswordChange || 'não informada'}`;
