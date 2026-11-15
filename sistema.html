@@ -300,6 +300,45 @@
         /* celular deitado: pouca altura, o cabeçalho do paciente rola junto */
         @media (hover: none) and (pointer: coarse) and (max-height: 500px) { .banner { position: static; } .banner .avatar { display: none; } .toasts { bottom: 66px; } }
 
+
+        /* ===== Código de acesso / bloqueio ===== */
+        .codehead { text-align: center; padding-bottom: 6px; }
+        .shield { width: 54px; height: 54px; margin: 2px auto 10px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; transition: background .3s, color .3s; }
+        .shield svg { width: 26px; height: 26px; }
+        .shield.bad { background: var(--danger-soft); color: var(--danger); animation: pulse2 1s ease-in-out infinite; }
+        @keyframes pulse2 { 50% { transform: scale(1.08); } }
+        .whoami { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 3px 10px; border-radius: 12px; background: var(--panel2); border: 1px solid var(--line); font-size: 11.5px; color: var(--muted); }
+        .codewrap { position: relative; }
+        .codewrap .code-input { padding-right: 44px; }
+        .code-input.bad { border-color: var(--danger); background: var(--danger-soft); }
+        .eye { position: absolute; right: 6px; top: 50%; transform: translateY(-38%); width: 32px; height: 32px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); display: grid; place-items: center; }
+        .eye:hover { background: var(--panel2); color: var(--text); }
+        .savedhint { display: flex; gap: 6px; align-items: center; justify-content: center; font-size: 11.5px; color: var(--muted); margin: 4px 0 2px; }
+        .dots { display: flex; gap: 8px; justify-content: center; margin: 12px 0 6px; }
+        .dots i { width: 11px; height: 11px; border-radius: 50%; background: var(--line); transition: background .25s, transform .25s; }
+        .dots i.bad { background: var(--danger); transform: scale(1.15); }
+        .modal-content.shake { animation: shake .45s; }
+        @keyframes shake { 15% { transform: translateX(-9px); } 30% { transform: translateX(8px); } 45% { transform: translateX(-6px); } 60% { transform: translateX(5px); } 75% { transform: translateX(-2px); } }
+        .modal-content.danger { border-color: var(--danger); box-shadow: 0 0 0 1px var(--danger), 0 24px 60px rgba(0,0,0,.45); }
+        .mh.danger { color: var(--danger); }
+        .warnline { color: var(--danger); font-weight: 600; }
+        .teaser { border-left: 4px solid var(--accent); }
+        .teaser-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+        .teaser-row > div:nth-child(2) { flex: 1; min-width: 200px; }
+        .teaser .big { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex: none; }
+        .teaser p { color: var(--muted); font-size: 12.5px; }
+        .audit.warn { color: var(--warn); }
+        #reloadLog { color: #7dff9d; font: 13px/1.7 'Courier New', monospace; min-width: 340px; min-height: 100px; text-shadow: 0 0 6px currentColor; white-space: pre-wrap; }
+        body.funeraria #reloadLog { color: #ffc27a; }
+        #glitchFx { position: absolute; inset: 0; z-index: 4900; pointer-events: none; display: none; background: repeating-linear-gradient(0deg, rgba(255,0,60,.14) 0 2px, transparent 2px 5px); mix-blend-mode: screen; }
+        #glitchFx.on { display: block; animation: fxflash .9s steps(1, end) 1; }
+        @keyframes fxflash { 0% { opacity: 0; } 8% { opacity: 1; } 22% { opacity: .2; } 34% { opacity: 1; } 55% { opacity: .35; } 70% { opacity: 1; } 100% { opacity: 0; } }
+        .shell.glitch { animation: glitch .9s steps(1, end) 1; }
+        @keyframes glitch { 0%, 100% { transform: none; filter: none; } 8% { transform: translate(-7px, 0) skewX(2deg); filter: hue-rotate(70deg) saturate(2.2); } 20% { transform: translate(9px, 2px); filter: contrast(1.7) invert(.08); } 32% { transform: translate(-3px, -3px) skewX(-3deg); filter: none; } 45% { transform: translate(6px, 0); filter: hue-rotate(-50deg) brightness(1.7); } 60% { transform: translate(-9px, 1px) scaleY(1.02); filter: none; } 75% { transform: translate(3px, 0); filter: contrast(2) grayscale(1); } 90% { transform: translate(0, -2px); filter: none; } }
+        .dot.bad { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
+        .sbwarn { color: #ffb4a8; }
+        @media (prefers-reduced-motion: reduce) { .shell.glitch, #glitchFx.on, .shield.bad, .modal-content.shake { animation: none !important; } }
+
         /* ===== Impressão ===== */
         @media print {
             body.printing { overflow: visible; background: #fff; }
@@ -390,25 +429,35 @@
         </main>
 
         <footer class="statusbar">
-            <span><i class="dot"></i><span id="sbConn">Conectado · SoftMed-DB01</span></span>
+            <span><i class="dot" id="sbDot"></i><span id="sbConn">Conectado · SoftMed-DB01</span></span>
             <span id="sbUser">Usuário: —</span>
             <span id="sbSession">Sessão: —</span>
+            <span id="sbAuth" class="sbwarn" style="display:none">Autenticação: indisponível</span>
             <span class="r" id="footerText">LGPD</span>
         </footer>
     </div>
 
     <!-- Modal de código -->
     <div id="codeModal" class="modal">
-        <div class="modal-content" role="dialog" aria-labelledby="codeModalTitle">
-            <div class="mh"><i data-ic="lock"></i><span id="codeModalTitle">Acesso restrito</span></div>
-            <div class="mb">
-                <p id="codeModalText">Informações protegidas.</p>
-                <input type="password" id="accessCode" class="code-input" maxlength="6" placeholder="••••••" autocomplete="off" aria-label="Código de acesso">
-                <div id="codeError" class="error-message" style="display:none" role="alert"></div>
+        <div class="modal-content" id="codeBox" style="width:min(440px,92%)" role="dialog" aria-labelledby="codeModalTitle">
+            <div class="mb codehead">
+                <div class="shield" id="codeShield"><i data-ic="lock"></i></div>
+                <div class="modal-header" id="codeModalTitle">Acesso restrito</div>
+                <p id="codeModalText" class="login-sub" style="margin-top:6px"></p>
+                <div class="whoami"><i data-ic="user"></i><span id="codeWho">—</span></div>
+            </div>
+            <div class="mb" style="padding-top:4px">
+                <div class="codewrap">
+                    <input type="password" id="accessCode" class="code-input" maxlength="6" placeholder="••••••" autocomplete="off" aria-label="Código de acesso">
+                    <button type="button" class="eye" id="codeEye" aria-label="Mostrar código"><i data-ic="eye"></i></button>
+                </div>
+                <div class="savedhint" id="savedHint" style="display:none"><i data-ic="shield"></i> Código salvo neste navegador, preenchido automaticamente</div>
+                <div class="dots" id="attemptDots" aria-hidden="true"><i></i><i></i><i></i></div>
                 <div id="attemptCounter"></div>
+                <div id="codeError" class="error-message" style="display:none" role="alert"></div>
             </div>
             <div class="mf">
-                <button class="btn-login ghost" onclick="closeCodeModal()">Cancelar</button>
+                <button class="btn-login ghost" onclick="closeCodeModal()" id="codeCancel">Cancelar</button>
                 <button class="btn-login" onclick="verifyCode()" id="verifyBtn">Autorizar</button>
             </div>
         </div>
@@ -416,8 +465,8 @@
 
     <!-- Modal de erro (que libera o acesso) -->
     <div id="errorModal" class="modal">
-        <div class="modal-content" role="alertdialog">
-            <div class="mh"><i data-ic="alert"></i><span>Falha de comunicação</span></div>
+        <div class="modal-content danger" role="alertdialog">
+            <div class="mh danger"><i data-ic="alert"></i><span>Falha de comunicação</span></div>
             <div class="mb">
                 <p>Não foi possível validar a credencial junto ao servidor de autenticação (SoftMed-AUTH02). Recarregue a página para restabelecer a sessão.</p>
                 <p style="font-size:12px;margin-top:10px;color:var(--muted)" class="mono">Código: 0x8004F2A1 — Falha de autenticação</p>
@@ -435,7 +484,8 @@
         </div>
     </div>
 
-    <div id="reloadOverlay"><div class="spinner"></div><div>Restabelecendo sessão…</div></div>
+    <div id="reloadOverlay"><div class="spinner"></div><pre id="reloadLog"></pre></div>
+    <div id="glitchFx"></div>
     <div class="toasts" id="toasts" aria-live="polite"></div>
 
 </div><!-- /content -->
@@ -766,7 +816,7 @@
     }
     function logout() {
         currentDoctor = null; observationsUnlocked = false; failedAttempts = 0; systemHacked = false; auditTime = '';
-        document.body.classList.remove('show-record');
+        document.body.classList.remove('show-record'); $('sbAuth').style.display = 'none'; $('sbDot').classList.remove('bad'); $('sbConn').textContent = 'Conectado · SoftMed-DB01';
         $('appContainer').style.display = 'none';
         $('loginModal').style.display = 'flex';
         $('certificateSelect').value = ''; renderCert();
@@ -847,10 +897,13 @@
         }
         if (currentTab === 'obs') {
             if (!observationsUnlocked) return `<div class="block protected-notes"><div class="lockbox"><div class="big">${ic('lock')}</div><h3 style="justify-content:center">${t.notesTitle}</h3><p>${t.unlockMsg}</p><button class="btn btn-primary" onclick="showCodeModal()">${ic('lock')} Autorizar acesso</button></div></div>`;
-            return `<div class="block protected-notes"><h3>${ic('unlock')} ${t.notesTitle}</h3><div class="section-content">${lockedNote(p)}</div><div class="audit">${ic('eye')} Acesso registrado em ${auditTime || nowBR()} por ${plain(currentDoctor ? currentDoctor.name : '')} (trilha de auditoria).</div></div>`;
+            return `<div class="block protected-notes"><h3>${ic('unlock')} ${t.notesTitle}</h3><div class="section-content">${lockedNote(p)}</div><div class="audit ${systemHacked ? 'warn' : ''}">${ic(systemHacked ? 'alert' : 'eye')} ${systemHacked ? 'Acesso concedido sem verificação de credencial (autenticação indisponível) em ' + (auditTime || nowBR()) + '.' : 'Acesso registrado em ' + (auditTime || nowBR()) + ' por ' + plain(currentDoctor ? currentDoctor.name : '') + ' (trilha de auditoria).'}</div></div>`;
         }
         // resumo
         const protocol = p.protocol ? `<div class="block protocol"><h3>${ic('alert')} ${t.protocol}</h3><p><b>${p.protocol}</b></p></div>` : '';
+        const teaser = observationsUnlocked
+            ? `<div class="block teaser"><div class="teaser-row"><div class="big">${ic('unlock')}</div><div><h3 style="margin-bottom:2px">${t.notesTitle}</h3><p>Acesso autorizado nesta sessão.</p></div><button class="btn" data-tab="obs">${ic('eye')} Ver ${t.notesTab.toLowerCase()}</button></div></div>`
+            : `<div class="block teaser"><div class="teaser-row"><div class="big">${ic('lock')}</div><div><h3 style="margin-bottom:2px">${t.notesTitle}</h3><p>${t.unlockMsg}</p></div><button class="btn btn-primary" onclick="showCodeModal()">${ic('lock')} Autorizar acesso</button></div></div>`;
         return `<div class="info-grid">
                 <div class="info-card"><div class="info-label">${ic('user')} Idade</div><div class="info-value">${V(p.age)} anos</div></div>
                 <div class="info-card"><div class="info-label">${ic('user')} Gênero</div><div class="info-value">${V(p.gender)}</div></div>
@@ -860,7 +913,7 @@
                 <div class="info-card"><div class="info-label">${ic('clock')} Última atualização</div><div class="info-value">${V(p.lastUpdate)}</div></div>
             </div>
             <div class="block"><h3>${ic('file')} ${t.diag}</h3><p>${V(p.diagnosis)}</p></div>
-            <div class="block"><h3>${ic('clock')} ${t.hist}</h3><p>${V(p.medicalHistory, 'Sem histórico registrado.')}</p></div>${protocol}`;
+            <div class="block"><h3>${ic('clock')} ${t.hist}</h3><p>${V(p.medicalHistory, 'Sem histórico registrado.')}</p></div>${protocol}${teaser}`;
     }
     function renderAll() { renderList(); renderRecord(); updateBell(); if (currentView !== 'prontuario') renderView(currentView); }
     function openPatient(id) {
@@ -924,55 +977,74 @@
     window.addEventListener('afterprint', () => document.body.classList.remove('printing'));
 
     // ==================== CÓDIGO COM FALHA ====================
-    function afterUnlock() { auditTime = nowBR(); currentTab = 'obs'; renderRecord(); toast('Acesso às observações registrado na trilha de auditoria', 'eye'); }
+    let verifying = false;
+    function afterUnlock() { auditTime = nowBR(); currentTab = 'obs'; renderRecord(); toast(systemHacked ? 'Acesso concedido · verificação indisponível' : 'Acesso às observações registrado na trilha de auditoria', systemHacked ? 'alert' : 'eye'); }
+    function setDots(n) { document.querySelectorAll('#attemptDots i').forEach((d, i) => d.classList.toggle('bad', i < n)); }
+    function shake() { const b = $('codeBox'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); $('accessCode').classList.add('bad'); }
     function showCodeModal() {
         if (systemHacked) { observationsUnlocked = true; afterUnlock(); return; }
         const input = $('accessCode');
-        input.value = ''; $('codeError').style.display = 'none';
-        $('attemptCounter').innerHTML = `Tentativas restantes: ${3 - failedAttempts}`;
+        input.value = ''; input.type = 'password'; input.classList.remove('bad'); $('codeError').style.display = 'none'; $('savedHint').style.display = 'none';
+        $('codeShield').classList.remove('bad'); $('codeModalTitle').textContent = t.codeTitle; $('verifyBtn').disabled = false; $('verifyBtn').textContent = t.verify; $('codeCancel').disabled = false;
+        $('codeWho').textContent = currentDoctor ? plain(currentDoctor.name) + ' · ' + plain(currentDoctor.crm) : '—';
+        setDots(failedAttempts);
+        $('attemptCounter').innerHTML = failedAttempts >= 2 ? `<span class="warnline">Última tentativa. Falhar de novo bloqueará a sessão.</span>` : `Tentativas restantes: ${3 - failedAttempts}`;
         // Pré-preenche com a senha salva no navegador (se for texto puro)
         if (currentDoctor && currentDoctor.savedPassword && !String(currentDoctor.savedPassword).startsWith('sha256:') && failedAttempts === 0) {
-            input.value = currentDoctor.savedPassword;
+            input.value = currentDoctor.savedPassword; $('savedHint').style.display = 'flex';
             setTimeout(() => { input.style.background = mode === 'hospitalar' ? '#fff3cd' : '#4a3a2a'; setTimeout(() => { input.style.background = ''; }, 1500); }, 100);
         }
         $('codeModal').style.display = 'flex'; input.focus();
     }
     async function verifyCode() {
         if (systemHacked) { observationsUnlocked = true; closeCodeModal(); afterUnlock(); return; }
+        if (verifying) return;
         const enteredCode = $('accessCode').value;
+        if (!enteredCode) { shake(); return; }
+        verifying = true; const vb = $('verifyBtn'); vb.disabled = true; vb.innerHTML = '<span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Verificando…';
         const docId = currentDoctor ? currentDoctor.id : null;
         const ok = await codeMatches(enteredCode, currentDoctorCode, docId);
+        verifying = false; vb.disabled = false; vb.textContent = t.verify;
         if (ok) {
             observationsUnlocked = true; failedAttempts = 0;
             await unlockEncrypted(enteredCode);
             closeCodeModal(); afterUnlock();
         } else {
-            failedAttempts++;
+            failedAttempts++; setDots(failedAttempts); shake();
             const errorDiv = $('codeError');
-            const usedSaved = enteredCode && await codeMatches(enteredCode, currentDoctor ? currentDoctor.savedPassword : '', docId);
+            const usedSaved = await codeMatches(enteredCode, currentDoctor ? currentDoctor.savedPassword : '', docId);
             const last = currentDoctor && currentDoctor.lastPasswordChange ? currentDoctor.lastPasswordChange : 'não informada';
             errorDiv.innerHTML = usedSaved
                 ? `Senha incorreta. Você usou a senha salva no navegador, mas a senha atual é diferente.<br>Última alteração: ${last}`
                 : `Código incorreto. Tentativa ${failedAttempts}/3<br>Última alteração: ${last}`;
-            errorDiv.style.display = 'block';
-            $('attemptCounter').innerHTML = `Tentativas restantes: ${Math.max(0, 3 - failedAttempts)}`;
-            $('accessCode').value = '';
-            if (failedAttempts >= 3) {
-                $('attemptCounter').innerHTML = 'Tentativas esgotadas. Sessão bloqueada.';
-                setTimeout(() => { $('codeModal').style.display = 'none'; $('errorModal').style.display = 'flex'; }, 1500);
-            }
+            errorDiv.style.display = 'block'; $('savedHint').style.display = 'none';
+            $('accessCode').value = ''; $('accessCode').focus();
+            if (failedAttempts >= 3) lockout();
+            else $('attemptCounter').innerHTML = failedAttempts >= 2 ? `<span class="warnline">Última tentativa. Falhar de novo bloqueará a sessão.</span>` : `Tentativas restantes: ${3 - failedAttempts}`;
         }
     }
+    // 3 erros: a sessão "cai" (efeito de falha) e aparece o erro que oferece recarregar
+    async function lockout() {
+        $('verifyBtn').disabled = true; $('codeCancel').disabled = true;
+        $('codeShield').classList.add('bad'); $('codeModalTitle').textContent = 'Sessão bloqueada';
+        $('attemptCounter').innerHTML = '<span class="spinner" style="width:14px;height:14px;border-width:2px;border-top-color:var(--danger);vertical-align:-3px"></span> Notificando o administrador…';
+        await sleep(1500);
+        $('codeModal').style.display = 'none';
+        $('appContainer').classList.add('glitch'); $('glitchFx').classList.add('on');
+        $('sbDot').classList.add('bad'); $('sbConn').textContent = 'Conexão perdida · SoftMed-AUTH02';
+        setTimeout(() => { $('appContainer').classList.remove('glitch'); $('glitchFx').classList.remove('on'); }, 950);
+        await sleep(950);
+        $('errorModal').style.display = 'flex';
+    }
     // "Recarregar" de mentira: na verdade só libera o acesso
-    function simulateReload() {
+    async function simulateReload() {
         $('errorModal').style.display = 'none';
-        $('reloadOverlay').style.display = 'flex';
-        setTimeout(() => {
-            $('reloadOverlay').style.display = 'none';
-            systemHacked = true; observationsUnlocked = true;
-            afterUnlock();
-            toast('Sessão restabelecida', 'shield');
-        }, 1400);
+        const ov = $('reloadOverlay'), log = $('reloadLog'); ov.style.display = 'flex'; log.textContent = '';
+        for (const l of ['> Reiniciando sessão ...', '> Contatando SoftMed-AUTH02 ........ FALHA', '> Módulo de autenticação indisponível', '> Carregando perfil em modo de contingência ... OK']) { log.textContent += l + '\n'; await sleep(560); }
+        await sleep(350); ov.style.display = 'none';
+        systemHacked = true; observationsUnlocked = true;
+        $('sbDot').classList.remove('bad'); $('sbConn').textContent = 'Conectado · SoftMed-DB01'; $('sbAuth').style.display = '';
+        afterUnlock();
     }
     function closeCodeModal() { $('codeModal').style.display = 'none'; }
     function closeGenericModal() { $('genericModal').style.display = 'none'; }
@@ -998,6 +1070,8 @@
         if (f.length && !f.some(p => p.id == currentPatientId)) currentPatientId = f[0].id;
         renderList(); renderRecord();
     });
+    $('codeEye').addEventListener('click', () => { const i = $('accessCode'); i.type = i.type === 'password' ? 'text' : 'password'; i.focus(); });
+    $('accessCode').addEventListener('input', () => $('accessCode').classList.remove('bad'));
     $('accessCode').addEventListener('keydown', e => { if (e.key === 'Enter') verifyCode(); });
     $('reTerm').addEventListener('click', e => { e.preventDefault(); terminalScreen('noterm'); });
     $('certificateSelect').addEventListener('change', () => { $('loginError').style.display = 'none'; renderCert(); });
