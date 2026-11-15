@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://docs.google.com https://*.googleusercontent.com https://script.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
     <title>SoftMed Solutions - Painel Administrativo</title>
     <style>
         * {
@@ -60,7 +63,9 @@
             background: white;
             font-size: 0.9rem;
             width: 400px;
+            max-width: 100%;
         }
+        @media (max-width: 600px) { .config-item { flex-direction: column; align-items: stretch; width: 100%; } .config-item select, .config-item input { width: 100% !important; } }
 
         .status {
             background: rgba(255,255,255,0.2);
@@ -328,7 +333,11 @@
             </div>
             <div class="config-item">
                 <label>🔗 API URL:</label>
-                <input type="text" id="apiUrl" value="https://script.google.com/macros/s/AKfycbwUTIt8nDgv3U8RaqSBX2ROi4DdPqpbobpmT6kqkX1K-IOHSAQsgD7P6Tq6G_FQsT_E/exec" style="width: 450px;">
+                <input type="text" id="apiUrl" value="" placeholder="Cole aqui a URL do Apps Script (fica só neste navegador)" style="width: 100%; max-width: 450px;" autocomplete="off">
+            </div>
+            <div class="config-item">
+                <label>🔑 Token:</label>
+                <input type="password" id="apiToken" value="" placeholder="Token do mestre (fica só neste navegador)" style="width: 100%; max-width: 450px;" autocomplete="off">
             </div>
             <div id="apiStatus" class="status loading">🔄 Verificando...</div>
         </div>
@@ -398,10 +407,14 @@
             funeraria: { doctors: 991544728, patients: 694307237 }
         };
 
+        // Tudo que vem da planilha é mostrado como texto (nunca como HTML)
+        function esc(v) { return String(v === null || v === undefined ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+        function numId(v) { const n = Number(v); return Number.isFinite(n) ? n : 0; }
+
         function showMessage(message, type) {
             const msgDiv = document.createElement('div');
             msgDiv.className = `message ${type}`;
-            msgDiv.innerHTML = message;
+            msgDiv.textContent = message;
             document.body.appendChild(msgDiv);
             setTimeout(() => msgDiv.remove(), 3000);
         }
@@ -414,8 +427,9 @@
                 return null;
             }
 
-            let url = `${apiUrl}?action=${action}&mode=${currentMode}&type=${type}`;
-            if (id) url += `&id=${id}`;
+            const token = document.getElementById('apiToken')?.value || '';
+            let url = `${apiUrl}?action=${encodeURIComponent(action)}&mode=${encodeURIComponent(currentMode)}&type=${encodeURIComponent(type)}` + (token ? `&token=${encodeURIComponent(token)}` : '');
+            if (id) url += `&id=${encodeURIComponent(id)}`;
             
             if (data) {
                 url += `&data=${encodeURIComponent(JSON.stringify(data))}`;
@@ -536,13 +550,13 @@
                 return;
             }
             const showHeaders = doctorsHeaders.slice(0, 7);
-            headerRow.innerHTML = `<tr>${showHeaders.map(h => `<th>${h}</th>`).join('')}<th>Ações</th></tr>`;
+            headerRow.innerHTML = `<tr>${showHeaders.map(h => `<th>${esc(h)}</th>`).join('')}<th>Ações</th></tr>`;
             bodyRow.innerHTML = doctorsData.map(d => `
                 <tr>
-                    ${showHeaders.map(h => `<td>${d[h] !== undefined ? d[h] : '-'}</td>`).join('')}
+                    ${showHeaders.map(h => `<td>${d[h] !== undefined ? esc(d[h]) : '-'}</td>`).join('')}
                     <td>
-                        <button class="edit-btn" onclick="openEditModal('doctor', ${d.id})">✏️</button>
-                        <button class="delete-btn" onclick="deleteRecord('doctor', ${d.id})">🗑️</button>
+                        <button class="edit-btn" onclick="openEditModal('doctor', ${numId(d.id)})">✏️</button>
+                        <button class="delete-btn" onclick="deleteRecord('doctor', ${numId(d.id)})">🗑️</button>
                     </td>
                 </tr>
             `).join('');
@@ -557,13 +571,13 @@
                 return;
             }
             const showHeaders = patientsHeaders.slice(0, 7);
-            headerRow.innerHTML = `<tr>${showHeaders.map(h => `<th>${h}</th>`).join('')}<th>Ações</th></tr>`;
+            headerRow.innerHTML = `<tr>${showHeaders.map(h => `<th>${esc(h)}</th>`).join('')}<th>Ações</th></tr>`;
             bodyRow.innerHTML = patientsData.map(p => `
                 <tr>
-                    ${showHeaders.map(h => `<td>${p[h] !== undefined ? p[h] : '-'}</td>`).join('')}
+                    ${showHeaders.map(h => `<td>${p[h] !== undefined ? esc(p[h]) : '-'}</td>`).join('')}
                     <td>
-                        <button class="edit-btn" onclick="openEditModal('patient', ${p.id})">✏️</button>
-                        <button class="delete-btn" onclick="deleteRecord('patient', ${p.id})">🗑️</button>
+                        <button class="edit-btn" onclick="openEditModal('patient', ${numId(p.id)})">✏️</button>
+                        <button class="delete-btn" onclick="deleteRecord('patient', ${numId(p.id)})">🗑️</button>
                     </td>
                 </tr>
             `).join('');
@@ -583,10 +597,10 @@
             document.getElementById('modalTitle').innerHTML = type === 'doctor' ? 'Adicionar Médico/Legista' : 'Adicionar Paciente/Falecido';
             document.getElementById('formFields').innerHTML = headers.map(h => `
                 <div class="form-group">
-                    <label>${h}</label>
+                    <label>${esc(h)}</label>
                     ${h === 'medicalNotes' || h === 'patientHistory' ? 
-                        `<textarea name="${h}" rows="3"></textarea>` : 
-                        `<input type="text" name="${h}">`}
+                        `<textarea name="${esc(h)}" rows="3"></textarea>` : 
+                        `<input type="text" name="${esc(h)}">`}
                 </div>
             `).join('');
             document.getElementById('editModal').style.display = 'flex';
@@ -602,10 +616,10 @@
             document.getElementById('modalTitle').innerHTML = type === 'doctor' ? 'Editar Médico/Legista' : 'Editar Paciente/Falecido';
             document.getElementById('formFields').innerHTML = headers.map(h => `
                 <div class="form-group">
-                    <label>${h}</label>
+                    <label>${esc(h)}</label>
                     ${h === 'medicalNotes' || h === 'patientHistory' ? 
-                        `<textarea name="${h}" rows="3">${record[h] || ''}</textarea>` : 
-                        `<input type="text" name="${h}" value="${record[h] || ''}">`}
+                        `<textarea name="${esc(h)}" rows="3">${esc(record[h])}</textarea>` : 
+                        `<input type="text" name="${esc(h)}" value="${esc(record[h])}">`}
                 </div>
             `).join('');
             document.getElementById('editModal').style.display = 'flex';
@@ -677,14 +691,18 @@
             });
         }
 
-        // Salvar URL da API no localStorage
+        // URL e token da API ficam só neste navegador (não ficam no código do site)
         function setupApiUrl() {
-            const apiInput = document.getElementById('apiUrl');
-            const savedUrl = localStorage.getItem('admin_api_url');
+            const apiInput = document.getElementById('apiUrl'), tokInput = document.getElementById('apiToken');
+            const savedUrl = localStorage.getItem('admin_api_url'), savedTok = sessionStorage.getItem('admin_api_token');
             if (savedUrl) apiInput.value = savedUrl;
-            
+            if (savedTok) tokInput.value = savedTok;
             apiInput.addEventListener('change', () => {
-                localStorage.setItem('admin_api_url', apiInput.value);
+                localStorage.setItem('admin_api_url', apiInput.value.trim());
+                refreshData();
+            });
+            tokInput.addEventListener('change', () => {
+                sessionStorage.setItem('admin_api_token', tokInput.value);
                 refreshData();
             });
         }
