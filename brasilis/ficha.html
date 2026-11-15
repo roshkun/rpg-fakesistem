@@ -397,7 +397,7 @@ details.pick .in{ padding:4px 10px 12px; }
 <script src="data/particulas.js?v=4"></script>
 <script src="data/modulos.js?v=4"></script>
 <script src="data/glossario.js?v=4"></script>
-<script src="data/magias.js?v=3"></script>
+<script src="data/magias.js?v=4"></script>
 <script src="pdf-ficha.js?v=14"></script>
 <script src="data/mesa.js?v=8"></script>
 <script src="mesa-cliente.js?v=5"></script>
@@ -515,7 +515,8 @@ function exemplos(){
   var box=$('#exmag'); if(!box) return; var L=(window.MAGIAS||{})[ALUNO.id]||[], by={}; PART.forEach(function(p){ by[p.codigo]=p; });
   var ORD=['Trivial','Regular','Difícil','Complexa','Milagre'], EST=[0,1,2,4,7], mente=num('mente'), max=mente>=6?4:mente>=4?3:mente>=2?2:1;
   function cap(c){ c=String(c).toLowerCase(); return c.charAt(0).toUpperCase()+c.slice(1); }
-  $('#mghelp').textContent='Seis magias dentro dos seus limites: só partículas do seu grimório e Complexidade até '+ORD[max]+' (Mente '+mente+'). Os exemplos partem do livro; a Complexidade é um parâmetro e o narrador pode ajustá-la. Estresse por Complexidade: Trivial 0, Regular 1, Difícil 2, Complexa 4.';
+  var tot=ALUNO.totem; var regra=tot?' Seu Totem: '+tot.nome+' (Rank '+tot.rank+'). No Mundano, cada magia que não seja Trivial soma o Rank do Totem ao Estresse.':' Você não tem Totem: no Mundano só se conjura dentro de um Santuário; fora dele, só no Fantástico.';
+  $('#mghelp').textContent='Seis magias dentro dos seus limites: só partículas do seu grimório e Complexidade até '+ORD[max]+' (Mente '+mente+'). Os exemplos partem do livro; a Complexidade é um parâmetro e o narrador pode ajustá-la. Estresse por Complexidade: Trivial 0, Regular 1, Difícil 2, Complexa 4.'+regra+' Sem Totem ou Santuário não há magia no Mundano.';
   box.innerHTML=L.map(function(m){
     var w=[cap(m.f)+String(m.o).toLowerCase()].concat(m.c.map(cap),m.m.map(cap)).join(' ');
     var tr=[m.f,m.o].concat(m.c,m.m).map(function(c){ return by[c]?by[c].nome.replace('Forma: ','Forma '):c; }).join(' · ');
