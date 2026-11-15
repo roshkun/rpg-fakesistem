@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Ferramenta do mestre · Proteger códigos e observações</title>
+<style>
+ body{font:15px/1.5 system-ui,sans-serif;background:#10161f;color:#e7ecf3;margin:0;padding:18px}
+ main{max-width:720px;margin:0 auto} h1{font-size:20px} h2{font-size:16px;margin-top:26px}
+ label{display:block;margin:10px 0 4px;font-size:13px;color:#aab6c6}
+ input,textarea{width:100%;box-sizing:border-box;padding:10px;border-radius:8px;border:1px solid #33445c;background:#18212e;color:#fff;font:inherit}
+ textarea{min-height:110px} button{margin-top:10px;padding:10px 16px;border:0;border-radius:8px;background:#3b82f6;color:#fff;font:600 14px system-ui;cursor:pointer}
+ .out{margin-top:10px;word-break:break-all;background:#0b1118;border:1px dashed #33445c;border-radius:8px;padding:10px;font:12px/1.4 ui-monospace,monospace;min-height:20px}
+ .note{font-size:13px;color:#aab6c6} code{background:#18212e;padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body><main>
+<h1>🔐 Proteger códigos e observações</h1>
+<p class="note">Tudo acontece neste aparelho: nada é enviado a lugar nenhum. Cole o resultado na planilha, no lugar do texto puro. Quem ler a planilha (ela é pública) não vê mais o código nem a observação. Texto puro continua funcionando, então dá para proteger só o que importa.</p>
+
+<h2>1. Código do médico (hash)</h2>
+<p class="note">Vale para as colunas <code>observationCode</code> e <code>savedPassword</code>. Com hash, a senha salva não é mais pré-preenchida na tela.</p>
+<label>ID do médico (coluna <code>id</code>)</label><input id="hid" inputmode="numeric">
+<label>Código</label><input id="hcode">
+<button id="bh">Gerar hash</button><div class="out" id="oh"></div>
+
+<h2>2. Observação do paciente (cifrada)</h2>
+<p class="note">Vale para a coluna <code>medicalNotes</code>. O código usado aqui precisa ser o mesmo código do médico que deve conseguir abrir.</p>
+<label>ID do paciente (coluna <code>id</code>)</label><input id="eid" inputmode="numeric">
+<label>Código do médico</label><input id="ecode">
+<label>Texto da observação</label><textarea id="etxt"></textarea>
+<button id="be">Cifrar</button><div class="out" id="oe"></div>
+<p class="note">Atenção: no “modo hackeado” (o erro das 3 tentativas), observações cifradas <b>não</b> são reveladas. Só as de texto puro. Deixe em texto puro o que o erro deve liberar.</p>
+</main>
+<script>
+const enc=new TextEncoder(), hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+document.getElementById('bh').onclick=async()=>{
+  const id=document.getElementById('hid').value.trim(), c=document.getElementById('hcode').value;
+  if(!id||!c){document.getElementById('oh').textContent='Preencha o ID e o código.';return;}
+  document.getElementById('oh').textContent='sha256:'+hex(await crypto.subtle.digest('SHA-256',enc.encode(id+':'+c)));
+};
+document.getElementById('be').onclick=async()=>{
+  const id=document.getElementById('eid').value.trim(), c=document.getElementById('ecode').value, t=document.getElementById('etxt').value;
+  if(!id||!c||!t){document.getElementById('oe').textContent='Preencha o ID, o código e o texto.';return;}
+  const km=await crypto.subtle.importKey('raw',enc.encode(c),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:enc.encode('softmed:'+id),iterations:120000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt']);
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(t)));
+  const all=new Uint8Array(12+ct.length); all.set(iv); all.set(ct,12);
+  let bin=''; all.forEach(b=>bin+=String.fromCharCode(b));
+  document.getElementById('oe').textContent='enc:'+btoa(bin);
+};
+</script>
+</body></html>
