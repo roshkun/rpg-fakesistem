@@ -22,43 +22,43 @@ window.MODULOS = {
   "rudimentos": [
    [
     "Expressão",
-    "Comunicar intenções e emoções (convencer, distrair, provocar)."
+    "Capacidade de comunicar intenções, emoções e ideias de forma eficaz, seja por palavras, postura, tom, gesto ou presença. Expressão é interação direta: convencer, distrair, acalmar, inspirar, provocar ou desestabilizar alguém por meio do impacto social imediato."
    ],
    [
     "Furtividade",
-    "Agir sem ser percebido, minimizar presença física."
+    "Agir sem ser percebido, discrição: controlar ruído corporal, minimizar presença, mover-se suavemente, manipular objetos silenciosamente e usar o corpo para passar despercebido. É físico, não social — diz respeito ao modo como o corpo ocupa o espaço."
    ],
    [
     "Improviso",
-    "Usar o ambiente e objetos de maneira criativa e inesperada."
+    "Usar ambiente, objetos e circunstâncias de maneira inesperada ou criativa. Transforma qualquer elemento presente — uma cadeira, uma cortina, um desnível, um barril — em parte da ação. Representa adaptação instantânea e inventividade corporal."
    ],
    [
     "Instinto",
-    "Leitura sensorial rápida, perceber perigos e armadilhas."
+    "Leitura corporal e sensorial do ambiente. Detectar movimentos, reagir a perigo iminente, perceber vibrações, notar armadilhas físicas, ajustar postura automaticamente. É a percepção tátil, espacial e reflexiva, seja consciente ou não."
    ],
    [
     "Mobilidade",
-    "Deslocamento corporal amplo (correr, saltar, esquivar)."
+    "Deslocamento corporal amplo: correr, saltar, escalar, esquivar, rolar, alcançar lugares difíceis, atravessar ambientes apertados. Representa controle sobre a trajetória e o movimento do corpo no espaço."
    ],
    [
     "Potência",
-    "Força bruta direta (empurrar, levantar, golpear com impacto)."
+    "Capacidade de aplicar força bruta ao mundo. Usado para empurrar, puxar, arrombar, levantar, romper, sustentar peso ou golpear com impacto. Potência trata de energia direta, de transformar esforço em ação física imediata."
    ],
    [
     "Precisão",
-    "Controle motor fino e exato (mirar, manipular mecanismos)."
+    "Controle motor fino e direção exata. Usado para manipular mecanismos, encaixar, destravar, ajustar, acertar pontos específicos ou operar objetos delicados. Representa ações que exigem cuidado e coordenação detalhada."
    ],
    [
     "Raciocínio",
-    "Clareza mental, dedução e lógica analítica."
+    "Clareza mental, organização de ideias e compreensão estrutural. Raciocínio representa a capacidade de analisar, deduzir, interpretar pistas, conectar informações e compreender implicações sem depender de conhecimento formal. É a lógica interna do pensamento, o entendimento de como algo funciona e a habilidade de resolver problemas abstratos."
    ],
    [
     "Técnica",
-    "Conhecimento aprendido e mecânico (alavancas, golpes marciais)."
+    "Aplicação de conhecimento aprendido. Inclui alavancas, posturas, manuseio de ferramentas, golpes marciais, manipulação eficiente do próprio peso e uso avançado de instrumentos físicos. Técnica é a lógica mecânica, não força bruta."
    ],
    [
     "Vigor",
-    "Suportar esforço, dor, cansaço e condições adversas."
+    "Capacidade de suportar esforço prolongado, dor, calor, impacto, peso, cansaço ou condições adversas. Representa tolerância física e manutenção de desempenho sob pressão."
    ]
   ],
   "complexidade": "Assim como as magias, Proezas têm Complexidade (que determina o ganho de Estresse e limites de Fadiga). A Complexidade é delimitada pelo atributo Mente (0/1: Regular; 2/3: Difícil; 4/5: Complexa; 6: Milagre).",
