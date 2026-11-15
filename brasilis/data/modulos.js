@@ -99,308 +99,308 @@ window.MODULOS = {
   {
    "nome": "Encantamento do Copião",
    "pp": 5,
-   "efeito": "Copia movimentos de escrita de outro instrumento observado em tempo real (apenas o gesto, não o significado).",
-   "veiculos": "Canetas, penas, lápis, pincéis."
+   "efeito": "Este encantamento permite ao objeto reproduzir com precisão os movimentos realizados por outra ferramenta de escrita que esteja ao alcance da visão do portador.\nSempre que o portador observar uma caneta, lápis ou qualquer instrumento de escrita realizando traços cursivos, o objeto encantado repete os mesmos movimentos, copiando o gesto com fidelidade. A cópia ocorre em tempo real, desde que o usuário mantenha o instrumento original sob observação contínua. O encantamento imita apenas o movimento da escrita, não interpretando palavras ou significados — reproduz unicamente os gestos.",
+   "veiculos": "Canetas, penas, lápis, pincéis, bisturis finos, ponteiros de caligrafia."
   },
   {
    "nome": "Audição Amplificada",
    "pp": 5,
-   "efeito": "Custa 1 Estresse. Ouve qualquer som até 100m com clareza por 1 hora.",
-   "veiculos": "Fones, brincos, tiaras, auriculares."
+   "efeito": "Este encantamento permite ao portador perceber sons distantes com clareza excepcional, como se seus ouvidos fossem afinados para captar murmúrios e vibrações sutis.\nAo acumular 1 Ponto de Estresse, o portador pode ouvir qualquer som a até 100 metros de distância, distinguindo detalhes como conversas, passos, sussurros e ruídos leves. O efeito permanece ativo por 1 hora.",
+   "veiculos": "Fones de ouvido, brincos, tiaras, amuletos, colares, clipes auriculares, capacetes leves."
   },
   {
    "nome": "Chama Aderente",
    "pp": 10,
-   "efeito": "Custa 1 Estresse. A arma entra em ignição por 1h sem ferir o usuário. Aumenta Ferimentos causados em +1.",
-   "veiculos": "Espadas, adagas, machados, correntes."
+   "efeito": "Este encantamento envolve a arma em fogo controlado, permitindo ao portador manejar chamas intensas sem sofrer dano.\nAo acumular 1 Ponto de Estresse e acionar o encantamento, a arma entra em ignição, produzindo uma chama forte que não afeta o portador nem o objeto encantado. Enquanto estiver em chamas, qualquer Ferimento causado pela arma é aumentado em 1 devido ao calor extremo.\nO efeito dura por 1 hora, podendo ser encerrado voluntariamente pelo portador a qualquer momento como uma ação livre.",
+   "veiculos": "Espadas, adagas, lanças, machados, correntes, punhais rituais, manoplas."
   },
   {
    "nome": "Potencialização",
    "pp": 15,
-   "efeito": "Aumenta um Atributo (Corpo, Mente ou Alma - definido na criação) em +1 enquanto equipado.",
-   "veiculos": "Anéis, colares, cintos, tiaras."
+   "efeito": "Este encantamento reforça a estrutura interna do portador, elevando sua capacidade física, mental ou espiritual conforme a afinidade definida.\nEnquanto estiver utilizando o objeto encantado, o portador tem um de seus Atributos (Corpo, Mente ou Alma) aumentado em 1. O Atributo escolhido é definido no momento em que o encantamento é preparado e não pode ser alterado posteriormente.",
+   "veiculos": "Anéis, braceletes, broches, colares, tiaras, cintos, amuletos."
   },
   {
    "nome": "Conjuração Partilhada",
    "pp": 15,
-   "efeito": "Sintoniza até 4 objetos. Permite que outro usuário acumule até 2 de Estresse no lugar de quem conjurou a magia.",
-   "veiculos": "Broches, anéis, pulseiras."
+   "efeito": "Este encantamento cria um vínculo cooperativo entre até quatro objetos igualmente encantados, permitindo que seus portadores dividam o peso da conjuração.\nO objeto encantado pode ser sintonizado com até outros três iguais, formando uma pequena rede mágica entre seus usuários. Sempre que o portador conjurar uma magia, qualquer outro usuário de objetos sintonizados pode escolher acumular até 2 Pontos de Estresse no lugar da pessoa que realizou a conjuração.\nA partilha é voluntária e ocorre de forma instantânea, desde que ambos os portadores estejam conscientes. A sintonia permanece ativa enquanto todos os objetos estiverem em posse de seus usuários.",
+   "veiculos": "Broches, anéis, colares, pulseiras, braceletes rúnicos."
   },
   {
    "nome": "Visão Noturna",
    "pp": 5,
-   "efeito": "Enxerga perfeitamente no escuro absoluto (sem distorções) enquanto usado.",
-   "veiculos": "Óculos, máscaras, lentes."
+   "efeito": "Este encantamento ajusta a percepção visual do portador, permitindo-lhe enxergar perfeitamente mesmo na ausência total de luz.\nEnquanto estiver utilizando um objeto encantado com este efeito, o portador pode enxergar no escuro absoluto como se estivesse em plena iluminação comum, sem distorções de cor ou profundidade.",
+   "veiculos": "Óculos, máscaras, viseiras, lentes, tiaras, capacetes leves."
   },
   {
    "nome": "Cura Menor",
    "pp": 10,
-   "efeito": "Consumível de 10 cargas. Cura 1 Ferimento imediatamente (máx 2 curas por pessoa até o próximo descanso completo).",
-   "veiculos": "Curativos, adesivos, selos."
+   "efeito": "Este encantamento cria um efeito de cura simples armazenado em pequenas unidades consumíveis, permitindo restaurar ferimentos leves de forma imediata.\nO objeto que contém este encantamento possui 10 cargas independentes, cada uma capaz de curar 1 Ferimento assim que ativada e aplicada sobre a pessoa alvo. A cura é instantânea e funciona em qualquer tipo de ferimento comum, mas uma pessoa não pode recuperar mais do que 2 Ferimentos através desse encantamento até o final de seu próximo Descanso Completo.\nCada carga perde permanentemente suas propriedades mágicas após ser utilizada.",
+   "veiculos": "Curativos, adesivos, selos de papel, pedrinhas marcadas, tiras de pano, pequenos talismãs descartáveis."
   },
   {
    "nome": "Desaparecimento",
    "pp": 10,
-   "efeito": "Consumível (3 usos). Cria névoa que torna o alvo e seus itens totalmente invisíveis por 10 minutos (sons/cheiros mantidos).",
-   "veiculos": "Algibeiras, cápsulas, frascos."
+   "efeito": "Este encantamento permite que o portador produza uma pequena nuvem luminosa que distorce a percepção ao redor, ocultando completamente quem estiver dentro dela.\nAo utilizar um dos usos armazenados no objeto encantado, o portador pode a energia vinculada, em forma de uma névoa prateada que torna uma única pessoa completamente invisível por 10 minutos. A invisibilidade cobre todo o corpo e todos os itens carregados, mas não oculta sons, cheiros ou pegadas produzidas pela pessoa.\nObjetos encantados com este efeito possuem 3 usos, cada qual se desfazendo após ativação.",
+   "veiculos": "Algibeiras, bolsas pequenas, frascos, anéis ocos, pingentes, broches, cápsulas rúnicas."
   },
   {
    "nome": "Sorte Engarrafada",
    "pp": 10,
-   "efeito": "Consumível. O usuário ganha 3 Dados de Empenho adicionais.",
-   "veiculos": "Frascos, garrafas, cantis."
+   "efeito": "Este encantamento confere ao recipiente que o contém a capacidade de gerar uma dose única de sorte instintiva, manifestada no momento em que o líquido é ingerido.\nAo usufruir do conteúdo do item encantado, o usuário recebe 3 Dados de Empenho adicionais, que funcionam exatamente como os Dados de Empenho normais e desaparecem conforme forem utilizados.\nUma vez consumida a dose, o encantamento se desfaz completamente, tornando o recipiente um objeto comum sem propriedades mágicas.",
+   "veiculos": "Frascos, garrafas, cantis, copos rituais, cabaças, ampolas."
   },
   {
    "nome": "Replicação",
    "pp": 15,
-   "efeito": "Registra um objeto não mágico/orgânico (até 30cm) no interior. Gera cópia idêntica que dura 24h. Recarrega em 24h (ou custo de 5 Estresse).",
-   "veiculos": "Mochilas, caixas, alforjes."
+   "efeito": "Este encantamento cria um espaço isolado que registra um único objeto colocado em seu interior, permitindo gerar cópias temporárias dele.\nQualquer objeto não orgânico, não mágico, de até 30 cm, pode ser armazenado no recipiente encantado, ficando registrado de forma permanente. O objeto armazenado não pode ser removido, mas o portador pode retirar do recipiente uma réplica exata, funcional e idêntica ao original. Toda réplica criada desaparece após 24 horas.\nApós retirar uma réplica, o encantamento só pode gerar outra após 24 horas, ou imediatamente se o usuário acumular 5 Pontos de Estresse.",
+   "veiculos": "Mochilas, bolsas de tiracolo, caixas pequenas, bolsas de cintura, alforjes."
   },
   {
    "nome": "Proteção Ígnea",
    "pp": 10,
-   "efeito": "Reduz em 2 Ferimentos qualquer dano vindo de fogo e calor extremo.",
-   "veiculos": "Colares, mantos, braceletes."
+   "efeito": "Este encantamento envolve o portador em uma camada de resistência térmica que dissipa calor extremo e absorve parte da energia de queimaduras.\nEnquanto estiver utilizando o objeto encantado, o portador recebe alta resistência a fogo e calor, reduzindo em 2 Ferimentos qualquer dano proveniente dessas fontes.",
+   "veiculos": "Colares, amuletos, anéis, broches, mantos, braceletes, cintos rúnicos."
   },
   {
    "nome": "Chuva Engarrafada",
    "pp": 10,
-   "efeito": "Consumível. Libera chuva torrencial por 1 hora. Extensão custa 2 Estresse por hora extra.",
-   "veiculos": "Garrafas, ânforas."
+   "efeito": "Este encantamento aprisiona uma pequena massa de nuvens tempestuosas dentro de um recipiente selado, permitindo que o clima seja invocado de forma controlada.\nAo abrir o recipiente encantado libera-se uma nuvem que ascende imediatamente ao céu acima. Após aproximadamente 2 minutos, forma-se uma chuva torrencial sobre a área, com intensidade constante e uniformidade climática. A chuva dura 1 hora, podendo ter sua duração estendida ao custo de 2 Pontos de Estresse adicionais por cada hora extra.\nO efeito pode ser encerrado apenas quando a duração chegar ao fim; fechar o recipiente não retorna a chuva para dentro dele, e após a chuva ser liberada, o encantamento se encerra.",
+   "veiculos": "Garrafas, frascos, potes selados, jarros rúnicos, ampolas reforçadas."
   },
   {
    "nome": "Impacto Explosivo",
    "pp": 5,
-   "efeito": "Projétil explode no impacto causando 2 Ferimentos (Defesa Ineficaz). Múltiplos projéteis simultâneos adicionam +1 Ferimento cada.",
-   "veiculos": "Esferas, pedras, cápsulas."
+   "efeito": "Este encantamento transforma pequenos projéteis em cargas instáveis que detonam ao primeiro impacto, liberando uma explosão concentrada.\nQualquer projétil encantado dessa forma explode ao colidir com uma superfície ou criatura, causando 2 Ferimentos em um alvo, tratada como Defesa Ineficaz. Se múltiplos projéteis encantados forem utilizados simultaneamente contra o mesmo alvo, a explosão combinada aumenta os Ferimentos causados em +1 para cada 2 projéteis adicionais envolvidos na colisão.\nCada projétil encantado perde sua propriedade mágica após ser utilizado, não podendo ser reutilizado.",
+   "veiculos": "Esferas pequenas, pedrinhas, rolamentos, mini-orbes, bagas petrificadas, cápsulas rígidas."
   },
   {
    "nome": "Forma Animada",
    "pp": 10,
-   "efeito": "Transforma objeto colapsável em estrutura animada (até 2m) por 8 horas (voar, flutuar, transportar).",
-   "veiculos": "Origamis, papéis, tendas desmontáveis."
+   "efeito": "Este encantamento permite que um objeto dobrável ou colapsável se transforme temporariamente em uma estrutura maior e funcional, assumindo uma forma definida pelo item encantado.\nAo ativar o encantamento, o objeto se desfaz, expande-se e se reorganiza sozinho, ganhando uma forma animada inerte, capaz de se mover ou se deslocar, mas incapaz de causar Ferimentos. A forma criada possui até 2 metros de dimensão e pode cumprir uma função simples, como voar, flutuar, transportar uma pessoa ou deslocar-se pelo terreno conforme seu formato permitir. A estrutura permanece ativa por até 8 horas, perdendo suas propriedades mágicas ao final desse período ou quando o portador desejar encerrá-la.\nAo término do efeito, o objeto retorna ao seu estado não encantado, incapaz de ser reutilizado até ser encantado novamente.",
+   "veiculos": "Origamis, esculturas dobráveis, folhas de papel rígido, tecidos rituais, miniaturas desmontáveis."
   },
   {
    "nome": "Transposição de Matéria",
    "pp": 15,
-   "efeito": "Consumível (queimável). Deixa criaturas em 10m intangíveis por 1 hora. Se acabar dentro de algo sólido, sofre 5 Ferimentos e é ejetado.",
-   "veiculos": "Incensos, velas, essências."
+   "efeito": "Este encantamento, quando aplicado a um objeto capaz de ser queimado, liberado ou ativado de forma contínua, cria uma névoa etérea que desloca parcialmente o corpo físico de quem permanecer exposto ao efeito. A transposição altera a interação material do alvo com o ambiente, permitindo atravessar matéria sólida enquanto existir sustentação mágica.\nAo ser ativado, o encantamento afeta todas as criaturas voluntárias em até 10 metros após 1 minuto. As criaturas afetadas tornam-se intangíveis por 1 hora, podendo atravessar objetos sólidos livremente e interagir fisicamente com seres, objetos e ambientes que também sejam intangíveis. Se o efeito se encerrar enquanto a criatura afetada estiver dentro de matéria sólida, ela sofre 5 Ferimentos e reaparece imediatamente no espaço desobstruído mais próximo.\nO encantamento não impede Ferimentos provenientes de efeitos mágicos, elementais ou ataques de entidades intangíveis.",
+   "veiculos": "incensos, velas, difusores aromáticos, papéis pirotécnicos, fitas queimáveis, essências voláteis."
   },
   {
    "nome": "Líquido Infindável",
    "pp": 5,
-   "efeito": "Reservatório inesgotável do último líquido não mágico nele posto. Se derramado no chão, evapora em 1 min.",
-   "veiculos": "Canecas, cantis, barris."
+   "efeito": "O objeto encantado torna-se um reservatório inexaurível de um único líquido simples não mágico.\nO Item permanece sempre cheio do último líquido não mágico nele posto, podendo ser trocado à vontade. Mas se for derramado no chão ou em outro reservatório, o líquido desaparece após 1 minuto.\nO líquido gerado não possui nenhuma propriedade especial além de seu sabor e natureza comuns.",
+   "veiculos": "Canecas, garrafas, cuias, cantis, potes selados, jarros pequenos."
   },
   {
    "nome": "Melodia Dominadora",
    "pp": 15,
-   "efeito": "Custa 2 Estresse. Encanta animais não mágicos (obedecem por 1 hora). Criaturas fantásticas resistem com Mente Dif 12.",
-   "veiculos": "Flautas, caixas de música."
+   "efeito": "Este encantamento vincula uma melodia hipnótica ao objeto encantado, capaz de influenciar profundamente o comportamento de criaturas não mágicas.\nQuando ativado, o usuário pode acumular 2 Pontos de Estresse para encantar qualquer animal não mágico que possa ouvir o som emitido pelo veículo encantado. O efeito dura por 1 hora, período no qual o animal obedece aos comandos do usuário ao melhor de sua capacidade natural.\nCriaturas fantásticas incapazes de comunicação formal podem ser afetadas da mesma forma, contanto que falhem em um Teste de Mente de Dificuldade 12. A influência não força ações impossíveis ao animal, mas o torna extraordinariamente receptivo, dócil e cooperativo.",
+   "veiculos": "Flautas, apitos, sinos, instrumentos musicais, caixas de música, conchas ressonantes, pequenos artefatos sonoros."
   },
   {
    "nome": "Janela-Além",
    "pp": 25,
-   "efeito": "Portal para espaço paralelo isolado (senha exigida). Cópias conectam-se ao mesmo espaço.",
-   "veiculos": "Quadros, pôsteres, portas falsas."
+   "efeito": "Este encantamento transforma um objeto bidimensional em um portal estável para um espaço paralelo fechado, acessível apenas por quem conhece a senha definida por quem fez o encantamento.\nQuando ativado, o objeto se torna atravessável, conduzindo qualquer pessoa que o transponha ao interior de um espaço isolado — uma sala, cabana, galeria, ou qualquer ambiente definido no momento da criação. O local é seguro, fixo e não pode ser acessado por outros meios. Uma cópia do objeto encantado sempre existe dentro desse espaço, funcionando como saída. Se essa cópia for destruída, o portal correspondente também se desfaz.\nTodos os objetos portadores deste encantamento conduzem ao mesmo espaço paralelo, independentemente de onde estejam no mundo, criando uma rede de acessos dispersos.",
+   "veiculos": "Quadros, pôsteres, murais, tapeçarias, portas falsas, grandes placas rígidas."
   },
   {
    "nome": "Amplificação",
    "pp": 10,
-   "efeito": "Foco mágico. Custa +1 Estresse. Concede +2 em Testes de Conjuração.",
-   "veiculos": "Varinhas, cajados."
+   "efeito": "Esse encantamento intensifica o poder de magias canalizadas através do objeto que o contém, servindo como um foco que reforça a potência da conjuração.\nSempre que o usuário optar por fazer uma magia partir diretamente do item encantado, a conjuração se torna mais forte ao acumular 1 Ponto de Estresse adicional. Magias canalizadas dessa forma recebem +2 em Testes de Conjuração, refletindo o impulso fornecido pelo foco amplificador.",
+   "veiculos": "Varinhas, cajados curtos, estabilizadores de mão, amuletos focais, hastes rígidas."
   },
   {
    "nome": "Repulsão",
    "pp": 10,
-   "efeito": "Custa 1 Estresse. Empurra alvo (até 10m) para 30m de distância, causando 1 Ferimento.",
-   "veiculos": "Bastões, escudos, manoplas."
+   "efeito": "O objeto encantado armazena uma carga de energia expansiva que pode ser liberada de forma controlada.\nAo acumular 1 Ponto de Estresse, o portador ativa o encantamento, emitindo uma onda de repulsão que afasta um alvo escolhido a até 10 metros de distância. A onda causa 1 Ferimento no alvo e o empurra até 30 metros para longe do ponto de origem, desde que o espaço permita o deslocamento.",
+   "veiculos": "Bastões, escudos, luvas, anéis, manoplas, broches, cajados, superfícies rígidas."
   },
   {
    "nome": "Desfase",
    "pp": 15,
-   "efeito": "Custa 2 Estresse. Fica intangível/desfasado por 5 min (+1 Estresse/minuto extra). Se acabar dentro de parede, sofre 3 Ferimentos.",
-   "veiculos": "Amuletos, capas, cajados."
+   "efeito": "O objeto encantado permite ao portador existir parcialmente fora da matéria, ocupando um estado entre presença e ausência.\nAo acumular 2 Pontos de Estresse, o portador ativa o encantamento e entra em desfase, tornando-se incapaz de interagir fisicamente com qualquer objeto sólido.\nNesse estado, o portador pode atravessar paredes, portas, objetos, superfícies e criaturas, e seu corpo adquire leveza suficiente para flutuar a pequenas alturas sem apoio físico.\nO estado de desfase dura 5 minutos, podendo ser estendido ao custo de 1 Ponto de Estresse adicional por minuto extra. O portador pode encerrar o efeito a qualquer momento de forma voluntária.\nCaso o efeito se encerre enquanto o portador estiver dentro de um objeto sólido, ele sofre 3 Ferimentos e reaparece no ponto livre mais próximo. Se estiver dentro de uma criatura, apenas o portador sofre os Ferimentos, sem causar dano ao outro ser.",
+   "veiculos": "Amuletos, anéis, broches, tornozeleiras, capas, luvas, pingentes, cajados."
   },
   {
    "nome": "Corte Espacial",
    "pp": 15,
-   "efeito": "Custa 2 Estresse. Cria portal abrindo 2 fendas a até 30m de distância. Dura 1 minuto.",
-   "veiculos": "Espadas, adagas, katanas."
+   "efeito": "O objeto encantado permite ao portador rasgar a superfície do espaço, criando uma abertura transitável entre dois pontos próximos.\nAo acumular 2 Pontos de Estresse, o portador realiza um golpe com a lâmina encantada, cortando o espaço e abrindo um portal estático no local atingido. Imediatamente após criar o primeiro portal, o portador deve realizar um segundo corte com a lâmina, escolhendo um ponto a até 30 metros de distância, onde o portal de saída se forma.\nOs dois portais permanecem conectados, permitindo que pessoas e objetos atravessem de um lado ao outro. O portal se mantém aberto por 1 minuto, podendo ser encerrado antes caso o portador deseje.\nCriaturas que estiverem no limiar do portal quando ele se fechar reaparecem no lado de entrada. O portal não pode ser criado dentro de criaturas ou objetos sólidos.",
+   "veiculos": "Espadas, adagas, katanas, lâminas curvas, machadinhas, foices, kunais, punhais rituais."
   },
   {
    "nome": "Conversão de Dor",
    "pp": 10,
-   "efeito": "Converte Ferimentos físicos do ataque armado em Acúmulo de Estresse instantâneo para o alvo.",
-   "veiculos": "Espadas, bastões, lanças."
+   "efeito": "Este encantamento altera a natureza do impacto causado pela arma, redirecionando o dano físico para o campo emocional e mental.\nAntes de realizar quaisquer Testes para definir êxito no ataque, o portador pode optar por ativar o encantamento. Se o fizer, todos os Ferimentos que seriam causados pela arma naquele ataque tornam-se Acúmulo de Estresse no alvo, em vez de Ferimentos regulares.\nA arma ainda produz impacto físico, mas a consequência mágica converte a dor e o trauma do golpe em tensão mental instantânea. Esse efeito não altera outros tipos de dano que venham de fontes externas, apenas o dano direto causado pela arma encantada.",
+   "veiculos": "Espadas, adagas, bastões, lanças, correntes, foices, manoplas, cajados."
   },
   {
    "nome": "Muitas Faces",
    "pp": 10,
-   "efeito": "Custa 1 Estresse. Altera a aparência física (cor, feições, voz) por 2 horas (+1 Estresse renova por +2h). Atributos inalterados.",
-   "veiculos": "Amuletos, anéis, máscaras."
+   "efeito": "Este encantamento permite ao portador alterar a própria aparência física, assumindo uma forma diferente sem modificar sua espécie ou capacidades essenciais.\nAo acumular 1 Ponto de Estresse, o portador ativa o encantamento e pode modificar livremente características como estatura, proporções corporais, textura da pele, coloração, feições faciais, cabelo, voz e outras qualidades externas. A metamorfose dura 2 horas, mantendo todas as capacidades físicas e atributos originais do usuário.\nO portador pode renovar a duração por mais 2 horas adicionais ao acumular 1 Ponto de Estresse cada vez que desejar estender o efeito. O efeito pode ser encerrado voluntariamente a qualquer momento, retornando o usuário à forma original.",
+   "veiculos": "Amuletos, anéis, colares, broches, tiaras, pulseiras, espelhos portáteis, máscaras rituais."
   },
   {
    "nome": "Mão Fantasma",
    "pp": 10,
-   "efeito": "Cria mão translúcida até 10m de distância que atua como extensão do corpo. Sofre e executa rolagens normalmente.",
-   "veiculos": "Luvas, anéis, manoplas."
+   "efeito": "Este encantamento permite ao portador manifestar uma mão fantasmagórica que surge à distância e atua como uma extensão física de seu próprio corpo.\nO portador pode criar a mão fantasmagórica em qualquer ponto a até 10 metros de sua posição, permitindo-lhe manipular objetos, operar mecanismos ou realizar tarefas finas como se estivesse tocando diretamente. A mão pode executar qualquer ação que o usuário seria capaz de realizar com sua própria, inclusive ações que possam causar Ferimentos, desde que a tarefa seja compatível com sua força e habilidade naturais.\nTodos os Testes realizados através da mão fantasmagórica utilizam os mesmos Atributos e capacidades que o usuário empregaria normalmente. A manifestação pode ser encerrada a qualquer momento, e o usuário pode criar uma nova mão fantasmagórica novamente sempre que desejar.",
+   "veiculos": "Luvas, anéis, braceletes, cajados, bastões, manoplas, colares rúnicos."
   },
   {
    "nome": "Umbrocinesia",
    "pp": 15,
-   "efeito": "Controla sombras (até 30m, 0 Estresse); vê através de sombra (até 60m, 1 Estresse); teleporte entre sombras (até 100m, 3 Estresse).",
-   "veiculos": "Capas, adagas cerimoniais."
+   "efeito": "Este encantamento concede ao portador controle direto sobre sombras, permitindo moldá-las livremente, perceber através delas e até atravessar espaços escuros como caminhos ocultos.\nAo utilizar este Encantamento, o portador pode aplicar os efeitos abaixo, acumulando o Estresse associado a cada uso:\n• O portador pode moldar, mover e alterar sombras a até 30 metros de distância, modificando sua forma, tamanho ou posição como desejar. (Sem custo de Estresse)\n• O portador pode ver e ouvir através de uma sombra a até 60 metros de distância, percebendo o que ocorre ao redor dela como se estivesse presente no local observado. (Custo: 1 Ponto de Estresse)\n• O portador pode teleportar-se de uma sombra para outra dentro de um limite de 100 metros, deslocando-se instantaneamente, desde que ambas as sombras sejam grandes o suficiente para acomodar seu corpo. (Custo: 3 Pontos de Estresse)\nQualquer efeito de Umbrocinesia pode ser encerrado voluntariamente a qualquer momento.",
+   "veiculos": "Capas, mantos, anéis, broches, pingentes, cajados, adagas cerimoniais, lanternas escuras."
   },
   {
    "nome": "Voo",
    "pp": 10,
-   "efeito": "Permite voo contínuo sem esforço.",
-   "veiculos": "Capas, botas, colares."
+   "efeito": "Este encantamento permite ao portador deslocar-se pelo ar como se seu corpo fosse naturalmente sustentado por correntes invisíveis, mantendo-se em voo contínuo sem esforço.\nO portador pode voar livremente enquanto estiver utilizando o objeto encantado, movendo-se pelo ar com a mesma facilidade com que caminharia no solo.",
+   "veiculos": "Capas, Mantos, Botas, Broches, Anéis, Colares."
   },
   {
    "nome": "Voo Temporário",
    "pp": 5,
-   "efeito": "Consumível. Voa por 2 minutos.",
-   "veiculos": "Poções, penas mágicas, óleos."
+   "efeito": "Este encantamento concede um período temporário de voo ao portador, desfazendo-se completamente após ser utilizado uma única vez.\nAo utilizar o objeto encantado, o portador passa a voar livremente por até 2 horas, movendo-se pelo ar com a mesma facilidade com que caminharia no solo. Ao término da duração — ou caso o portador deseje encerrar o efeito antes — o voo se desfaz e o encantamento é consumido permanentemente.",
+   "veiculos": "Poções, pergaminhos, pedras rúnicas, penas encantadas, talismãs frágeis, óleos aplicados à pele, velas rituais."
   },
   {
    "nome": "Celeridade",
    "pp": 10,
-   "efeito": "Movimentação +3m. Bônus de +2 em testes de mobilidade, salto e esquiva.",
-   "veiculos": "Botas, cintos, tornozeleiras."
+   "efeito": "Este encantamento amplifica a fluidez dos movimentos do portador, tornando cada passo mais leve, preciso e rápido do que o normal.\nEnquanto estiver utilizando o objeto encantado, o portador tem sua movimentação aumentada em 3 metros. Além disso, o portador recebe +2 em quaisquer Testes que envolvam sua mobilidade, incluindo ações como correr, saltar, esquivar, contornar obstáculos, manter equilíbrio ou executar movimentos acrobáticos.",
+   "veiculos": "Botas, cintos, braceletes, anéis, capas leves, tiaras, tornozeleiras."
   },
   {
    "nome": "Percepção de Falsidade",
    "pp": 15,
-   "efeito": "Percebe instintivamente quando alguém fala diretamente uma mentira verbal intencional.",
-   "veiculos": "Brincos, aparelhos auditivos."
+   "efeito": "Este encantamento afina a percepção do portador para as nuances sutis presentes na fala humana, permitindo-lhe identificar desvios, hesitações e pequenas dissonâncias que revelam falsidade.\nSempre que alguém falar diretamente com o portador, ele percebe instintivamente quando a afirmação contém mentira, distorção consciente ou falsidade intencional. O efeito não interpreta intenção, emoção ou contexto — apenas indica a presença de mentira verbal direta.\nO encantamento não funciona com mensagens escritas, gravações, ilusões auditivas ou qualquer forma de comunicação que não seja fala presencial direcionada ao portador.",
+   "veiculos": "Brincos, anéis, colares, broches, tiaras, coroas, amuletos auditivos."
   },
   {
    "nome": "Projétil Guiado",
    "pp": 5,
-   "efeito": "Curva a trajetória do projétil no ar, dando +4 em Testes de acerto.",
-   "veiculos": "Flechas, facas de arremesso."
+   "efeito": "Este encantamento infunde no projétil uma força direcional sutil, permitindo que ele curve sua trajetória e ajuste seu percurso em pleno ar para alcançar o alvo pretendido.\nProjéteis encantados desta forma tornam-se autocorrigidos, acompanhando o movimento do alvo e compensando desvios provocados por vento, distância ou movimentação brusca. Ataques realizados utilizando projéteis encantados com este efeito recebem +4 de bônus em Testes de acerto, refletindo a precisão ampliada do impacto guiado.\nO projétil ainda precisa ser lançado, arremessado ou disparado normalmente, mas sua trajetória passa a responder à intenção do portador de forma evidente.",
+   "veiculos": "Flechas, virotes, dardos, facas de arremesso, pedras encantadas, shurikens, agulhas."
   },
   {
    "nome": "Psicometria",
    "pp": 15,
-   "efeito": "Lê impressões passadas do item tocado. Custa 1 Estresse para a última hora. Exige mais estresse cumulativo para dias anteriores.",
-   "veiculos": "Luvas, anéis, adagas rituais."
+   "efeito": "Este encantamento permite ao portador acessar impressões residuais do passado de um objeto, lendo fragmentos emocionais, visuais e sensoriais deixados pelas pessoas que o manipularam.\nAo acumular 1 Ponto de Estresse, o portador pode perceber as memórias ligadas ao objeto relativas à última hora de seu uso.\nPara investigar períodos anteriores, o portador pode continuar acumulando Estresse em uma progressão crescente, avançando 1 dia no passado por uso, com o seguinte custo:\n• 1 dia no passado — 1 Estresse\n• 2 dias no passado — 2 Estresse\n• 3 dias no passado — 3 Estresse\n• 4 dias no passado — 5 Estresse\n• 5 dias no passado — 8 Estresse\n• 6 dias no passado — 13 Estresse\n• 7 dias no passado — 21 Estresse\nO usuário recebe percepções sensoriais fragmentadas do período selecionado — não visões contínuas — e pode encerrar o efeito a qualquer momento.\nEste encantamento não revela pensamentos internos de indivíduos envolvidos, apenas suas ações e emoções superficiais ligadas ao objeto.",
+   "veiculos": "Luvas, anéis, braceletes, colares, adagas rituais, amuletos, grimórios, máscaras."
   },
   {
    "nome": "Cornucópia",
    "pp": 15,
-   "efeito": "Gera 3 refeições completas (10 pessoas cada) por dia. Alimento some se removido do item por muito tempo.",
-   "veiculos": "Cornucópias, cestas, barris."
+   "efeito": "Este encantamento cria uma fonte inesgotável de alimentos naturais, gerados diretamente do objeto encantado, como se ele estivesse ligado a um reservatório fértil e abundante.\nO receptáculo encantado produz até 3 refeições completas por dia, cada uma capaz de alimentar até 10 pessoas com comida sempre fresca, nutritiva e variada (frutas, raízes, legumes, grãos e outros alimentos simples). O alimento desaparece se removido do recipiente por tempo prolongado ou armazenado de maneira inadequada, mas nunca estraga enquanto permanecer dentro do receptáculo encantado.\nO efeito não acumula Estresse e se renova diariamente ao amanhecer.",
+   "veiculos": "Cornucópias, cestas, baús pequenos, panelas, potes cerâmicos, cantis largos, barris esculpidos."
   },
   {
    "nome": "Passo Silente",
    "pp": 5,
-   "efeito": "Oculta qualquer som de contato dos pés com o solo.",
-   "veiculos": "Botas, capas leves, tornozeleiras."
+   "efeito": "Este encantamento envolve o portador em uma camada fina de amortecimento mágico, suprimindo vibrações e dissipando sons produzidos pelo contato dos pés com o solo.\nEnquanto estiver utilizando o objeto encantado, o portador é capaz de mover-se sem produzir qualquer ruído, mesmo ao caminhar sobre superfícies que normalmente fariam barulho, como madeira, folhas secas, cascalho ou metal. O encantamento não interfere na movimentação em si — apenas oculta o som gerado pelos passos, permitindo aproximação furtiva e deslocamentos discretos.\nQualquer outro som produzido pelo portador (fala, respiração, objetos manipulados) não é afetado por este encantamento.",
+   "veiculos": "Botas, tornozeleiras, capas leves, cintos, anéis, broches, luvas."
   },
   {
    "nome": "Ventania Engarrafada",
    "pp": 10,
-   "efeito": "Consumível (3 usos). Libera rajada única (2 Ferimentos em alvo até 10m) ou ventania contínua de 5 minutos que conturba a área.",
-   "veiculos": "Garrafas, ânforas."
+   "efeito": "Este encantamento armazena correntes de ar violentas dentro de um recipiente ou objeto oco, permitindo que o portador libere ventos concentrados ou prolongados conforme sua necessidade. O efeito pode ser utilizado 3 vezes antes de o encantamento se desfazer por completo.\nO portador pode quebrar o lacre, tampa ou selo do objeto encantado para liberar uma rajada única de vento concentrado, que explode para fora com força suficiente para causar 2 Ferimentos em um alvo em até 10m atingido diretamente.\nAlternativamente, o portador pode abrir o recipiente de forma controlada, liberando uma ventania contínua que toma o ambiente, gerando fortes correntes de ar que conturbam a área por até 5 minutos, dificultando movimentos, visão e estabilidade de criaturas presentes.\nCada uso consome um dos três usos do encantamento, independentemente da forma como o vento é liberado.",
+   "veiculos": "Garrafas, frascos lacrados, tubos ocos, ânforas pequenas, cabaças, lanternas vazias, potes ritualísticos."
   },
   {
    "nome": "Revelação Invisível",
    "pp": 10,
-   "efeito": "Revela qualquer entidade, marca, camuflagem ou efeito invisível.",
-   "veiculos": "Óculos, lentes, máscaras."
+   "efeito": "Este encantamento permite ao portador perceber aquilo que está oculto aos sentidos comuns, revelando formas, criaturas, marcas e fenômenos que normalmente não poderiam ser vistos.\nEnquanto estiver utilizando o objeto encantado, o portador é capaz de enxergar qualquer entidade, objeto ou efeito invisível, incluindo criaturas ocultas, assinaturas mágicas, símbolos disfarçados e camuflagens místicas. A visão revelada não altera o funcionamento do ambiente — apenas expõe o que está presente, mantendo o restante da percepção inalterado. O portador pode alternar entre sua visão normal e a revelada a qualquer momento, sem custo adicional.",
+   "veiculos": "Óculos, lentes, anéis, tiaras, máscaras, cajados, pingentes."
   },
   {
    "nome": "Rastreamento Parcial",
    "pp": 10,
-   "efeito": "Aponta a direção geral de um alvo a partir de um fragmento (escama, cabelo, peça de roupa) inserido.",
-   "veiculos": "Bússolas, agulhas."
+   "efeito": "Este encantamento permite ao portador identificar a direção geral de um objeto ou pessoa desde que possua uma parte legítima do todo — um fragmento, peça, fio de roupa, mecha de cabelo, escama, lasca, acessório ou qualquer componente que tenha pertencido originalmente ao alvo.\nAo segurar o fragmento e ativar o encantamento, o objeto encantado aponta para a direção geral do restante do alvo, agindo como um indicador sensível que busca o “todo” a partir da “parte”. A indicação não fornece distância exata, apenas direção aproximada, e pode oscilar caso existam obstáculos mágicos ou interferências energéticas.\nO efeito permanece ativo enquanto o portador estiver segurando o fragmento original, encerrando-se assim que o contato for perdido.",
+   "veiculos": "Bússolas, agulhas, pingentes, anéis, talismãs, cajados, placas metálicas, peças de cerâmica."
   },
   {
    "nome": "Respiração Aquática",
    "pp": 5,
-   "efeito": "Permite respirar embaixo d'água indefinidamente.",
-   "veiculos": "Amuletos, máscaras, tiaras."
+   "efeito": "Este encantamento adapta o corpo do portador para extrair oxigênio diretamente da água, permitindo que permaneça submerso sem dificuldade ou risco de asfixia.\nEnquanto estiver utilizando o objeto encantado, o portador pode respirar debaixo d’água indefinidamente, mantendo-se tão confortável quanto estaria em ar aberto.",
+   "veiculos": "Amuletos, anéis, colares, broches, máscaras, braceletes, tiaras."
   },
   {
    "nome": "Passos de Aranha",
    "pp": 5,
-   "efeito": "Caminha sobre qualquer superfície (água, tetos, paredes, névoa densa) sem perder estabilidade.",
-   "veiculos": "Botas, sandálias."
+   "efeito": "Este encantamento permite ao portador deslocar-se sobre qualquer superfície como se estivesse caminhando em solo firme, independentemente de sua consistência ou orientação.\nO portador pode caminhar sobre água, lama, gelo, superfícies lisas, paredes verticais, tetos, névoas densas e até estruturas frágeis sem afundar, escorregar ou perder estabilidade. A tração mágica se adapta automaticamente ao tipo de superfície, garantindo equilíbrio constante e permitindo deslocamento em velocidade normal.",
+   "veiculos": "Botas, sandálias, anéis, tornozeleiras, mantos, cajados."
   },
   {
    "nome": "Marca Vinculada",
    "pp": 15,
-   "efeito": "Marca 1 objeto por 1 semana (máx 3 marcas). Custa 1 Estresse para puxar o objeto até você; 3 Estresse para se teleportar até ele.",
-   "veiculos": "Anéis, luvas, broches."
+   "efeito": "Este encantamento cria uma ligação estável entre o portador e um objeto marcado, permitindo deslocamentos instantâneos entre ambos mediante gasto de Estresse.\nAo tocar um objeto e aplicar o encantamento, o portador cria uma Marca Vinculada que permanece ativa por 1 semana. O portador pode manter até 3 Marcas simultaneamente; criar uma nova marca além desse limite faz com que a mais antiga desapareça. Objetos marcados não podem ser seres vivos, nem entidades conscientes ou animadas.\nAo acumular 1 Ponto de Estresse, o portador pode teleportar o objeto marcado para sua localização atual, desde que o objeto seja de tamanho e massa compatíveis com algo que o portador poderia carregar com o próprio corpo.\nAo acumular 3 Pontos de Estresse, o portador pode teleportar-se para a localização do objeto marcado, aparecendo próximo a ele.\nObjetos grandes, como casas, construções, rochedos, árvores ou estruturas fixas, não podem ser movidos, mas o portador pode teleportar-se até eles normalmente.\nO portador pode encerrar voluntariamente qualquer Marca antes do fim da duração.",
+   "veiculos": "Anéis, luvas, broches, cajados, amuletos, braceletes, correntes rituais."
   },
   {
    "nome": "Silêncio Contido",
    "pp": 5,
-   "efeito": "Custa 2 Estresse. Cria área estática de 10m de raio de silêncio isolante por 10 min. Nada entra ou sai audivelmente.",
-   "veiculos": "Amuletos, sinos selados."
+   "efeito": "Este encantamento cria um campo isolante ao redor do portador, impedindo que qualquer som produzido dentro da área ultrapasse seus limites.\nAo acumular 2 Pontos de Estresse, o portador ativa o encantamento e estabelece uma zona de silêncio estática com 10 metros de raio, onde conversas, passos, impactos e quaisquer ruídos ficam confinados. Dentro da área, todos podem falar e ouvir normalmente; porém, nada do que for dito ou produzido em seu interior pode ser percebido por quem estiver fora dela.\nO campo permanece ativo por 10 minutos, podendo ser encerrado antecipadamente. O encantamento não bloqueia vibrações físicas nem impede entrada ou saída de pessoas, nem interfere com nenhuma conjuração.",
+   "veiculos": "Amuletos, anéis, broches, sinos selados, cajados, lanternas ritualísticas."
   },
   {
    "nome": "Traço Animado",
    "pp": 15,
-   "efeito": "Custa 1 Estresse. Desenhos feitos ganham forma sólida em tinta 3D (até 3m / 100kg). Dura 1 hora ou se desfaz com 1 Ferimento.",
-   "veiculos": "Pincéis, canetas, estiletes."
+   "efeito": "Este encantamento permite ao portador transformar desenhos feitos com o objeto encantado em formas físicas temporárias, compostas de tinta solidificada.\nAo acumular 1 Ponto de Estresse, o portador ativa o efeito e qualquer desenho concluído ganha forma física com aspecto de tinta tridimensional. As criações não podem ser seres vivos, não possuem propriedades mágicas, tecnológicas ou nutritivas, e existem apenas como objetos sólidos simples. O tamanho, formato e peso da criação são determinados pela Intenção do usuário, mas não podem ultrapassar 3 metros de extensão nem 100Kg.\nA criação permanece por 1 hora, podendo ser desfeita voluntariamente pelo portador a qualquer momento, ou automaticamente ao sofrer 1 Ferimento, desfazendo-se em respingos de tinta.",
+   "veiculos": "Pincéis, canetas, estiletes de caligrafia, penas metálicas, brochas de pintura."
   },
   {
    "nome": "Partícula Acrescida",
    "pp": 15,
-   "efeito": "Consumível. Contém 1 Partícula mágica (definida pelo Narrador). Permite uso perfeito em 1 conjuração, desfazendo o item.",
-   "veiculos": "Páginas de grimório, pergaminhos."
+   "efeito": "Este encantamento armazena uma única Partícula mágica, permitindo ao portador utilizá-la uma vez para conjurar uma magia como se possuísse pleno domínio sobre aquela Partícula específica.\nAssim que o objeto encantado é encontrado, ele já contém uma Partícula pré-determinada, escolhida pelo Narrador, e essa Partícula não pode ser alterada ou substituída por qualquer meio.\nAo utilizar a Partícula contida neste encantamento para compor uma magia, o efeito se desfaz imediatamente após a conjuração, e o objeto perde suas propriedades mágicas. A Partícula armazenada funciona como qualquer outra Partícula conhecida pelo usuário, mas apenas para um único uso.",
+   "veiculos": "Páginas de grimório, pergaminhos, amuletos, pedras rúnicas, selos, medalhões, anéis."
   },
   {
    "nome": "Campo de Distorção Mágica",
    "pp": 15,
-   "efeito": "Custa 2 Estresse. Cria campo estático (10m raio) por 10 min. Todo conjurador (incluindo usuário) sofre +1 Estresse em magias NÃO Triviais.",
-   "veiculos": "Cajados, lanternas, pedestais."
+   "efeito": "Este encantamento cria uma área fixa de instabilidade arcana que interfere diretamente no ato de conjurar, elevando seu acúmulo de estresse.\nAo acumular 2 Pontos de Estresse, o portador ativa o encantamento e gera um campo fixo de distorção mágica com 10 metros de raio, cuja posição é determinada no exato local onde o usuário se encontra no momento da ativação.\nDentro dessa área, qualquer conjurador — inclusive o próprio portador — acumula 1 Ponto de Estresse adicional sempre que realizar uma magia NÃO Trivial. O campo permanece ativo por 10 minutos, e não se move após ser formado, mesmo que o portador se afaste. O efeito não pode ser encerrado voluntariamente pelo portador e não pode ser deslocado ou reposicionado até o término de sua duração.",
+   "veiculos": "Cajados, amuletos, lanternas, bastões, talismãs rúnicos, pedestais portáteis."
   },
   {
    "nome": "Refluxo Arcano",
    "pp": 20,
-   "efeito": "Recupera 1 Ponto de Estresse imediatamente após conjurar magias NÃO Triviais.",
-   "veiculos": "Anéis, cajados, colares."
+   "efeito": "Este encantamento estabiliza parcialmente o fluxo emocional e mental do portador, permitindo-lhe recuperar parte do estresse causado por magias mais exigentes.\nSempre que o portador conjurar uma magia NÃO Trivial, ele recupera 1 Ponto de Estresse imediatamente após a conclusão da conjuração. O portador pode manter o encantamento ativo continuamente enquanto estiver utilizando o objeto que o carrega.",
+   "veiculos": "Anéis, amuletos, braceletes, broches, cajados, colares, tiaras."
   },
   {
    "nome": "Retrocesso Breve",
    "pp": 15,
-   "efeito": "Custa 1 Estresse. Refaz o teste de uma criatura visível a 30m. Apenas 1x por teste e 2x por dia máximo.",
-   "veiculos": "Ampulhetas, relógios de bolso."
+   "efeito": "Este encantamento permite ao portador intervir sutilmente no fluxo do tempo, desfazendo alguns segundos de um acontecimento recente para forçar que ele seja refeito.\nAssim que uma criatura (ou o próprio usuário) em até 30m realizar um Teste, você pode acumular 1 Ponto de Estresse. Se o fizer o Teste é imediatamente refeito, substituindo o resultado anterior pelo novo. Este efeito só pode ser aplicado uma única vez sobre cada Teste, e em uma criatura que você possa ver. Ele não pode ser usado para repetir um Teste que já tenha sido forçado anteriormente.\nO encantamento pode ser utilizado no máximo duas vezes por dia.",
+   "veiculos": "Ampulhetas, relógios de bolso, anéis, pingentes, braceletes, cajados cerimoniais."
   },
   {
    "nome": "Eco Particulado",
    "pp": 25,
-   "efeito": "Reação (custa 3 Estresse). Copia 1 Partícula que acabou de ouvir ser usada. Guarda a partícula no Grimório por 1 hora (ou até copiar outra).",
-   "veiculos": "Brincos, penas ornamentais."
+   "efeito": "Este encantamento permite ao portador captar e reproduzir temporariamente uma Partícula mágica pronunciada por outra pessoa, como se a entonação e a intenção do som ficassem presas no objeto encantado por um curto período.\nQuando o portador ouvir uma Partícula sendo usada em uma magia, ele pode gastar sua Reação para copiar essa Partícula, acumulando 3 Pontos de Estresse ao fazê-lo. A Partícula copiada é adicionada ao Grimório do usuário como uma Partícula temporária, podendo ser utilizada normalmente na construção de frases mágicas. A Partícula copiada permanece disponível por 1 hora, ou até que o portador copie uma nova Partícula, o que substitui automaticamente a anterior.",
+   "veiculos": "Brincos, anéis, colares, broches, fivelas, pulseiras, cajados, penas ornamentais."
   },
   {
    "nome": "Ventania Heroica",
    "pp": 5,
-   "efeito": "Visual épico permanente: a capa ondula dramaticamente como se houvesse vento. Sem efeito mecânico.",
-   "veiculos": "Capas, mantos, echarpes."
+   "efeito": "Este encantamento permite ao portador controlar dramaticamente o fluxo de ar ao redor de sua capa, manto ou tecido semelhante, criando um efeito de ondulação constante como se estivesse sempre sob um vento épico.\nO portador pode fazer a capa esvoaçar, tremular, se inflar, girar ou ondular ao seu comando, mesmo em locais completamente fechados ou sem circulação de ar. A intensidade do movimento pode variar de uma brisa suave até uma rajada teatral digna de um herói lendário fazendo uma entrada triunfal.\nEste efeito é puramente visual e não interfere em testes, movimentação, furtividade ou qualquer outra mecânica. O portador pode ativar ou interromper a ondulação da capa quando desejar.",
+   "veiculos": "Capas, mantos, echarpes, ponchos, casacos longos, tapetes de ombro."
   },
   {
    "nome": "Som Elogioso",
    "pp": 5,
-   "efeito": "Ao emitir som, o item proclama elogios absurdos, altos e heroicos para a pessoa mais próxima.",
-   "veiculos": "Apitos, sinos, liras."
+   "efeito": "Este encantamento faz com que qualquer objeto capaz de produzir um som curto manifeste uma voz calorosa e exageradamente positiva sempre que for acionado.\nAo emitir o som, o objeto identifica automaticamente a pessoa mais próxima do portador e gera um elogio espontâneo, sempre de forma alta, clara e constrangedoramente sincera. Os elogios variam entre comentários motivacionais, observações poéticas e declarações heroicas grandiosas, muitas vezes completamente fora de contexto.",
+   "veiculos": "Apitos, sinos pequenos, liras, pedras sonoras, amuletos vocais, argolas chocalhantes."
   },
   {
    "nome": "Avaliação Absurda",
    "pp": 5,
-   "efeito": "Projeta notas arbitrárias e absurdas sobre pessoas ao redor (ex: \"Grau de majestade do nariz: 10\").",
-   "veiculos": "Monóculos, óculos, tiaras."
+   "efeito": "Este encantamento projeta avaliações totalmente arbitrárias sobre as pessoas ao redor do portador, atribuindo notas, conceitos ou comentários sem qualquer critério lógico ou discernível.\nSempre que o portador desejar, o encantamento se manifesta automaticamente sobre a pessoa mais próxima, atribuindo uma “nota” aleatória — que pode surgir como um número flutuante no ar, uma pequena placa luminosa ou até uma voz etérea proclamando a avaliação. As avaliações não seguem qualquer lógica: podem julgar “grau de majestade do nariz”, “nível de heroísmo potencial”, “carisma culinário”, “misticidade dos sapatos”, “quantidade de enigmas não resolvidos” ou qualquer outro parâmetro absurdo.",
+   "veiculos": "Monóculos, óculos, tiaras, broches, pequenos sinos, pedras rúnicas humorísticas."
   },
   {
    "nome": "Trivia Inútil",
    "pp": 5,
-   "efeito": "Revela fatos totalmente irrelevantes e desnecessários nos piores momentos.",
-   "veiculos": "Livros, sinos, cristais falantes."
+   "efeito": "Este encantamento faz com que o objeto conte fatos, curiosidades e informações completamente aleatórias, irrelevantes e sem relação com o momento — muitas vezes no pior momento possível.\nAo ser ativado, o objeto compartilha um único fato inesperado, que pode variar de “interessante, porém inútil” até “absurdamente desnecessário”, sempre sem qualquer conexão com a situação presente. O conteúdo das curiosidades não possui fundamento prático, mas é surpreendentemente específico, como se o encantamento tivesse acesso a um acervo infinito de informações que ninguém pediu.",
+   "veiculos": "Livros, sinos, cristais falantes, estátuas pequenas, broches, pergaminhos."
   }
  ],
  "familiares": {
