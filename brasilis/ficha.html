@@ -156,7 +156,7 @@ body.locked .fxin:focus{ outline:none; }
 .mg h4{ margin:0; background:none; padding:0; border:0; text-shadow:none; font:700 15px Georgia,serif; color:var(--purple); }
 .mg .fr{ font:700 17px/1.25 Georgia,serif; letter-spacing:.02em; color:var(--ink); margin:5px 0 2px; overflow-wrap:anywhere; }
 .mg .src{ font:700 10.5px system-ui,sans-serif; letter-spacing:.07em; text-transform:uppercase; color:#5b4668; margin-top:6px; }
-.mg .tr{ font-size:11.5px; color:#5b4668; margin-bottom:4px; } .mg .src.lv{ color:#2f6b3d; }
+.mg .it b{ color:var(--purple); } .mg .tr{ font-size:11.5px; color:#5b4668; margin-bottom:4px; } .mg .src.lv{ color:#2f6b3d; }
 .cxb{ font:700 11px system-ui,sans-serif; letter-spacing:.06em; text-transform:uppercase; color:#fff; padding:3px 9px; border-radius:99px; white-space:nowrap; background:var(--acc); }
 .cxb.t0{ background:#5b8a5f; } .cxb.t1{ background:#3d7a99; } .cxb.t2{ background:#a06a1a; } .cxb.t3{ background:#a3162b; } .cxb.t4{ background:#3e1c43; }
 /* grimório */
@@ -397,7 +397,7 @@ details.pick .in{ padding:4px 10px 12px; }
 <script src="data/particulas.js?v=4"></script>
 <script src="data/modulos.js?v=4"></script>
 <script src="data/glossario.js?v=4"></script>
-<script src="data/magias.js?v=4"></script>
+<script src="data/magias.js?v=5"></script>
 <script src="pdf-ficha.js?v=14"></script>
 <script src="data/mesa.js?v=8"></script>
 <script src="mesa-cliente.js?v=5"></script>
@@ -516,13 +516,13 @@ function exemplos(){
   var ORD=['Trivial','Regular','Difícil','Complexa','Milagre'], EST=[0,1,2,4,7], mente=num('mente'), max=mente>=6?4:mente>=4?3:mente>=2?2:1;
   function cap(c){ c=String(c).toLowerCase(); return c.charAt(0).toUpperCase()+c.slice(1); }
   var tot=ALUNO.totem; var regra=tot?' Seu Totem: '+tot.nome+' (Rank '+tot.rank+'). No Mundano, cada magia que não seja Trivial soma o Rank do Totem ao Estresse.':' Você não tem Totem: no Mundano só se conjura dentro de um Santuário; fora dele, só no Fantástico.';
-  $('#mghelp').textContent='Seis magias dentro dos seus limites: só partículas do seu grimório e Complexidade até '+ORD[max]+' (Mente '+mente+'). Os exemplos partem do livro; a Complexidade é um parâmetro e o narrador pode ajustá-la. Estresse por Complexidade: Trivial 0, Regular 1, Difícil 2, Complexa 4.'+regra+' Sem Totem ou Santuário não há magia no Mundano.';
+  $('#mghelp').textContent='Você diz só a frase; o que ela faz vem da intenção com que é dita, e a frase precisa casar com ela. Seis magias dentro dos seus limites: só partículas do seu grimório e Complexidade até '+ORD[max]+' (Mente '+mente+'). Os exemplos partem do livro; a Complexidade é um parâmetro e o narrador pode ajustá-la. Estresse por Complexidade: Trivial 0, Regular 1, Difícil 2, Complexa 4.'+regra+' Sem Totem ou Santuário não há magia no Mundano.';
   box.innerHTML=L.map(function(m){
     var w=[cap(m.f)+String(m.o).toLowerCase()].concat(m.c.map(cap),m.m.map(cap)).join(' ');
     var tr=[m.f,m.o].concat(m.c,m.m).map(function(c){ return by[c]?by[c].nome.replace('Forma: ','Forma '):c; }).join(' · ');
     var i=Math.max(0,ORD.indexOf(m.cx));
     var src=m.or==='livro'?'Exemplo do livro':m.or==='adapt'?'Adaptado do livro: '+m.lv:m.or==='ficha'?'Magia da sua ficha':'No estilo do livro';
-    return '<div class="mg"><div class="mgtop"><h4>'+esc(m.nome)+'</h4><span class="cxb t'+i+'">'+esc(m.cx)+' · '+EST[i]+' Estresse</span></div><div class="fr">'+esc(w)+'</div><div class="tr">'+esc(tr)+'</div><div>'+esc(m.efeito)+'</div><div class="src'+(m.or==='livro'||m.or==='ficha'?' lv':'')+'">'+esc(src)+'</div></div>';
+    return '<div class="mg"><div class="mgtop"><h4>'+esc(m.nome)+'</h4><span class="cxb t'+i+'">'+esc(m.cx)+' · '+EST[i]+' Estresse</span></div><div class="fr">'+esc(w)+'</div><div class="tr">'+esc(tr)+'</div><div class="it"><b>Intenção:</b> '+esc(m.intencao)+'</div><div class="src'+(m.or==='livro'||m.or==='ficha'?' lv':'')+'">'+esc(src)+'</div></div>';
   }).join('')||'<div class="hint">Sem magias para esta personagem.</div>';
 }
 var comps=$('#comps'); PART.filter(function(p){return p.cat==='Complementos'&&p.nivel===1;}).forEach(function(p){ comps.appendChild(tile(p,true,true)); });
