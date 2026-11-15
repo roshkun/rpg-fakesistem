@@ -15,10 +15,17 @@
   #scene{ position:fixed; inset:0; overflow:hidden; background:linear-gradient(#d8c8f1 0%, #c9b8e6 45%, #bfa9de 100%); perspective:900px; }
   .layer{ position:absolute; will-change:transform; }
 
-  /* fundo: a escola */
-  #bg{ left:50%; top:0; width:170vw; transform:translateX(-50%); }
-  #bg img{ display:block; width:100%; height:auto;
-           -webkit-mask-image:linear-gradient(#000 82%, transparent 100%); mask-image:linear-gradient(#000 82%, transparent 100%); }
+  /* fundo: a escola em camadas (parallax + folhas ao vento) */
+  #bg{ position:absolute; left:50%; top:0; width:170vw; aspect-ratio:1376/768; transform:translateX(-50%);
+       -webkit-mask-image:linear-gradient(#000 82%, transparent 100%); mask-image:linear-gradient(#000 82%, transparent 100%); }
+  #bg .bgl{ inset:0; }
+  #bg .bgl img{ position:absolute; display:block; height:auto; -webkit-user-drag:none; pointer-events:none; }
+  #bg .bgl .full{ left:0; top:0; width:100%; }
+  #bg .sway{ will-change:transform; animation:swayA 6.5s ease-in-out infinite; }
+  #bg .sway.palm{ transform-origin:30% 100%; filter:url(#vento1); }
+  #bg .sway.tree{ transform-origin:70% 100%; animation-duration:8s; animation-delay:-2.5s; filter:url(#vento2); }
+  @keyframes swayA{ 0%,100%{ transform:rotate(-.7deg) skewX(.9deg) } 50%{ transform:rotate(.8deg) skewX(-1.1deg) } }
+  @media (prefers-reduced-motion: reduce){ #bg .sway{ animation:none; filter:none !important; } }
   #ground{ left:-10%; right:-10%; bottom:0; height:62svh; background:linear-gradient(transparent, #a58bd0 70%, #8a6bb8); pointer-events:none; }
 
   /* personagens */
@@ -89,7 +96,17 @@
 </head>
 <body>
 <main id="scene" aria-label="Entrada da escola Brasilis. Escolha um aluno.">
-  <div class="layer" id="bg" data-depth="0.25"><img src="assets/cenario/escola-brasilis.webp" alt="Fachada da escola Brasilis" draggable="false"></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="vento1" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.011 0.018" numOctaves="2" seed="3" result="n"><animate attributeName="baseFrequency" dur="9s" values="0.011 0.018;0.016 0.024;0.011 0.018" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="vento2" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.013 0.02" numOctaves="2" seed="9" result="n"><animate attributeName="baseFrequency" dur="11s" values="0.013 0.02;0.019 0.026;0.013 0.02" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/></filter>
+  </svg>
+  <div id="bg" role="img" aria-label="Fachada da escola Brasilis">
+    <div class="layer bgl" data-depth="0.2"><img class="full" src="assets/cenario/camadas/fundo.webp" alt="" draggable="false"></div>
+    <div class="layer bgl" data-depth="0.3"><img class="sway palm" src="assets/cenario/camadas/palmeiras.webp" alt="" draggable="false" style="left:0%;top:17.188%;width:23.11%"></div>
+    <div class="layer bgl" data-depth="0.3"><img class="sway tree" src="assets/cenario/camadas/arvore.webp" alt="" draggable="false" style="left:77.616%;top:0%;width:22.384%"></div>
+    <div class="layer bgl" data-depth="0.4"><img src="assets/cenario/camadas/placa.webp" alt="" draggable="false" style="left:26.526%;top:1.953%;width:48.11%"></div>
+    <div class="layer bgl" data-depth="0.7"><img src="assets/cenario/camadas/grade.webp" alt="" draggable="false" style="left:0%;top:56.38%;width:100%"></div>
+  </div>
   <div class="layer" id="ground" data-depth="0.1"></div>
   <div id="chars"></div>
   <div id="hint">Toque em um aluno para abrir a ficha</div>
