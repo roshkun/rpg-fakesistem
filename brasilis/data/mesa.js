@@ -1,7 +1,7 @@
 // Mesa: canal de tempo real (ntfy.sh) e imagens do repositório que o mestre pode exibir.
 // A chave pública valida as mensagens; a privada fica criptografada na Área do Mestre.
 window.MESA={
- "personagens": [{"id": "aluno1", "n": "Vanguarda"}, {"id": "aluno2", "n": "Rebelde"}, {"id": "aluno3", "n": "Curandeiro"}, {"id": "aluno4", "n": "Acadêmico"}, {"id": "aluno5", "n": "Ilusionista"}, {"id": "aluno6", "n": "Atleta"}],
+ "personagens": [{"id": "aluno1", "n": "Vanguarda"}, {"id": "aluno2", "n": "Rebelde"}, {"id": "aluno3", "n": "Cuidante"}, {"id": "aluno4", "n": "Estudante"}, {"id": "aluno5", "n": "Ilusionista"}, {"id": "aluno6", "n": "Atleta"}],
  "server": "https://ntfy.sh",
  "topic": "etmos-mesa-66e4eb7d11b1a41cd938a373",
  "pub": {
@@ -45,12 +45,12 @@ window.MESA={
   },
   {
    "c": "personagens",
-   "t": "Curandeiro",
+   "t": "Cuidante",
    "s": "assets/personagens/o-curandeiro.webp"
   },
   {
    "c": "personagens",
-   "t": "Acadêmico",
+   "t": "Estudante",
    "s": "assets/personagens/o-academico.webp"
   },
   {
@@ -94,7 +94,7 @@ window.MESA={
    "s": "assets/mascotes/corisco.webp"
   }
  ],
- "titulos": {"sala-coberta-de-vegetacao":"Sala coberta de vegetação","corredor-vinhas-travando":"Corredor com vinhas travando a passagem", "construcao-abandonada-exterior":"Construção abandonada (exterior)", "sala-de-aula-brasilis":"Sala de aula de Brasilis", "entrada-vinhas-combatendo":"Entrada: vinhas combatendo os sinais", "entrada-vinhas-combatendo-versao-2":"Entrada: vinhas combatendo (versão 2)", "entrada-vestigios-perna-cabeluda":"Entrada: vestígios da Perna Cabeluda", "mao-professor-besouro":"Mão do professor com o besouro", "sala-vazia-obra":"Sala vazia, sinais de obra","caipora":"Caipora","perna-cabeluda":"Perna Cabeluda","professor-jonas-fagulha":"Professor Jonas \"Fagulha\"","orador-buscador":"Orador Buscador","escola-brasilis": "Escola Brasilis", "a-vanguarda": "Vanguarda", "a-vanguarda-2": "Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "Rebelde", "brasinha": "Brasinha", "o-curandeiro": "Curandeiro", "cantiga": "Cantiga", "o-academico": "Acadêmico", "verbete": "Verbete", "o-ilusionista": "Ilusionista", "miragem": "Miragem", "o-atleta": "Atleta", "corisco": "Corisco"},
+ "titulos": {"sala-coberta-de-vegetacao":"Sala coberta de vegetação","corredor-vinhas-travando":"Corredor com vinhas travando a passagem", "construcao-abandonada-exterior":"Construção abandonada (exterior)", "sala-de-aula-brasilis":"Sala de aula de Brasilis", "entrada-vinhas-combatendo":"Entrada: vinhas combatendo os sinais", "entrada-vinhas-combatendo-versao-2":"Entrada: vinhas combatendo (versão 2)", "entrada-vestigios-perna-cabeluda":"Entrada: vestígios da Perna Cabeluda", "mao-professor-besouro":"Mão do professor com o besouro", "sala-vazia-obra":"Sala vazia, sinais de obra","caipora":"Caipora","perna-cabeluda":"Perna Cabeluda","professor-jonas-fagulha":"Professor Jonas \"Fagulha\"","orador-buscador":"Orador Buscador","escola-brasilis": "Escola Brasilis", "a-vanguarda": "Vanguarda", "a-vanguarda-2": "Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "Rebelde", "brasinha": "Brasinha", "o-curandeiro": "Cuidante", "cantiga": "Cantiga", "o-academico": "Estudante", "verbete": "Verbete", "o-ilusionista": "Ilusionista", "miragem": "Miragem", "o-atleta": "Atleta", "corisco": "Corisco"},
  "categorias": [["personagens","Personagens"],["mascotes","Mascotes"],["npcs","NPCs"],["cenario","Cenário"],["itens","Itens"]],
  "repo": {"nome":"roshkun/rpg-fakesistem","ramo":"main","pasta":"brasilis/assets"}
 };
