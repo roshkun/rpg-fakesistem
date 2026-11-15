@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex,nofollow">
     <meta name="referrer" content="no-referrer">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://docs.google.com https://*.googleusercontent.com https://script.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src https://*.googleusercontent.com https://script.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
     <title>SoftMed Solutions - Painel Administrativo</title>
     <style>
         * {
@@ -400,13 +400,6 @@
         let editingId = null;
         let editingType = null;
 
-        // IDs das abas para CSV direto (fallback)
-        const SHEET_ID = '2PACX-1vSa0YBbnJctwW1n6htVZIJ7OAuP8kBnk96XaUDM6BVM2K_iVwgwSKQzOYNDT3XfTvtQeG32AcCCr1eN';
-        const GIDS = {
-            hospitalar: { doctors: 0, patients: 764843484 },
-            funeraria: { doctors: 991544728, patients: 694307237 }
-        };
-
         // Tudo que vem da planilha é mostrado como texto (nunca como HTML)
         function esc(v) { return String(v === null || v === undefined ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
         function numId(v) { const n = Number(v); return Number.isFinite(n) ? n : 0; }
@@ -468,77 +461,11 @@
                     throw new Error('Falha na API');
                 }
             } catch (error) {
-                console.warn('API falhou, usando fallback CSV:', error);
-                return await loadDataFromCSV();
-            }
-        }
-
-        // Fallback: carregar via CSV direto
-        async function loadDataFromCSV() {
-            const statusDiv = document.getElementById('apiStatus');
-            statusDiv.className = 'status loading';
-            statusDiv.innerHTML = '🔄 Carregando via CSV...';
-            
-            try {
-                const doctorsGid = GIDS[currentMode].doctors;
-                const patientsGid = GIDS[currentMode].patients;
-                const baseUrl = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=`;
-                
-                const [doctorsRes, patientsRes] = await Promise.all([
-                    fetch(`${baseUrl}${doctorsGid}&single=true&output=csv`),
-                    fetch(`${baseUrl}${patientsGid}&single=true&output=csv`)
-                ]);
-                
-                const doctorsCSV = await doctorsRes.text();
-                const patientsCSV = await patientsRes.text();
-                
-                const doctorsResult = parseCSV(doctorsCSV);
-                const patientsResult = parseCSV(patientsCSV);
-                
-                doctorsData = doctorsResult.data;
-                doctorsHeaders = doctorsResult.headers;
-                patientsData = patientsResult.data;
-                patientsHeaders = patientsResult.headers;
-                
-                statusDiv.className = 'status connected';
-                statusDiv.innerHTML = `✅ CSV (${doctorsData.length} médicos, ${patientsData.length} pacientes)`;
-                return true;
-            } catch (error) {
-                console.error('Erro CSV:', error);
+                console.warn('API falhou:', error);
                 statusDiv.className = 'status error';
-                statusDiv.innerHTML = '❌ Erro de conexão';
+                statusDiv.innerHTML = '❌ API recusou ou não respondeu. Confira a URL e o token do mestre.';
                 return false;
             }
-        }
-
-        function parseCSV(csvText) {
-            if (!csvText || csvText.trim() === '') return { headers: [], data: [] };
-            const lines = csvText.split('\n').filter(l => l.trim());
-            if (lines.length === 0) return { headers: [], data: [] };
-            
-            const parseLine = (line) => {
-                const result = [];
-                let current = '';
-                let inQuotes = false;
-                for (let i = 0; i < line.length; i++) {
-                    const c = line[i];
-                    if (c === '"') inQuotes = !inQuotes;
-                    else if (c === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
-                    else current += c;
-                }
-                result.push(current.trim());
-                return result;
-            };
-            
-            const headers = parseLine(lines[0]);
-            const data = [];
-            for (let i = 1; i < lines.length; i++) {
-                const values = parseLine(lines[i]);
-                const record = {};
-                headers.forEach((h, idx) => { record[h] = values[idx] || ''; });
-                data.push(record);
-            }
-            return { headers, data };
         }
 
         function renderDoctorsTable() {
