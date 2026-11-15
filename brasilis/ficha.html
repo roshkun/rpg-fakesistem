@@ -158,6 +158,7 @@ body.locked .fxin:focus{ outline:none; }
 .mg .tr{ font-size:11.5px; color:#5b4668; margin-bottom:4px; }
 .cxb{ font:700 11px system-ui,sans-serif; letter-spacing:.06em; text-transform:uppercase; color:#fff; padding:3px 9px; border-radius:99px; white-space:nowrap; }
 .cxb.t0{ background:#5b8a5f; } .cxb.t1{ background:#3d7a99; } .cxb.t2{ background:#a06a1a; } .cxb.t3{ background:#a3162b; } .cxb.t4{ background:#3e1c43; }
+.mg .src{ font:700 10.5px system-ui,sans-serif; letter-spacing:.07em; text-transform:uppercase; color:#5b4668; margin-top:6px; } .mg .src.lv{ color:#2f6b3d; }
 .mg .lim{ font-size:11.5px; color:#a3162b; margin-top:4px; }
 /* grimório */
 .tiles{ display:grid; grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:8px; }
@@ -321,7 +322,7 @@ details.pick .in{ padding:4px 10px 12px; }
     <div class="sec"><span class="hd">Complementos</span>
       <div class="help">Os complementos de 1º nível já são conhecidos.</div><div class="tiles" id="comps"></div></div>
     <div class="sec"><span class="hd">Magias de exemplo</span>
-      <div class="help">Quatro frases prontas com as suas partículas, da mais simples à mais difícil. Servem de modelo: a mesma frase pode ter outros efeitos, conforme a sua intenção.</div>
+      <div class="help">Quatro frases prontas com as suas partículas, da mais simples à mais difícil, a partir dos exemplos do livro (onde a partícula original não é sua, a frase foi adaptada). Servem de modelo: a mesma frase pode ter outros efeitos, conforme a sua intenção.</div>
       <div id="exmag"></div></div>
     <div class="links"><a id="conj2" href="conjurar.html">✨ Montar uma magia (mesa de cartas)</a> &nbsp;·&nbsp; <a id="dic2" href="dicionario.html">📖 Dicionário completo</a> &nbsp;·&nbsp; <a id="mod2" href="modulos.html">📘 Módulos (proezas, itens, familiares)</a></div>
   </section>
@@ -397,7 +398,7 @@ details.pick .in{ padding:4px 10px 12px; }
 <script src="data/particulas.js?v=4"></script>
 <script src="data/modulos.js?v=4"></script>
 <script src="data/glossario.js?v=4"></script>
-<script src="data/magias.js?v=1"></script>
+<script src="data/magias.js?v=2"></script>
 <script src="pdf-ficha.js?v=14"></script>
 <script src="data/mesa.js?v=8"></script>
 <script src="mesa-cliente.js?v=5"></script>
@@ -519,7 +520,7 @@ function exemplos(){
     var w=[cap(m.f)+String(m.o).toLowerCase()].concat(m.c.map(cap),m.m.map(cap)).join(' ');
     var tr=[m.f,m.o].concat(m.c,m.m).map(function(c){ return by[c]?by[c].nome.replace('Forma: ','Forma '):c; }).join(' · ');
     var i=Math.max(0,ORD.indexOf(m.cx)), acima=i>max;
-    return '<div class="mg"><div class="mgtop"><h4>'+esc(m.nome)+'</h4><span class="cxb t'+i+'">'+esc(m.cx)+'</span></div><div class="fr">'+esc(w)+'</div><div class="tr">'+esc(tr)+'</div><div>'+esc(m.efeito)+'</div>'+(acima?'<div class="lim">Acima da sua Mente atual (até '+ORD[max]+'). Meta para quando crescer.</div>':'')+'</div>';
+    return '<div class="mg"><div class="mgtop"><h4>'+esc(m.nome)+'</h4><span class="cxb t'+i+'">'+esc(m.cx)+'</span></div><div class="fr">'+esc(w)+'</div><div class="tr">'+esc(tr)+'</div><div>'+esc(m.efeito)+'</div>'+'<div class="src'+(m.or==='livro'?' lv':'')+'">'+(m.or==='livro'?'Exemplo do livro':m.or==='adapt'?'Adaptado do livro: '+esc(m.lv):'No estilo do livro')+'</div>'+(acima?'<div class="lim">Acima da sua Mente atual (até '+ORD[max]+'). Meta para quando crescer.</div>':'')+'</div>';
   }).join('')||'<div class="hint">Sem exemplos para esta personagem.</div>';
 }
 var comps=$('#comps'); PART.filter(function(p){return p.cat==='Complementos'&&p.nivel===1;}).forEach(function(p){ comps.appendChild(tile(p,true,true)); });
