@@ -1,6 +1,7 @@
 // 6 magias por personagem, todas dentro dos limites da ficha: só partículas que ela conhece,
 // só complementos de 1º nível e Complexidade até o que a Mente permite (0-1 Regular, 2-3 Difícil, 4-5 Complexa).
 // f = Função, o = Objeto, c = Características, m = Complementos (códigos de data/particulas.js).
+// Lembrete: no Mundano só se conjura com Totem ou dentro de um Santuário; por isso nenhuma magia aqui depende de cenário Mundano (câmeras, computadores, IP...).
 // or: 'livro' = exemplo do livro sem mudança · 'adapt' = exemplo do livro com partículas trocadas (lv = frase original)
 //     'ficha' = a magia-símbolo da própria ficha · 'nova' = no estilo do livro. A Complexidade é um exemplo: o narrador ajusta.
 window.MAGIAS = {
@@ -30,10 +31,10 @@ window.MAGIAS = {
   ],
   aluno4: [
     { nome:'Lembrar do esquecido', f:'IL', o:'IMU', c:[], m:[], cx:'Trivial', or:'livro', lv:'Ilimu', efeito:'Fazer alguém lembrar do que esqueceu.' },
-    { nome:'Rastrear sinal', f:'IL', o:'INA', c:['TRIZ'], m:[], cx:'Regular', or:'adapt', lv:'Ilina Mutazi', efeito:'Descobrir a localização exata de um aparelho conectado, como um endereço de IP.' },
+    { nome:'Mentes ligadas', f:'OR', o:'IMU', c:[], m:[], cx:'Regular', or:'adapt', lv:'Unimu', efeito:'Ligar duas mentes para conversarem por pensamento.' },
     { nome:'Resíduos mágicos', f:'IL', o:'AZI', c:['MAG'], m:[], cx:'Regular', or:'ficha', efeito:'Ler resíduos mágicos.' },
     { nome:'Entendido sem idioma', f:'OR', o:'AZI', c:['HIN'], m:[], cx:'Trivial', or:'adapt', lv:'Alala Hin', efeito:'Fazer a pessoa ser entendida apesar da barreira do idioma.' },
-    { nome:'Pulso eletromagnético', f:'OR', o:'INA', c:['TRIZ'], m:[], cx:'Difícil', or:'adapt', lv:'Imiro Triz', efeito:'Soltar um pulso eletromagnético que desativa câmeras e computadores próximos.' },
+    { nome:'Rastro de portais', f:'IL', o:'AZI', c:['RAT'], m:[], cx:'Difícil', or:'nova', efeito:'Perceber onde há portais e passagens para outros planos nas proximidades.' },
     { nome:'Bolso dimensional', f:'OR', o:'INA', c:['RAT'], m:[], cx:'Complexa', or:'adapt', lv:'Enivi Rat', efeito:'Enviar um objeto para uma dimensão de bolso.' }
   ],
   aluno5: [
@@ -48,7 +49,7 @@ window.MAGIAS = {
     { nome:'Equilíbrio', f:'ET', o:'IVI', c:['TUM'], m:[], cx:'Trivial', or:'adapt', lv:'Emuna Phys', efeito:'Melhorar o equilíbrio de uma pessoa.' },
     { nome:'Bola na mão', f:'ET', o:'EXA', c:['TUM'], m:['MIN'], cx:'Trivial', or:'nova', efeito:'Fazer um objeto leve rolar ou voltar até a mão.' },
     { nome:'Ponto visível', f:'IT', o:'IVI', c:[], m:[], cx:'Regular', or:'livro', lv:'Itivi', efeito:'Levar uma pessoa a um ponto visível a até 10 metros.' },
-    { nome:'Peso que muda', f:'ET', o:'IVI', c:['YM'], m:[], cx:'Regular', or:'ficha', efeito:'Alterar o próprio peso para saltar prédios no mundo Mundano.' },
+    { nome:'Peso que muda', f:'ET', o:'IVI', c:['YM'], m:[], cx:'Regular', or:'ficha', efeito:'Alterar o próprio peso para saltar prédios.' },
     { nome:'Pique', f:'IT', o:'IVI', c:['AST'], m:[], cx:'Regular', or:'nova', efeito:'Correr muito mais rápido por alguns segundos, num pique curto.' },
     { nome:'Chão rolante', f:'ET', o:'ERA', c:['TUM'], m:['MIN'], cx:'Regular', or:'nova', efeito:'Fazer um trecho curto do chão deslizar como esteira, levando quem estiver em cima.' }
   ]
