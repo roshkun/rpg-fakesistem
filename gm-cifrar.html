@@ -19,7 +19,7 @@
 </head>
 <body><main>
 <h1>🔐 Proteger códigos e observações</h1>
-<p class="note">Tudo acontece neste aparelho: nada é enviado a lugar nenhum. Cole o resultado na planilha, no lugar do texto puro. Quem ler a planilha (ela é pública) não vê mais o código nem a observação. Texto puro continua funcionando, então dá para proteger só o que importa.</p>
+<p class="note">Tudo acontece neste aparelho: nada é enviado a lugar nenhum. Cole o resultado na planilha, no lugar do texto puro. Mesmo que alguém consiga ler a planilha, não vê mais o código nem a observação. Texto puro continua funcionando, então dá para proteger só o que importa.</p>
 
 <h2>1. Código do médico (hash)</h2>
 <p class="note">Vale para as colunas <code>observationCode</code> e <code>savedPassword</code>. Com hash, a senha salva não é mais pré-preenchida na tela.</p>
@@ -34,6 +34,13 @@
 <label>Texto da observação</label><textarea id="etxt"></textarea>
 <button id="be">Cifrar</button><div class="out" id="oe"></div>
 <p class="note">Atenção: no “modo hackeado” (o erro das 3 tentativas), observações cifradas <b>não</b> são reveladas. Só as de texto puro. Deixe em texto puro o que o erro deve liberar.</p>
+
+<h2>3. Link do terminal (abre o sistema já configurado)</h2>
+<p class="note">Gera um link que grava a URL da API e o token <b>só no navegador de quem o abrir</b> e depois some da barra de endereço (os dados ficam depois do <code>#</code>, parte que nunca vai a servidor nenhum). Use o token de <b>leitura</b> (<code>READ_TOKEN</code>), nunca o do admin. Guarde o link nos favoritos do aparelho do mestre; não compartilhe nem cole em chats públicos.</p>
+<label>URL da API (termina em /exec)</label><input id="tu" autocomplete="off">
+<label>Token de leitura</label><input id="tt" type="password" autocomplete="off">
+<label>Tela</label><select id="tm" style="width:100%;padding:10px;border-radius:8px;border:1px solid #33445c;background:#18212e;color:#fff"><option value="hospitalar">Hospital</option><option value="funeraria">Funerária</option></select>
+<button id="bl">Gerar link</button><div class="out" id="ol"></div>
 </main>
 <script>
 const enc=new TextEncoder(), hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
@@ -52,6 +59,14 @@ document.getElementById('be').onclick=async()=>{
   const all=new Uint8Array(12+ct.length); all.set(iv); all.set(ct,12);
   let bin=''; all.forEach(b=>bin+=String.fromCharCode(b));
   document.getElementById('oe').textContent='enc:'+btoa(bin);
+};
+
+document.getElementById('bl').onclick=()=>{
+  const u=document.getElementById('tu').value.trim(), t=document.getElementById('tt').value.trim(), m=document.getElementById('tm').value, o=document.getElementById('ol');
+  if(!/^https:\/\/script\.google\.com\/(a\/macros\/[\w.-]+|macros)\/s\/[\w-]+\/exec$/.test(u)){o.textContent='URL inválida: use o endereço terminado em /exec.';return;}
+  if(!t){o.textContent='Informe o token.';return;}
+  const base=location.href.replace(/gm-cifrar\.html.*$/,'sistema.html');
+  o.textContent=base+'?mode='+m+'#u='+encodeURIComponent(u)+'&t='+encodeURIComponent(t);
 };
 </script>
 </body></html>
