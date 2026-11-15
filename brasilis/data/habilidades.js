@@ -1,4 +1,4 @@
-// Habilidades de Etmos (resumo próprio das regras). P = prática, T = teórica.
+// Habilidades de Etmos: resumo das regras do livro base (cap. Criação de Personagem, págs. 75-79), conferido contra o texto do livro. P = prática, T = teórica.
 // "acum": pode ser escolhida de novo; cada vez soma o bônus indicado.
 window.HABILIDADES = {
  "Aparar":["P","A dificuldade para te acertarem (corpo a corpo ou à distância) sobe 2. Escolhida de novo, soma mais +2."],
