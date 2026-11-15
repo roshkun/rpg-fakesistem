@@ -92,6 +92,21 @@
   }
   @media (prefers-reduced-motion: reduce){ .char .in{ animation:none; } }
   #mestre{ position:fixed; left:12px; bottom:calc(env(safe-area-inset-bottom) + 12px); z-index:6; font:600 12px/1 system-ui,sans-serif; color:#f1ecf7; background:rgba(29,20,36,.6); border:1px solid rgba(123,74,138,.6); padding:9px 11px; border-radius:99px; text-decoration:none; backdrop-filter:blur(4px); }
+
+  /* mascotes (familiares) junto de cada aluno: acompanham o parallax do aluno e abrem a mesma ficha */
+  .char .mas{ position:absolute; left:calc(var(--mx,50) * 1%); bottom:calc((var(--mb,2) - var(--b)) * 1svh); height:calc(var(--mh,11) * 1svh);
+              aspect-ratio:var(--mar,1.2); transform:translateX(-50%); z-index:3; pointer-events:auto; cursor:pointer; }
+  .char .mas img{ pointer-events:auto; width:100%; height:100%; -webkit-mask-image:none; mask-image:none; animation:hop 3.4s ease-in-out infinite; animation-delay:var(--dl); transform-origin:50% 100%;
+                  filter:drop-shadow(0 4px 6px rgba(30,10,50,.4)); }
+  .char:hover .mas img, .char:focus-visible .mas img{ filter:drop-shadow(0 0 12px rgba(255,255,255,.85)); transform:none; }
+  .char.sel .mas img{ animation:none; }
+  @keyframes hop{ 0%,86%,100%{ transform:translateY(0) } 92%{ transform:translateY(-1.4svh) } }
+  .c1{ --mx:14; --mb:36.5; --mh:8; } .c3{ --mx:14; --mb:37.5; --mh:8; } .c5{ --mx:14; --mb:36.5; --mh:8; }
+  .c2{ --mx:76; --mb:9; --mh:10; } .c4{ --mx:78; --mb:9; --mh:10; } .c6{ --mx:22; --mb:9; --mh:10; }
+  @media (min-aspect-ratio: 1/1){
+    .c1,.c2,.c3,.c4,.c5,.c6{ --mx:50; --mb:7; --mh:15; }
+    .c2,.c4,.c6{ --mh:17; }
+  }
 </style>
 </head>
 <body>
@@ -142,6 +157,12 @@
     var inn=document.createElement('span'); inn.className='in'; inn.appendChild(im);
     var tag=document.createElement('span'); tag.className='tag'; tag.textContent=a.nome; inn.appendChild(tag);
     b.appendChild(inn);
+    if(a.familiar_img){
+      var ms=document.createElement('span'); ms.className='mas';
+      var mi=new Image(); mi.src=a.familiar_img; mi.alt=''; mi.draggable=false;
+      mi.onload=function(){ b.style.setProperty('--mar',(mi.naturalWidth/mi.naturalHeight).toFixed(4)); };
+      ms.appendChild(mi); b.appendChild(ms);
+    }
     b.dataset.depth=DEPTH[n]||1; b.dataset.id=a.id;
     b.addEventListener('click',function(e){ e.stopPropagation(); pick(b,a); });
     box.appendChild(b); chars.push(b);
