@@ -405,11 +405,13 @@ window.MODULOS = {
  ],
  "familiares": {
   "pacto": [
-   "Pode ser Afetivo, Espiritual, Fenômeno Místico ou Contrato Escrito.",
-   "Vínculo Mental e Espiritual: Possuem localização mútua, telepatia e empatia.",
-   "Conjuração Através do Familiar: O Orador pode conjurar magias como se estivesse no local do Familiar, custando +1 de Estresse extra.",
-   "Dano Compartilhado: Efeitos mágicos que tenham o Familiar como alvo podem afetar o Pactário (e vice-versa), com um acúmulo de +2 Pontos de Estresse.",
-   "Se o Familiar morre, a alma retorna ao Pactário e é conservada até ser ressuscitada."
+   "Pacto: relação social e mística com o Familiar (o Orador é o Pactário). Apenas 1 Pacto pode ser estabelecido por vez. Ele é firmado de modo narrativo, por exemplo como Vínculo Afetivo, Conexão Espiritual, Fenômeno Místico ou Contrato Escrito.",
+   "O Pacto conecta Pactário e Familiar através de suas almas. Ambos conseguem determinar a localização um do outro, sentir suas emoções e integridade física. Também possuem contato psíquico, de modo que não precisam falar o mesmo idioma para conseguirem se comunicar.",
+   "Conjurar através do Familiar: o Orador pode conjurar magias através de seu Familiar, como se estivessem no mesmo lugar. A magia acumula 1 Ponto de Estresse adicional, independente da Complexidade.",
+   "Afetar o Pactário através do Familiar (e vice-versa): uma magia conjurada no Familiar pode afetar o Pactário, e vice-versa, ao acúmulo de 2 Pontos de Estresse extra quando conjurar a magia.",
+   "Se o Familiar morre, sua Alma retorna ao Pactário e fica atrelada a seu corpo, sendo assim “conservada”. Com a magia apropriada, ou itens Encantados específicos, é possível trazê-lo de volta à vida.",
+   "Em combate, o Familiar não age se não for comandado. O Pactário pode comandá-lo como opção à sua ação de Interagir com o Ambiente, e o Familiar age imediatamente (para se movimentar ou executar uma ação).",
+   "A forma do Familiar (sua “skin”) pode ser qualquer uma, desde que acordada entre Jogador e Narrador, mas a aparência não define mecânica: o que ele pode fazer vem das Aptidões."
   ],
   "base": [
    [
@@ -440,55 +442,55 @@ window.MODULOS = {
   "aptidoes": [
    [
     "Grimório Compartilhado",
-    "Familiar pode conjurar magias (1 Função, 1 Objeto, 1 Característica do mestre)."
+    "O Pactário compartilha parte do seu Grimório, permitindo o Familiar conjurar magias por conta própria. Escolha 1 Função, 1 Objeto e 1 Característica do seu Grimório: O Familiar sabe essas Partículas e pode conjurar magias com elas."
    ],
    [
     "Golpe Simples (Ataque)",
-    "Ataque desarmado (Corpo) até 1m, 1 Ferimento."
+    "O Familiar realiza um ataque desarmado usando seu Atributo Corpo como bônus extraordinário contra um alvo em distância até 1m, causando 1 Ferimento."
    ],
    [
     "Corpo Fechado",
-    "Bloqueia magias miradas no Familiar de afetarem o Pactário."
+    "Não é possível afetar o Pactário através de magias, ou outros efeitos mágicos, que tenham o Familiar como alvo."
    ],
    [
     "Presença Calmante",
-    "1x/dia recupera 3 de Estresse do Pactário."
+    "Uma vez por dia, o Familiar pode acalmar os nervos do Pactário, recuperando 3 Pontos de Estresse."
    ],
    [
     "Extensão de Sentidos",
-    "Ver/ouvir pelos sentidos do outro (+1 Estresse se >10 min)."
+    "O Pactário e Familiar podem concentrar-se para experienciar o mundo através do outro. Pode-se ver, ouvir, e sentir a mesma coisa que o outro. Permanecer com essa Extensão de Sentidos por mais de 10 minutos por dia acumula 1 Ponto de Estresse."
    ],
    [
     "Reinvocação Espontânea",
-    "Se morto, renasce espontaneamente após 3 dias."
+    "Após ser morto e ter sua Alma retornada ao corpo do Pactário, o corpo físico do Familiar se reforma espontaneamente após 3 dias."
    ],
    [
     "Familiar Totêmico",
-    "Age como Totem Rank 2 (exige Força do Pacto 3+)."
+    "O Familiar conta como um Totem de Rank 2 para seu Pactário. Esse efeito não se aplica se a Força do Pacto for menor que 3."
    ],
    [
     "Fala",
-    "Pode falar os idiomas do Pactário."
+    "O Familiar consegue se comunicar por conta própria nos mesmos idiomas que o Pactário."
    ],
    [
     "Voo",
-    "Pode voar ou flutuar."
+    "O Familiar consegue flutuar ou voar."
    ],
    [
     "Fôlego Sem Fim",
-    "Não precisa respirar."
+    "O Familiar não precisa respirar."
    ],
    [
     "Resistência Elemental",
-    "Imunidade a 1 elemento (Fogo, Gelo, Veneno, Ácido ou Eletricidade)."
+    "Escolhe entre: Fogo, Gelo, Veneno, Ácido ou Eletricidade. O Familiar não sofre Ferimento de tais fontes."
    ],
    [
     "Robustez",
-    "+2 no Limite de Ferimentos."
+    "Aumenta o Limite de Ferimentos do Familiar em 2."
    ],
    [
     "Treinado",
-    "+2 em um Atributo (máx 5). Pode ser escolhida várias vezes."
+    "Aumente um Atributo do Familiar em 2, até o máximo de 5. Essa Aptidão é cumulativa e pode ser escolhida mais de uma vez."
    ]
   ],
   "forca": [
@@ -509,6 +511,6 @@ window.MODULOS = {
     "6 Aptidões"
    ]
   ],
-  "aptintro": "Ao fazer o pacto, o Familiar ganha 3 Aptidões e, a cada aumento na Força do Pacto, ganha 1 nova."
+  "aptintro": "Assim que o Pacto é estabelecido, o Jogador (Pactário) escolhe 3 Aptidões para o Familiar possuir e, a cada aumento da Força do Pacto, escolhe 1 nova Aptidão."
  }
 };
