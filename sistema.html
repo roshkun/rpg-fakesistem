@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="referrer" content="no-referrer">
     <meta name="robots" content="noindex,nofollow">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src https://script.google.com https://*.googleusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
@@ -18,6 +18,8 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; }
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+        button, a, input, select { touch-action: manipulation; }
         body { font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif; font-size: 14px; color: var(--text); background: var(--bg); overflow: hidden; }
         button { font: inherit; color: inherit; cursor: pointer; }
         input, select { font: inherit; }
@@ -52,16 +54,16 @@
         html.crt .stage { display: grid; place-items: center; position: fixed; inset: 0; background: radial-gradient(ellipse at 50% 30%, var(--wall1), var(--wall2) 75%); }
         html.crt .monitor {
             display: flex; flex-direction: column; position: relative;
-            width: min(97vw, calc(97vh * 1.16)); aspect-ratio: 1.16; padding: 3.6% 4.2% 0;
-            font-size: calc(min(97vw, 97vh * 1.16) / 80);
-            border-radius: 3.2% / 3.8%;
+            width: min(98vw, calc(98vh * var(--ma, 1.209))); aspect-ratio: var(--ma, 1.209); padding: 2.2% 2.4% 0;
+            font-size: calc(min(98vw, 98vh * var(--ma, 1.209)) / 80);
+            border-radius: 2.4% / 3%;
             background: linear-gradient(160deg, var(--case1), var(--case2));
             box-shadow: 0 34px 70px rgba(0,0,0,.6), inset 0 2px 0 rgba(255,255,255,.3), inset 0 -8px 16px rgba(0,0,0,.28);
         }
-        html.crt .bezel { display: block; padding: 2.2%; background: #12100e; border-radius: 2.4% / 3.2%; box-shadow: inset 0 4px 12px rgba(0,0,0,.95), 0 1px 0 rgba(255,255,255,.25); }
-        html.crt .screen { display: block; position: relative; width: 100%; aspect-ratio: 4 / 3; background: #000; border-radius: 5% / 6.5%; overflow: hidden; box-shadow: inset 0 0 40px rgba(0,0,0,.9); }
+        html.crt .bezel { display: block; padding: 1.3%; background: #12100e; border-radius: 2% / 2.8%; box-shadow: inset 0 4px 12px rgba(0,0,0,.95), 0 1px 0 rgba(255,255,255,.25); }
+        html.crt .screen { display: block; position: relative; width: 100%; aspect-ratio: var(--sa, 1.3333); background: #000; border-radius: 3.6% / 5%; overflow: hidden; box-shadow: inset 0 0 40px rgba(0,0,0,.9); }
         html.crt .glass { display: block; position: absolute; inset: 0; }
-        html.crt .content { position: absolute; inset: auto; left: 0; top: 0; width: 1024px; height: 768px; transform-origin: 0 0; animation: flicker 7s infinite; text-shadow: 0 0 1.2px rgba(150,190,255,.28); }
+        html.crt .content { position: absolute; inset: auto; left: 0; top: 0; width: 960px; height: 720px; transform-origin: 0 0; animation: flicker 7s infinite; text-shadow: 0 0 1.2px rgba(150,190,255,.28); }
         html.crt .overlay { display: block; position: absolute; inset: 0; pointer-events: none; }
         .ov-scan { background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.12) 3px, rgba(0,0,0,0) 4px); z-index: 20; }
         .ov-vig { background: radial-gradient(ellipse at center, rgba(0,0,0,0) 58%, rgba(0,0,0,.45) 100%); z-index: 21; }
@@ -128,6 +130,7 @@
         .navspacer { flex: 1; }
         .main { grid-area: main; min-width: 0; min-height: 0; position: relative; }
         .view { position: absolute; inset: 0; overflow: auto; }
+        .view[hidden] { display: none !important; }
         #view-prontuario { display: grid; grid-template-columns: 300px 1fr; overflow: hidden; }
         .listpane { border-right: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
         .listhead { padding: 12px 14px 10px; border-bottom: 1px solid var(--line); }
@@ -238,7 +241,7 @@
         .login-foot { margin-top: 14px; font-size: 11px; color: var(--muted); text-align: center; line-height: 1.5; }
 
         /* ===== Modais, avisos ===== */
-        .modal { position: absolute; inset: 0; z-index: 4000; display: none; align-items: center; justify-content: center; background: rgba(10,18,28,.62); backdrop-filter: blur(3px); }
+        .modal { position: absolute; inset: 0; z-index: 4000; display: none; align-items: center; justify-content: center; background: rgba(10,18,28,.62); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
         .modal-content { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 14px; width: min(520px, 92%); max-height: 90%; overflow: auto; box-shadow: 0 24px 60px rgba(0,0,0,.4); animation: pop .18s ease-out; }
         @keyframes pop { from { transform: translateY(10px) scale(.98); opacity: 0; } to { transform: none; opacity: 1; } }
         .mh { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-weight: 700; }
@@ -264,8 +267,11 @@
         @keyframes sk { to { background-position: -200% 0; } }
 
         /* ===== Celular / janela estreita ===== */
-        @media (max-width: 820px) {
-            .shell { grid-template-columns: 1fr; grid-template-rows: 54px 1fr 58px; grid-template-areas: "top" "main" "nav"; }
+        @media (max-width: 820px), (hover: none) and (pointer: coarse) and (max-height: 500px) {
+            .shell { grid-template-columns: 1fr; grid-template-rows: calc(54px + env(safe-area-inset-top)) 1fr calc(58px + env(safe-area-inset-bottom)); grid-template-areas: "top" "main" "nav"; }
+            .topbar { padding-top: env(safe-area-inset-top); padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
+            .navrail { padding-bottom: env(safe-area-inset-bottom); }
+            input, select, .code-input { font-size: 16px !important; }   /* iOS dá zoom em campos menores que 16px */
             .statusbar, .clock, .unit-text, .uinfo, .kbd { display: none; }
             .brandbox { min-width: 0; }
             .topbar { gap: 8px; padding: 0 10px; }
@@ -287,9 +293,12 @@
             .banner-actions { margin-left: 0; width: 100%; justify-content: flex-start; }
             .panel, .viewpad { padding: 14px 12px 24px; }
             .docrow { grid-template-columns: 1fr; gap: 2px; }
-            .toasts { bottom: 66px; right: 8px; left: 8px; }
+            .toasts { bottom: calc(66px + env(safe-area-inset-bottom)); right: 8px; left: 8px; }
             .tbl .hide-m { display: none; }
         }
+
+        /* celular deitado: pouca altura, o cabeçalho do paciente rola junto */
+        @media (hover: none) and (pointer: coarse) and (max-height: 500px) { .banner { position: static; } .banner .avatar { display: none; } .toasts { bottom: 66px; } }
 
         /* ===== Impressão ===== */
         @media print {
@@ -1007,17 +1016,26 @@
 
     // ==================== MONITOR DE TUBO ====================
     let powered = true;
+    // O tubo acompanha a proporção da janela (de 4:3 a 16:9). A resolução "lógica" tem altura fixa (720)
+    // e largura proporcional; o conteúdo é escalado para preencher a tela do monitor.
+    const LH = 720;
     function applyScale() {
-        const c = $('content');
-        if (!IS_CRT()) { c.style.transform = ''; c.style.left = ''; c.style.top = ''; return; }
+        const c = $('content'), root = document.documentElement;
+        if (!IS_CRT()) { c.style.transform = ''; c.style.left = ''; c.style.top = ''; c.style.width = ''; c.style.height = ''; return; }
+        const ratio = innerHeight / innerWidth;                       // altura/largura da janela
+        const sa = Math.min(16 / 9, Math.max(4 / 3, 0.927 / (ratio - 0.1318)));   // proporção da tela do monitor
+        const ma = 1 / (0.1318 + 0.927 / sa);                           // proporção do monitor inteiro
+        root.style.setProperty('--sa', sa.toFixed(4)); root.style.setProperty('--ma', ma.toFixed(4));
+        const LW = Math.round(LH * sa);
+        c.style.width = LW + 'px'; c.style.height = LH + 'px';
         const r = $('screen').getBoundingClientRect();
-        const k = Math.min(r.width / 1024, r.height / 768) * 0.955;
+        const k = Math.min(r.width / LW, r.height / LH) * 0.985;
         c.style.transform = `scale(${k})`;
-        c.style.left = ((r.width - 1024 * k) / 2) + 'px'; c.style.top = ((r.height - 768 * k) / 2) + 'px';
+        c.style.left = ((r.width - LW * k) / 2) + 'px'; c.style.top = ((r.height - LH * k) / 2) + 'px';
     }
     const crtMQ = matchMedia('(min-width:900px) and (min-height:560px) and (hover:hover) and (pointer:fine)');
     function syncCRT() { document.documentElement.classList.toggle('crt', urlParams.get('crt') !== '0' && crtMQ.matches); applyScale(); }
-    crtMQ.addEventListener('change', syncCRT); window.addEventListener('resize', applyScale); syncCRT();
+    crtMQ.addEventListener('change', syncCRT); window.addEventListener('resize', () => { applyScale(); requestAnimationFrame(applyScale); }); syncCRT(); requestAnimationFrame(applyScale);
     function crtPower() {
         if (!IS_CRT()) return;
         const g = $('glass'), led = $('led');
