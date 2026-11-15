@@ -64,6 +64,9 @@
         background:rgba(29,20,36,.78); border:1px solid #7b4a8a; padding:10px 13px; border-radius:99px; text-decoration:none; backdrop-filter:blur(6px); }
   #dic:hover{ background:rgba(58,35,80,.9); }
   #scene.picked #dic{ opacity:0; pointer-events:none; }
+  #cred{ position:absolute; top:calc(env(safe-area-inset-top) + 13.5svh); left:50%; transform:translateX(-50%); z-index:20; white-space:nowrap; text-align:center; font:600 11px/1.3 system-ui,sans-serif; color:#f4ecfa; background:rgba(46,26,58,.72); border:1px solid rgba(201,166,214,.45); padding:7px 10px; border-radius:12px; backdrop-filter:blur(4px); letter-spacing:.02em; }
+  #cred b{ display:block; font:700 12px Georgia,serif; font-variant:small-caps; letter-spacing:.08em; color:#e2c9ee; }
+  #scene.picked #cred{ opacity:0; pointer-events:none; }
   /* véu de transição */
   #veil{ position:absolute; inset:0; z-index:30; background:radial-gradient(circle at 50% 45%, #4a2e66, #1d1424 75%); opacity:0; pointer-events:none; transition:opacity .55s ease-in .25s; }
   #bg, #ground{ transition:filter .8s ease, opacity .8s ease; }
@@ -126,12 +129,13 @@
   <div id="chars"></div>
   <div id="hint">Toque em um aluno para abrir a ficha</div>
   <button id="motion" type="button">Ativar movimento</button>
+  <div id="cred"><b>Sistema criado por Rafael</b>com o Balde Galático</div>
   <a id="dic" href="dicionario.html">📖 Dicionário</a>
   <a id="mestre" href="mestre.html" aria-label="Área do mestre">🔒 Mestre</a>
   <div id="veil"></div>
 </main>
 
-<script src="data/alunos.js?v=12"></script>
+<script src="data/alunos.js?v=13"></script>
 <script>window.MESA_SO_PUBLICAR=true;</script>
 <script src="data/mesa.js?v=11"></script>
 <script src="mesa-cliente.js?v=5"></script>
