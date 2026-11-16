@@ -12,9 +12,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Veio de uma comunidade à beira de um rio no interior da Amazônia, direto do Mundano, de onde trouxe uma postura rígida, estruturada e defensiva e o hábito de proteger os seus. Não tem nenhuma facilidade inata para o Fantástico, e cada conquista na língua vem de esforço deliberado.",
-      "dos_postura": "Estuda as frases mágicas como quem treina artes marciais: repete até a exaustão, até a fonética sair perfeita. A atitude é de controle e hipervigilância, com tendência a ditar as ações do pelotão durante as simulações práticas.",
-      "dos_atencao": "Com o rio na memória, a água é o elemento em que se sente em casa: usa a de canos quebrados e poças para erguer barreiras protetoras ao redor dos colegas mais imprudentes. Exige supervisão constante para que a rigidez moral não gere conflitos internos na turma.",
+      "personagem": "Tainá Ribeiro",
+      "dos_chegada": "Veio de uma comunidade à beira de um rio no interior da Amazônia, direto do Mundano, de onde trouxe uma postura rígida, estruturada e defensiva e o hábito de proteger os seus. Cresceu entre as casas sobre a margem, aprendendo cedo que, quando o rio sobe, ninguém se salva sozinho. Fez um treinamento formal de combate ainda criança e chegou a Brasilis com a disciplina de quem nunca teve folga. Não tem nenhuma facilidade inata para o Fantástico, e cada conquista na língua vem de esforço deliberado. As folhas presas ao cabelo e a pintura vermelha no rosto são costumes de casa e não pedem explicação.",
+      "dos_postura": "Estuda as frases mágicas como quem treina artes marciais: repete até a exaustão, até a fonética sair perfeita. A atitude é de controle e hipervigilância, com tendência a ditar as ações do pelotão durante as simulações práticas. Fala pouco e escuta tudo, de braços cruzados, medindo quem merece confiança. Quando decide que alguém é do grupo, passa a cobrar e a defender essa pessoa com o mesmo rigor.",
+      "dos_atencao": "Com o rio na memória, a água é o elemento em que se sente em casa: usa a de canos quebrados e poças para erguer barreiras protetoras ao redor dos colegas mais imprudentes. Exige supervisão constante para que a rigidez moral não gere conflitos internos na turma. A coordenação nota que a tendência de assumir toda a responsabilidade sozinha pesa mais do que parece, e que pedir ajuda ainda é uma lição por aprender.",
       "val_l1": "Proteção",
       "val_r1": "Controle",
       "val_l2": "Estrutura",
@@ -68,9 +69,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "De ancestralidade fantástica, da linhagem da Caipora, tem natureza rústica e intuitiva. No segundo dia de aula estilhaçou a tranca de um armário do almoxarifado usando instintivamente a partícula Ru (Destruir), sem consultar o grimório.",
-      "dos_postura": "Desconhece as diretrizes éticas dos Oradores mais velhos e não demonstra o menor interesse em segui-las. O traço é antissocial, com teimosia e desconfiança de qualquer regra imposta pela diretoria. A preferência é pelo silêncio das matas do Fantástico.",
-      "dos_atencao": "As interações com a turma do Mundano são gélidas, já que a dependência tecnológica dos colegas lhe parece uma fraqueza inadmissível. A coordenação acompanha o potencial destrutivo da magia instintiva e o risco de isolamento, pois há pouquíssima disposição para trabalhar em grupo.",
+      "personagem": "Ruan Matos",
+      "dos_chegada": "De ancestralidade fantástica, da linhagem da Caipora, tem natureza rústica e intuitiva. Foi criado nas bordas do Fantástico, entre trilhas de mato fechado e bichos que nunca viram uma cerca, sem calendário e sem sinal de celular. A família lhe ensinou a respeitar a caça, o fogo e o silêncio, e quase nada sobre salas de aula. No segundo dia de aula estilhaçou a tranca de um armário do almoxarifado usando instintivamente a partícula Ru (Destruir), sem consultar o grimório. O cabelo ruivo e espetado parece sempre prestes a soltar faísca.",
+      "dos_postura": "Desconhece as diretrizes éticas dos Oradores mais velhos e não demonstra o menor interesse em segui-las. O traço é antissocial, com teimosia e desconfiança de qualquer regra imposta pela diretoria. A preferência é pelo silêncio das matas do Fantástico. Por trás do sorriso desafiador há alguém que testa os limites para descobrir quem aguenta ficar por perto de verdade.",
+      "dos_atencao": "As interações com a turma do Mundano são gélidas, já que a dependência tecnológica dos colegas lhe parece uma fraqueza inadmissível. A coordenação acompanha o potencial destrutivo da magia instintiva e o risco de isolamento, pois há pouquíssima disposição para trabalhar em grupo. O pequeno Brasinha, que vive fuçando onde não deve, é hoje a companhia mais estável que Ruan aceita.",
       "val_l1": "Caos",
       "val_r1": "Ordem",
       "val_l2": "Liberdade",
@@ -124,9 +126,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Da linhagem do Curupira, tem sintonia visceral com o ecossistema da escola. Sem nunca ter frequentado uma aula formal, compreendeu a partícula Re (Restaurar) de forma puramente orgânica, sentindo as microfissuras na energia dos corredores de Brasilis.",
-      "dos_postura": "A postura é protetora e pacífica ao extremo, sempre tentando apaziguar os ânimos exaltados da turma. A sensibilidade às mudanças emocionais ao redor é enorme, e o esforço constante é manter o grupo unido.",
-      "dos_atencao": "Há dificuldade de impor limites: absorve o estresse emocional de todo o grupo e paralisa fisicamente diante de qualquer forma de dano, hesitando em conjurar magias que exijam confronto direto. A coordenação recomenda atenção ao desgaste emocional acumulado.",
+      "personagem": "Maíra Soares",
+      "dos_chegada": "Da linhagem do Curupira, tem sintonia visceral com o ecossistema da escola. Cresceu num sítio afastado, cuidando de bichos feridos e de plantas doentes, e aprendeu a reconhecer o estado de um lugar só de ouvir. Sem nunca ter frequentado uma aula formal, compreendeu a partícula Re (Restaurar) de forma puramente orgânica, sentindo as microfissuras na energia dos corredores de Brasilis. As tranças longas com anéis dourados foram feitas pela avó, uma por uma, antes da viagem.",
+      "dos_postura": "A postura é protetora e pacífica ao extremo, sempre tentando apaziguar os ânimos exaltados da turma. A sensibilidade às mudanças emocionais ao redor é enorme, e o esforço constante é manter o grupo unido. Costuma chegar antes de todos e ser a última a sair, e é quem percebe primeiro quando alguém passou a noite mal.",
+      "dos_atencao": "Há dificuldade de impor limites: absorve o estresse emocional de todo o grupo e paralisa fisicamente diante de qualquer forma de dano, hesitando em conjurar magias que exijam confronto direto. A coordenação recomenda atenção ao desgaste emocional acumulado. Os sons altos da escola cansam muito mais do que se imagina, por causa da audição sensível, e a Cantiga costuma ser a única que consegue fazê-la respirar fundo.",
       "val_l1": "União",
       "val_r1": "Autopreservação",
       "val_l2": "Empatia",
@@ -179,9 +182,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Produto do ensino formal da capital paulista, tropeçou numa seção esquecida da biblioteca e deu de cara com o Fantástico. A reação divide-se, em partes iguais, entre fascínio e terror.",
-      "dos_postura": "Decorou o Léxico em três dias, tratando as partículas como linhas de código. O intelectualismo rende arrogância nas discussões de classe, com ares de quem já leu tudo sobre o assunto e discorda do resto.",
-      "dos_atencao": "Trava por completo na hora de dizer as partículas em voz alta para o efeito se manifestar. Ao encontrar um filhote de curupira nos jardins, passou vinte minutos se escondendo atrás de um orelhão. Falta prática de campo e a tolerância ao estresse físico é baixa: a teoria sobra, a coragem sob pressão real ainda precisa ser construída.",
+      "personagem": "Davi Prado",
+      "dos_chegada": "Produto do ensino formal da capital paulista, tropeçou numa seção esquecida da biblioteca e deu de cara com o Fantástico. A reação divide-se, em partes iguais, entre fascínio e terror. Filho de pais que trabalham o dia inteiro, passou a infância entre livros, cadernos espirais e enciclopédias, com a certeza de que tudo no mundo cabia numa explicação. Descobrir que isso não era verdade foi a melhor e a pior notícia da vida.",
+      "dos_postura": "Decorou o Léxico em três dias, tratando as partículas como linhas de código. O intelectualismo rende arrogância nas discussões de classe, com ares de quem já leu tudo sobre o assunto e discorda do resto. Anota tudo, corrige os outros por reflexo e fica genuinamente mal quando percebe que magoou alguém, mesmo sem saber consertar isso.",
+      "dos_atencao": "Trava por completo na hora de dizer as partículas em voz alta para o efeito se manifestar. Ao encontrar um filhote de curupira nos jardins, passou vinte minutos se escondendo atrás de um orelhão. Falta prática de campo e a tolerância ao estresse físico é baixa: a teoria sobra, a coragem sob pressão real ainda precisa ser construída. O pacto com o Verbete, assinado numa página de caderno, é o primeiro passo que Davi deu sem consultar um livro antes.",
       "val_l1": "Teoria",
       "val_r1": "Prática",
       "val_l2": "Coragem",
@@ -236,9 +240,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Carrega ancestralidade do Fantástico, da linhagem do Boto, e veio de uma comunidade ribeirinha do Norte, onde as histórias de encantados correm junto com o rio. Chegou à Brasilis com intimidade natural com o Outro Lado, que sempre pareceu mais real que as salas do Mundano. Articulou a partícula Vis (Luz) sem esforço, antes mesmo de abrir qualquer apostila.",
-      "dos_postura": "Não entende a gramática formal do Fantástico, mas sente o ritmo das palavras como quem entoa uma toada ribeirinha. A cabeça vive no Outro Lado: dispersão, risadas de piadas internas e peças pregadas nos inspetores com partículas efêmeras de luz. É o arquétipo do caos encantador do Fantástico.",
-      "dos_atencao": "Tem aversão à rigidez das salas de aula do Mundano e enorme dificuldade para sustentar o foco nas lições teóricas. A coordenação observa talento natural fora do comum, acompanhado do risco de se perder no próprio encanto. Precisa de âncoras no mundo Mundano para não se dispersar no meio da aula, ou no meio de uma conjuração.",
+      "personagem": "Kauã Barros",
+      "dos_chegada": "Carrega ancestralidade do Fantástico, da linhagem do Boto, e veio de uma comunidade ribeirinha do Norte, onde as histórias de encantados correm junto com o rio. Cresceu entre barcos, festas de beira de rio e cantigas contadas ao entardecer, e ninguém estranhava quando ele voltava para casa com a roupa molhada e uma história sem pé nem cabeça. Chegou à Brasilis com intimidade natural com o Outro Lado, que sempre pareceu mais real que as salas do Mundano. Articulou a partícula Vis (Luz) sem esforço, antes mesmo de abrir qualquer apostila. O chapéu de palha com fita vermelha acompanha Kauã desde a viagem e nunca sai da cabeça.",
+      "dos_postura": "Não entende a gramática formal do Fantástico, mas sente o ritmo das palavras como quem entoa uma toada ribeirinha. A cabeça vive no Outro Lado: dispersão, risadas de piadas internas e peças pregadas nos inspetores com partículas efêmeras de luz. É o arquétipo do caos encantador do Fantástico. O sorriso de canto serve tanto para conquistar quanto para disfarçar o que realmente passa pela cabeça.",
+      "dos_atencao": "Tem aversão à rigidez das salas de aula do Mundano e enorme dificuldade para sustentar o foco nas lições teóricas. A coordenação observa talento natural fora do comum, acompanhado do risco de se perder no próprio encanto. Precisa de âncoras no mundo Mundano para não se dispersar no meio da aula, ou no meio de uma conjuração. A Miragem, que muda de cor como o rio, avisa quando as histórias de Kauã começam a ficar longe demais da verdade.",
       "val_l1": "Fantástico",
       "val_r1": "Mundano",
       "val_l2": "Enigma",
@@ -291,9 +296,10 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Chegou da periferia de São Paulo por puro acaso: cruzou um Portal do Meio no terminal de ônibus sem fazer ideia do que era. Entrou no campus sem nenhuma bagagem teórica, sem nunca ter ouvido falar dos Oradores, do Outro Lado ou do Fantástico. Para quem vem do Mundano, a escola inteira soa como um desafio novo a ser vencido, e é nesse ponto que o interesse se acende.",
-      "dos_postura": "A atitude é de pragmatismo físico: age primeiro e pensa depois. Enxerga a magia como prova de resistência e de habilidade, não como ciência das palavras, e as aulas de Semântica rendem tédio visível. A competitividade é extrema: tudo vira disputa, da corrida no pátio a quem pronuncia a partícula com mais força.",
-      "dos_atencao": "Na primeira tentativa de conjurar, Etivi (Controlar + Corpo) para saltar um muro alto na aula de educação física, o peso do próprio corpo saiu de controle e a queda terminou de cara no mato. A coordenação registra impulsividade alta, paciência quase nula com teoria e grande potencial físico. Vale acompanhar de perto as travessias de Portais, que costumam acontecer sem planejamento.",
+      "personagem": "Wesley Nascimento",
+      "dos_chegada": "Chegou da periferia de São Paulo por puro acaso: cruzou um Portal do Meio no terminal de ônibus sem fazer ideia do que era. Entrou no campus sem nenhuma bagagem teórica, sem nunca ter ouvido falar dos Oradores, do Outro Lado ou do Fantástico. Cresceu jogando bola na rua e correndo atrás de ônibus, e aprendeu a se virar antes de aprender a pedir. Para quem vem do Mundano, a escola inteira soa como um desafio novo a ser vencido, e é nesse ponto que o interesse se acende.",
+      "dos_postura": "A atitude é de pragmatismo físico: age primeiro e pensa depois. Enxerga a magia como prova de resistência e de habilidade, não como ciência das palavras, e as aulas de Semântica rendem tédio visível. A competitividade é extrema: tudo vira disputa, da corrida no pátio a quem pronuncia a partícula com mais força. Por baixo da disputa, é leal ao time e dá a cara a tapa por quem corre junto.",
+      "dos_atencao": "Na primeira tentativa de conjurar, Etivi (Controlar + Corpo) para saltar um muro alto na aula de educação física, o peso do próprio corpo saiu de controle e a queda terminou de cara no mato. A coordenação registra impulsividade alta, paciência quase nula com teoria e grande potencial físico. Vale acompanhar de perto as travessias de Portais, que costumam acontecer sem planejamento. O Corisco, que dispara pelo pátio e bica quem o provoca, é o único que consegue acompanhar o ritmo de Wesley.",
       "val_l1": "Impulso",
       "val_r1": "Planejamento",
       "val_l2": "Competição",
