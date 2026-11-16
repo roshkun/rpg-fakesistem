@@ -12,9 +12,9 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Veio do interior do estado, direto do Mundano, com postura rígida, estruturada e defensiva. Não tem nenhuma facilidade inata para o Fantástico, e cada conquista na língua vem de esforço deliberado.",
+      "dos_chegada": "Veio de uma comunidade à beira de um rio no interior da Amazônia, direto do Mundano, de onde trouxe uma postura rígida, estruturada e defensiva e o hábito de proteger os seus. Não tem nenhuma facilidade inata para o Fantástico, e cada conquista na língua vem de esforço deliberado.",
       "dos_postura": "Estuda as frases mágicas como quem treina artes marciais: repete até a exaustão, até a fonética sair perfeita. A atitude é de controle e hipervigilância, com tendência a ditar as ações do pelotão durante as simulações práticas.",
-      "dos_atencao": "Usa a água de canos quebrados e poças para erguer barreiras protetoras ao redor dos colegas mais imprudentes. Exige supervisão constante para que a rigidez moral não gere conflitos internos na turma.",
+      "dos_atencao": "Com o rio na memória, a água é o elemento em que se sente em casa: usa a de canos quebrados e poças para erguer barreiras protetoras ao redor dos colegas mais imprudentes. Exige supervisão constante para que a rigidez moral não gere conflitos internos na turma.",
       "val_l1": "Proteção",
       "val_r1": "Controle",
       "val_l2": "Estrutura",
@@ -236,8 +236,8 @@ window.ALUNOS = [
       "z": 1.2
     },
     "ficha": {
-      "dos_chegada": "Carrega ancestralidade do Fantástico, da linhagem do Boto, e chegou à Brasilis com intimidade natural com o Outro Lado, que sempre pareceu mais real que as salas do Mundano. Articulou a partícula Vis (Luz) sem esforço, antes mesmo de abrir qualquer apostila.",
-      "dos_postura": "Não entende a gramática formal do Fantástico, mas sente o ritmo das palavras como quem entoa uma cantiga de roda. A cabeça vive no Outro Lado: dispersão, risadas de piadas internas e peças pregadas nos inspetores com partículas efêmeras de luz. É o arquétipo do caos encantador do Fantástico.",
+      "dos_chegada": "Carrega ancestralidade do Fantástico, da linhagem do Boto, e veio de uma comunidade ribeirinha do Norte, onde as histórias de encantados correm junto com o rio. Chegou à Brasilis com intimidade natural com o Outro Lado, que sempre pareceu mais real que as salas do Mundano. Articulou a partícula Vis (Luz) sem esforço, antes mesmo de abrir qualquer apostila.",
+      "dos_postura": "Não entende a gramática formal do Fantástico, mas sente o ritmo das palavras como quem entoa uma toada ribeirinha. A cabeça vive no Outro Lado: dispersão, risadas de piadas internas e peças pregadas nos inspetores com partículas efêmeras de luz. É o arquétipo do caos encantador do Fantástico.",
       "dos_atencao": "Tem aversão à rigidez das salas de aula do Mundano e enorme dificuldade para sustentar o foco nas lições teóricas. A coordenação observa talento natural fora do comum, acompanhado do risco de se perder no próprio encanto. Precisa de âncoras no mundo Mundano para não se dispersar no meio da aula, ou no meio de uma conjuração.",
       "val_l1": "Fantástico",
       "val_r1": "Mundano",
