@@ -21,7 +21,7 @@
      +'<p><b>Este site é um projeto de fã, feito por fãs, para fãs.</b></p>'
      +'<p>Ele é gratuito e não tem fins lucrativos: não vende nada e não exibe anúncios.</p>'
      +'<p>O Etmos RPG, o sistema, as regras, os textos e todas as informações reunidas aqui pertencem a <b>Rafa Reis</b> e à <b>Editora Balde Galáctico</b>, que detêm todos os direitos sobre eles. Este site é só um material de apoio e não substitui as obras originais.</p>'
-     +'<p>Nomes, marcas e conteúdos de terceiros citados aqui pertencem aos seus respectivos donos. Este site não é um produto oficial, a menos que os autores digam o contrário.</p>'
+     +'<p>Nomes, marcas e conteúdos de terceiros citados aqui pertencem aos seus respectivos donos. Este site não é um produto oficial.</p>'
      +'<p>Não copie, redistribua nem venda este conteúdo sem autorização dos autores. Para apoiar o trabalho deles e conhecer os materiais oficiais:</p>'
      +'<ul><li><b>Rafa Reis (@mestrerafareis):</b> <a href="https://www.youtube.com/@mestrerafareis" target="_blank" rel="noopener">YouTube</a> · <a href="https://mestrerafareis.substack.com/" target="_blank" rel="noopener">Módulos de Etmos no Substack</a></li>'
      +'<li><b>Editora Balde Galáctico:</b> <a href="https://baldegalactico.com.br/" target="_blank" rel="noopener">Site oficial</a> · <a href="https://baldegalactico.com.br/jogo/etmos/" target="_blank" rel="noopener">Página do Etmos RPG</a></li></ul>'
