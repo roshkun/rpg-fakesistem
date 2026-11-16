@@ -6,6 +6,7 @@
   var css=document.createElement('style');
   css.textContent='#aviso{position:fixed;inset:0;z-index:1000;overflow-y:auto;-webkit-overflow-scrolling:touch;background:radial-gradient(ellipse at top,#3a2347 0%,#1d1424 75%);color:#f1ecf7;display:flex;justify-content:center;align-items:flex-start}'
    +'#aviso .box{max-width:560px;width:100%;padding:28px 20px calc(28px + env(safe-area-inset-bottom));font:16px/1.55 Georgia,serif}'
+   +'#aviso .lg{display:inline-block;background:#f1ecf7;border-radius:12px;padding:8px 14px;margin-bottom:14px}#aviso .lg img{display:block;height:44px;width:auto}'
    +'#aviso .ey{font:700 12px system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#c9a6d6}'
    +'#aviso h1{margin:6px 0 14px;font:700 28px/1.1 Georgia,serif;font-variant:small-caps;letter-spacing:.04em}'
    +'#aviso p{margin:0 0 12px}#aviso ul{margin:0 0 18px;padding-left:20px}#aviso li{margin-bottom:8px}'
@@ -17,7 +18,7 @@
   function abrir(){
     if(el) return;
     el=document.createElement('div'); el.id='aviso'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true'); el.setAttribute('aria-label','Aviso legal');
-    el.innerHTML='<div class="box"><div class="ey">Escola Brasilis · Etmos RPG</div><h1>Antes de entrar</h1>'
+    el.innerHTML='<div class="box"><div class="lg"><img src="assets/ui/logo-etmos.svg" alt="Etmos RPG"></div><br><div class="ey">Escola Brasilis · Etmos RPG</div><h1>Antes de entrar</h1>'
      +'<p><b>Este site é um projeto de fã, feito por fãs, para fãs.</b></p>'
      +'<p>Ele é gratuito e não tem fins lucrativos: não vende nada e não exibe anúncios.</p>'
      +'<p>O Etmos RPG, o sistema, as regras, os textos e todas as informações reunidas aqui pertencem a <b>Rafa Reis</b> e à <b>Editora Balde Galáctico</b>, que detêm todos os direitos sobre eles. Este site é só um material de apoio e não substitui as obras originais.</p>'
