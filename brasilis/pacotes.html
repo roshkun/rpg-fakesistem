@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pacotes de Brasilis · Etmos RPG</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M16 2 28 16 16 30 4 16z%27 fill=%27%236e3a7d%27/%3E%3C/svg%3E">
+<style>
+:root{ --w:clamp(190px,56vw,250px); --h:calc(var(--w)*1.55); --d:28px; --cw:min(74vw,300px); }
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; height:100%; overflow:hidden; background:radial-gradient(ellipse at 50% 20%,#4a2a5c 0%,#1d1424 70%); color:#f1ecf7; font:16px/1.4 Georgia,serif; touch-action:none; user-select:none; -webkit-user-select:none; }
+header{ position:fixed; inset:0 0 auto 0; z-index:30; display:flex; align-items:center; gap:10px; padding:calc(env(safe-area-inset-top) + 10px) 12px 10px; }
+header h1{ margin:0; flex:1; font:700 18px Georgia,serif; font-variant:small-caps; letter-spacing:.08em; }
+.btn{ font:700 13px system-ui,sans-serif; color:#fff; background:rgba(110,58,125,.9); border:1px solid #a974ba; padding:10px 14px; border-radius:10px; cursor:pointer; text-decoration:none; }
+.btn.alt{ background:rgba(34,18,46,.85); }
+#stage{ position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; perspective:1100px; padding-top:44px; }
+/* ---------- pacote 3D ---------- */
+#float{ animation:flut 4s ease-in-out infinite; transform-style:preserve-3d; }
+@keyframes flut{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-10px);} }
+#pack{ position:relative; width:var(--w); height:var(--h); transform-style:preserve-3d; transform:rotateX(var(--rx,-6deg)) rotateY(var(--ry,-18deg)); transition:transform .35s cubic-bezier(.2,.8,.2,1); cursor:grab; }
+#pack.drag{ transition:none; cursor:grabbing; }
+.f{ position:absolute; backface-visibility:hidden; overflow:hidden; }
+.front,.back{ width:var(--w); height:var(--h); border-radius:6px; }
+.front{ transform:translateZ(calc(var(--d)/2)); }
+.back{ transform:rotateY(180deg) translateZ(calc(var(--d)/2)); }
+.side{ width:var(--d); height:var(--h); top:0; left:calc(50% - var(--d)/2); }
+.side.r{ transform:rotateY(90deg) translateZ(calc(var(--w)/2)); }
+.side.l{ transform:rotateY(-90deg) translateZ(calc(var(--w)/2)); }
+.cap{ width:var(--w); height:var(--d); left:0; }
+.cap.t{ top:calc(var(--d)/-2); transform:rotateX(90deg) translateZ(calc(var(--h)/2)); }
+.cap.b{ top:calc(var(--h) - var(--d)/2); transform:rotateX(-90deg) translateZ(calc(var(--h)/2)); }
+.foil{ background:linear-gradient(160deg,#6e3a7d 0%,#3e1c43 38%,#2a8f9a 70%,#c9a6d6 100%); }
+.side,.cap{ background:linear-gradient(90deg,#2b1433,#5b2f6a,#2b1433); }
+.front .shine,.back .shine{ position:absolute; inset:0; background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 48%,transparent 62%); background-size:260% 100%; background-position:calc(50% + var(--ry,0deg)*-4) 0; mix-blend-mode:screen; pointer-events:none; }
+.crimp{ position:absolute; left:0; right:0; height:8%; background:repeating-linear-gradient(90deg,rgba(255,255,255,.28) 0 2px,rgba(0,0,0,.25) 2px 4px),linear-gradient(#8d57a0,#5b2f6a); }
+.crimp.top{ top:0; } .crimp.bot{ bottom:0; }
+#strip{ position:absolute; left:0; right:0; top:0; height:11%; z-index:3; transform-origin:0 100%; transition:transform .5s ease,opacity .5s ease; background:inherit; }
+#strip::after{ content:""; position:absolute; left:0; right:0; bottom:0; border-bottom:2px dashed rgba(255,255,255,.7); }
+#strip .crimp.top{ height:70%; }
+.chip{ position:absolute; top:13%; left:50%; transform:translateX(-50%); background:#f1ecf7; border-radius:10px; padding:6px 12px; box-shadow:0 3px 8px rgba(0,0,0,.4); }
+.chip img{ display:block; height:34px; width:auto; }
+.title{ position:absolute; top:31%; left:0; right:0; text-align:center; font:700 13px system-ui,sans-serif; letter-spacing:.3em; text-transform:uppercase; color:#f1ecf7; text-shadow:0 2px 6px rgba(0,0,0,.6); }
+.title b{ display:block; font:700 26px Georgia,serif; letter-spacing:.04em; text-transform:none; font-variant:small-caps; margin-top:2px; }
+.trio{ position:absolute; left:0; right:0; bottom:10%; height:36%; display:flex; justify-content:center; align-items:flex-end; }
+.trio img{ height:100%; width:auto; margin:0 -7%; filter:drop-shadow(0 6px 8px rgba(0,0,0,.5)); }
+.trio img:nth-child(2){ height:118%; z-index:2; }
+.trio img:nth-child(1),.trio img:nth-child(3){ height:96%; }
+.badge{ position:absolute; right:7%; bottom:11%; z-index:4; transform:rotate(8deg); font:700 11px system-ui,sans-serif; background:#f2b84b; color:#3e1c43; padding:4px 8px; border-radius:20px; }
+#pack.open{ transition:transform .6s ease,opacity .6s ease; transform:translateY(60vh) rotateX(20deg); opacity:0; }
+#pack.tearing #strip{ transform:translate(30%,-130%) rotate(-28deg); opacity:0; }
+#dica{ font:600 13px system-ui,sans-serif; color:#d7c3e3; text-align:center; min-height:20px; }
+/* ---------- cartas ---------- */
+#deck{ position:relative; width:var(--cw); aspect-ratio:5/7; perspective:1000px; display:none; }
+.card{ position:absolute; inset:0; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .4s; cursor:pointer; }
+.card .inner{ position:absolute; inset:0; transform-style:preserve-3d; transition:transform .65s cubic-bezier(.2,.8,.2,1); }
+.card.up .inner{ transform:rotateY(180deg); }
+.face{ position:absolute; inset:0; border-radius:16px; backface-visibility:hidden; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.55); }
+.cback{ background:radial-gradient(circle at 50% 40%,#6e3a7d,#2a1433); border:3px solid #a974ba; display:flex; align-items:center; justify-content:center; }
+.cback .chip{ position:static; transform:none; }
+.cback .chip img{ height:42px; }
+.cfront{ transform:rotateY(180deg); background:#1d1424; border:6px solid var(--rc); display:flex; flex-direction:column; }
+.cfront .top{ display:flex; justify-content:space-between; align-items:baseline; padding:7px 10px 3px; background:linear-gradient(var(--rc2),var(--rc)); color:#1d1424; }
+.cfront .top b{ font:700 17px/1.1 Georgia,serif; }
+.cfront .top span{ font:700 11px system-ui,sans-serif; letter-spacing:.06em; }
+.art{ position:relative; flex:1; min-height:0; margin:0 8px; border:2px solid rgba(255,255,255,.25); border-radius:8px; background:radial-gradient(circle at 50% 35%,var(--rc2),#2b1433 80%); overflow:hidden; display:flex; align-items:flex-end; justify-content:center; }
+.art img{ max-width:100%; max-height:100%; object-fit:contain; filter:drop-shadow(0 4px 6px rgba(0,0,0,.5)); }
+.art .gl{ font:700 76px Georgia,serif; color:rgba(255,255,255,.88); align-self:center; text-shadow:0 4px 10px rgba(0,0,0,.5); font-variant:small-caps; }
+.sub{ margin:6px 10px 0; font:700 11px system-ui,sans-serif; letter-spacing:.05em; text-transform:uppercase; color:var(--rc2); }
+.txt{ margin:3px 10px 6px; font:13px/1.3 Georgia,serif; color:#f1ecf7; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+.ft{ display:flex; justify-content:space-between; padding:0 10px 7px; font:600 10px system-ui,sans-serif; color:#b9a3c8; }
+.holo{ position:absolute; inset:0; pointer-events:none; mix-blend-mode:color-dodge; opacity:var(--ho,0); background:linear-gradient(115deg,#ff5fa2,#ffd75f,#5fffb0,#5fb4ff,#c35fff,#ff5fa2); background-size:300% 300%; background-position:calc(var(--px,50)*1%) calc(var(--py,50)*1%); }
+.r3 .face.cfront::after{ content:""; position:absolute; inset:0; background:radial-gradient(circle at calc(var(--px,50)*1%) calc(var(--py,50)*1%),rgba(255,255,255,.4),transparent 45%); mix-blend-mode:overlay; pointer-events:none; }
+.r0{ --rc:#8fa1b3; --rc2:#c9d4de; --ho:0; } .r1{ --rc:#3d8fc9; --rc2:#8cc7f0; --ho:.18; }
+.r2{ --rc:#9b4fd0; --rc2:#d5a4f5; --ho:.32; } .r3{ --rc:#e0a52f; --rc2:#ffe08a; --ho:.5; }
+.burst{ position:fixed; inset:0; pointer-events:none; z-index:20; background:radial-gradient(circle,rgba(255,224,138,.55),transparent 60%); animation:bst .9s ease-out forwards; }
+@keyframes bst{ from{ opacity:1; transform:scale(.3);} to{ opacity:0; transform:scale(1.6);} }
+/* ---------- resumo / coleção ---------- */
+#sum{ position:fixed; inset:0; z-index:25; display:none; overflow-y:auto; background:rgba(20,10,28,.96); padding:calc(env(safe-area-inset-top) + 56px) 14px 24px; touch-action:pan-y; }
+#sum h2{ margin:0 0 4px; font:700 22px Georgia,serif; font-variant:small-caps; text-align:center; }
+#sum .sub2{ text-align:center; font:13px system-ui,sans-serif; color:#c9b3d6; margin-bottom:14px; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:10px; max-width:760px; margin:0 auto 16px; }
+.mini{ position:relative; aspect-ratio:5/7; border-radius:9px; border:3px solid var(--rc); background:radial-gradient(circle at 50% 35%,var(--rc2),#2b1433 85%); overflow:hidden; display:flex; align-items:flex-end; justify-content:center; }
+.mini img{ max-width:100%; max-height:84%; object-fit:contain; }
+.mini .gl{ align-self:center; font:700 30px Georgia,serif; color:rgba(255,255,255,.85); font-variant:small-caps; }
+.mini .n{ position:absolute; left:0; right:0; bottom:0; padding:12px 4px 3px; text-align:center; font:700 10px/1.1 system-ui,sans-serif; background:linear-gradient(transparent,rgba(0,0,0,.8)); }
+.mini .q{ position:absolute; top:3px; right:3px; background:#1d1424; border-radius:10px; font:700 10px system-ui,sans-serif; padding:1px 6px; }
+.mini.novo::after{ content:"NOVA"; position:absolute; top:3px; left:3px; background:#f2b84b; color:#3e1c43; font:700 9px system-ui,sans-serif; padding:1px 5px; border-radius:8px; }
+.mini.lock{ filter:grayscale(1) brightness(.4); }
+.acts{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+@media (prefers-reduced-motion:reduce){ #float{ animation:none; } }
+</style>
+</head>
+<body>
+<header><h1>Pacotes de Brasilis</h1><button class="btn alt" id="colbtn" type="button">Coleção</button><a class="btn alt" href="index.html">← Voltar</a></header>
+<div id="stage">
+  <div id="float"><div id="pack" aria-label="Pacote de cartas">
+    <div class="f front foil"><div class="crimp bot"></div><div class="chip"><img src="assets/ui/logo-etmos.svg" alt="Etmos RPG"></div>
+      <div class="title">Coleção<b>Brasilis</b></div><div class="badge">5 cartas</div>
+      <div class="trio"><img src="assets/personagens/o-rebelde.webp" alt=""><img src="assets/personagens/a-vanguarda-2.webp" alt=""><img src="assets/personagens/o-ilusionista.webp" alt=""></div>
+      <div id="strip" class="foil"><div class="crimp top"></div></div><div class="shine"></div></div>
+    <div class="f back foil"><div class="crimp top"></div><div class="crimp bot"></div><div class="chip" style="top:42%"><img src="assets/ui/logo-etmos.svg" alt=""></div><div class="shine"></div></div>
+    <div class="f side r"></div><div class="f side l"></div><div class="f cap t"></div><div class="f cap b"></div>
+  </div></div>
+  <div id="deck" aria-live="polite"></div>
+  <div id="dica">Arraste de lado no topo do pacote para rasgar. Arraste no resto para girar.</div>
+  <button class="btn" id="rasgar" type="button">Rasgar o pacote</button>
+</div>
+<div id="sum"><h2 id="sumt"></h2><div class="sub2" id="sums"></div><div class="grid" id="grid"></div><div class="acts" id="acts"></div></div>
+<script src="aviso.js?v=3"></script>
+<script src="data/alunos.js?v=15"></script>
+<script src="data/modulos.js?v=7"></script>
+<script src="data/mesa.js"></script>
+<script>
+(function(){
+var $=function(s){ return document.querySelector(s); };
+var KEY='etmos-colecao-v1', RAR=['Comum','Rara','Épica','Lendária'];
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ return {}; } }
+function save(c){ try{ localStorage.setItem(KEY,JSON.stringify(c)); }catch(e){} }
+function hash(s){ var h=0; for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))|0; return Math.abs(h); }
+function ini(n){ return n.replace(/^(Encantamento|Amuleto|Pergaminho|Poção|Objeto)\s+(de|do|da|dos|das)\s+/i,'').replace(/[^A-Za-zÀ-ú ]/g,'').trim().split(/\s+/).slice(0,2).map(function(w){ return w[0]; }).join('').toUpperCase(); }
+/* ---------- conjunto de cartas ---------- */
+var POOL=[];
+(window.ALUNOS||[]).forEach(function(a){ var f=a.ficha||{};
+  POOL.push({id:'p-'+a.id,r:3,tipo:'Personagem',nome:f.personagem||a.nome,sub:f.basico||a.nome,img:a.imagem,txt:f.dos_chegada||f.aparencia||''});
+  if(a.familiar_img&&f.fam_nome) POOL.push({id:'m-'+a.id,r:1,tipo:'Mascote',nome:f.fam_nome,sub:'Mascote · Pacto '+(f.fam_tipo||''),img:a.familiar_img,txt:f.fam_notas||''});
+  if(a.totem) POOL.push({id:'t-'+a.id,r:2,tipo:'Totem',nome:a.totem.nome,sub:'Totem · Rank '+a.totem.rank,img:a.totem.img,txt:a.totem.desc||''});
+});
+POOL.push({id:'t-jonas',r:2,tipo:'Totem',nome:'Totem do Professor Jonas',sub:'Totem · Corpo docente',img:'assets/itens/totem-professor-jonas.webp',txt:'O Totem do Professor Jonas "Fagulha", de Brasilis.'});
+((window.MESA&&window.MESA.imagens)||[]).forEach(function(g){ if(g.c==='npcs') POOL.push({id:'n-'+hash(g.s),r:1,tipo:'NPC',nome:g.t,sub:'Personagem do mestre',img:g.s,txt:'Uma figura que o narrador pode apresentar à turma em Brasilis.'}); });
+((window.MODULOS&&window.MODULOS.itens)||[]).forEach(function(it){ POOL.push({id:'i-'+hash(it.nome),r:0,tipo:'Item',nome:it.nome,sub:'Item · '+it.pp+' PP',gl:ini(it.nome),hue:hash(it.nome)%360,txt:(it.efeito||'').split('\n')[0]}); });
+function porR(r){ return POOL.filter(function(c){ return c.r===r; }); }
+function pick(w){ var t=Math.random()*100, r=0, acc=0; for(var i=0;i<w.length;i++){ acc+=w[i]; if(t<acc){ r=i; break; } } var l=porR(r); if(!l.length) l=POOL; return l[Math.floor(Math.random()*l.length)]; }
+function sorteio(){ var o=[], tries=0;
+  var slots=[[100,0,0,0],[100,0,0,0],[100,0,0,0],[0,70,25,5],[50,35,12,3]];
+  slots.forEach(function(w){ var c; do{ c=pick(w); tries++; }while(o.indexOf(c)>-1&&tries<200); o.push(c); });
+  return o.sort(function(a,b){ return a.r-b.r; });
+}
+function artHTML(c){ return c.img?'<img src="'+c.img+'" alt="">':'<div class="gl">'+(c.gl||'?')+'</div>'; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
+function cardEl(c,idx,tot,colec){
+  var el=document.createElement('div'); el.className='card r'+c.r;
+  var bg=c.hue!=null?' style="background:radial-gradient(circle at 50% 35%,hsl('+c.hue+',55%,55%),#2b1433 85%)"':'';
+  el.innerHTML='<div class="inner"><div class="face cback"><div class="chip"><img src="assets/ui/logo-etmos.svg" alt=""></div></div>'
+   +'<div class="face cfront"><div class="top"><b>'+esc(c.nome)+'</b><span>'+RAR[c.r].toUpperCase()+'</span></div>'
+   +'<div class="art"'+bg+'>'+artHTML(c)+'</div><div class="sub">'+esc(c.sub)+'</div><div class="txt">'+esc(c.txt)+'</div>'
+   +'<div class="ft"><span>'+esc(c.tipo)+'</span><span>'+(idx+1)+' / '+tot+'</span></div><div class="holo"></div></div></div>';
+  el.addEventListener('pointermove',function(e){ var r=el.getBoundingClientRect(); el.style.setProperty('--px',((e.clientX-r.left)/r.width*100).toFixed(0)); el.style.setProperty('--py',((e.clientY-r.top)/r.height*100).toFixed(0)); if(el.classList.contains('up')&&!el.classList.contains('gone')) el.style.transform='rotateY('+(((e.clientX-r.left)/r.width-.5)*18).toFixed(1)+'deg) rotateX('+(-((e.clientY-r.top)/r.height-.5)*18).toFixed(1)+'deg)'; });
+  el.addEventListener('pointerleave',function(){ if(!el.classList.contains('gone')) place(); });
+  return el;
+}
+/* ---------- pacote: girar e rasgar ---------- */
+var pack=$('#pack'), strip=$('#strip'), rx=-6, ry=-18, drag=null, aberto=false;
+function setRot(){ pack.style.setProperty('--rx',rx+'deg'); pack.style.setProperty('--ry',ry+'deg'); }
+setRot();
+pack.addEventListener('pointerdown',function(e){ if(aberto) return; pack.setPointerCapture(e.pointerId);
+  var r=pack.getBoundingClientRect(); var topo=(e.clientY-r.top)<r.height*.3&&Math.abs(ry)<35&&Math.abs(rx)<25;
+  drag={x:e.clientX,y:e.clientY,rx:rx,ry:ry,topo:topo,p:0,w:r.width}; pack.classList.add('drag'); });
+pack.addEventListener('pointermove',function(e){ if(!drag) return; var dx=e.clientX-drag.x, dy=e.clientY-drag.y;
+  if(drag.topo&&Math.abs(dx)>Math.abs(dy)*.6){ drag.p=Math.max(0,Math.min(1,dx/(drag.w*.7))); strip.style.transform='rotate('+(-drag.p*14)+'deg) translate('+(drag.p*14)+'px,'+(-drag.p*6)+'px)'; if(drag.p>=1){ var d=drag; drag=null; pack.classList.remove('drag'); strip.style.transform=''; rasgar(); } }
+  else if(!drag.topo){ ry=Math.max(-70,Math.min(70,drag.ry+dx*.45)); rx=Math.max(-35,Math.min(35,drag.rx-dy*.35)); setRot(); } });
+function fim(){ if(!drag) return; pack.classList.remove('drag'); if(drag.topo&&drag.p<1){ strip.style.transform=''; } drag=null; }
+pack.addEventListener('pointerup',fim); pack.addEventListener('pointercancel',fim);
+$('#rasgar').addEventListener('click',rasgar);
+function rasgar(){ if(aberto) return; aberto=true; rx=-4; ry=0; setRot(); $('#rasgar').style.display='none'; $('#dica').textContent='';
+  setTimeout(function(){ pack.classList.add('tearing'); },350);
+  setTimeout(function(){ pack.classList.add('open'); },950);
+  setTimeout(mostrar,1500); }
+/* ---------- cartas: revelar uma a uma ---------- */
+var mao=[], cur=0, els=[], novas={};
+function mostrar(){ $('#float').style.display='none'; var deck=$('#deck'); deck.style.display='block'; deck.innerHTML=''; mao=sorteio(); cur=0; els=[]; novas={};
+  var col=load();
+  mao.forEach(function(c,i){ if(!col[c.id]) novas[c.id]=1; var el=cardEl(c,i,mao.length,col); deck.appendChild(el); els.push(el);
+    el.addEventListener('click',function(){ if(i!==cur) return; if(!el.classList.contains('up')){ virar(el,c); } else { passa(); } }); });
+  place(); $('#dica').textContent='Toque na carta para virar.'; }
+function place(){ els.forEach(function(el,i){ if(el.classList.contains('gone')) return; var d=i-cur; el.style.zIndex=50-d; el.style.transform=d<0?'':'translateY('+(d*7)+'px) scale('+(1-d*.035)+')'; el.style.opacity=d>3?0:1; }); }
+function virar(el,c){ el.classList.add('up'); el.style.transform='';
+  var col=load(); col[c.id]=(col[c.id]||0)+1; save(col);
+  if(c.r>=2){ var b=document.createElement('div'); b.className='burst'; document.body.appendChild(b); setTimeout(function(){ b.remove(); },950); }
+  $('#dica').textContent=RAR[c.r]+(novas[c.id]?' · carta nova':' · repetida')+'. Toque para a próxima.'; }
+function passa(){ var el=els[cur]; el.classList.add('gone'); el.style.transform='translate(-130%,-20%) rotate(-18deg)'; el.style.opacity=0; cur++;
+  if(cur>=els.length){ setTimeout(resumo,450); } else { place(); $('#dica').textContent='Toque na carta para virar.'; } }
+/* ---------- resumo e coleção ---------- */
+function miniHTML(c,q,flag){ var bg=c.hue!=null?' style="background:radial-gradient(circle at 50% 35%,hsl('+c.hue+',55%,55%),#2b1433 85%)"':'';
+  return '<div class="mini r'+c.r+(flag==='novo'?' novo':'')+(flag==='lock'?' lock':'')+'"'+bg+'>'+artHTML(c)+'<div class="n">'+(flag==='lock'?'???':esc(c.nome))+'</div>'+(q>1?'<div class="q">x'+q+'</div>':'')+'</div>'; }
+function resumo(){ $('#deck').style.display='none'; $('#dica').textContent=''; var s=$('#sum'); s.style.display='block'; var col=load();
+  $('#sumt').textContent='Seu pacote'; var n=mao.filter(function(c){ return novas[c.id]; }).length;
+  $('#sums').textContent=n+' carta(s) nova(s) · coleção '+Object.keys(col).length+' / '+POOL.length;
+  $('#grid').innerHTML=mao.map(function(c){ return miniHTML(c,col[c.id],novas[c.id]?'novo':''); }).join('');
+  $('#acts').innerHTML='<button class="btn" id="outro" type="button">Abrir outro pacote</button><button class="btn alt" id="vcol" type="button">Ver coleção</button>';
+  $('#outro').onclick=novo; $('#vcol').onclick=colecao; }
+function colecao(){ var s=$('#sum'); s.style.display='block'; var col=load();
+  $('#sumt').textContent='Coleção'; $('#sums').textContent=Object.keys(col).length+' de '+POOL.length+' cartas';
+  var ord=POOL.slice().sort(function(a,b){ return b.r-a.r; });
+  $('#grid').innerHTML=ord.map(function(c){ return miniHTML(c,col[c.id]||0,col[c.id]?'':'lock'); }).join('');
+  $('#acts').innerHTML='<button class="btn" id="outro" type="button">Abrir pacote</button><button class="btn alt" id="fch" type="button">Fechar</button>';
+  $('#outro').onclick=novo; $('#fch').onclick=function(){ s.style.display='none'; }; }
+$('#colbtn').addEventListener('click',colecao);
+function novo(){ $('#sum').style.display='none'; $('#deck').style.display='none'; var f=$('#float'); f.style.display=''; pack.className=''; strip.style.transform=''; aberto=false; rx=-6; ry=-18; setRot(); $('#rasgar').style.display=''; $('#dica').textContent='Arraste de lado no topo do pacote para rasgar. Arraste no resto para girar.'; }
+})();
+</script>
+</body>
+</html>
