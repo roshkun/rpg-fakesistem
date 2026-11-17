@@ -21,13 +21,13 @@ window.MESA={
  {"c": "cenario", "t": "Sala de aula de Brasilis", "s": "assets/cenario/sala-de-aula-brasilis.webp"},
  {"c": "cenario", "t": "Entrada: vinhas combatendo os sinais", "s": "assets/cenario/entrada-vinhas-combatendo.webp"},
  {"c": "cenario", "t": "Entrada: vinhas combatendo (versão 2)", "s": "assets/cenario/entrada-vinhas-combatendo-versao-2.webp"},
- {"c": "cenario", "t": "Entrada: vestígios da Perna Cabeluda", "s": "assets/cenario/entrada-vestigios-perna-cabeluda.webp"},
+ {"c": "cenario", "t": "Entrada: vestígios", "s": "assets/cenario/entrada-vestigios.webp"},
  {"c": "cenario", "t": "Mão do professor com o besouro", "s": "assets/cenario/mao-professor-besouro.webp"},
  {"c": "cenario", "t": "Sala vazia, sinais de obra", "s": "assets/cenario/sala-vazia-obra.webp"},
- {"c":"npcs","t":"Caipora","s":"assets/npcs/caipora.webp"},
- {"c":"npcs","t":"Perna Cabeluda","s":"assets/npcs/perna-cabeluda.webp"},
+ {"c":"npcs","t":"NPC A","s":"assets/npcs/npc-a.webp"},
+ {"c":"npcs","t":"NPC B","s":"assets/npcs/npc-b.webp"},
  {"c":"npcs","t":"Professor Jonas \"Fagulha\"","s":"assets/npcs/professor-jonas-fagulha.webp"},
- {"c":"npcs","t":"Orador Buscador","s":"assets/npcs/orador-buscador.webp"},
+ {"c":"npcs","t":"NPC C","s":"assets/npcs/npc-c.webp"},
   {
    "c": "cenario",
    "t": "Escola Brasilis",
@@ -94,7 +94,7 @@ window.MESA={
    "s": "assets/mascotes/corisco.webp"
   }
  ],
- "titulos": {"sala-coberta-de-vegetacao":"Sala coberta de vegetação","corredor-vinhas-travando":"Corredor com vinhas travando a passagem", "construcao-abandonada-exterior":"Construção abandonada (exterior)", "sala-de-aula-brasilis":"Sala de aula de Brasilis", "entrada-vinhas-combatendo":"Entrada: vinhas combatendo os sinais", "entrada-vinhas-combatendo-versao-2":"Entrada: vinhas combatendo (versão 2)", "entrada-vestigios-perna-cabeluda":"Entrada: vestígios da Perna Cabeluda", "mao-professor-besouro":"Mão do professor com o besouro", "sala-vazia-obra":"Sala vazia, sinais de obra","caipora":"Caipora","perna-cabeluda":"Perna Cabeluda","professor-jonas-fagulha":"Professor Jonas \"Fagulha\"","orador-buscador":"Orador Buscador","escola-brasilis": "Escola Brasilis", "a-vanguarda": "Vanguarda", "a-vanguarda-2": "Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "Rebelde", "brasinha": "Brasinha", "o-curandeiro": "Cuidante", "cantiga": "Cantiga", "o-academico": "Estudante", "verbete": "Verbete", "o-ilusionista": "Ilusionista", "miragem": "Miragem", "o-atleta": "Atleta", "corisco": "Corisco"},
+ "titulos": {"sala-coberta-de-vegetacao":"Sala coberta de vegetação","corredor-vinhas-travando":"Corredor com vinhas travando a passagem", "construcao-abandonada-exterior":"Construção abandonada (exterior)", "sala-de-aula-brasilis":"Sala de aula de Brasilis", "entrada-vinhas-combatendo":"Entrada: vinhas combatendo os sinais", "entrada-vinhas-combatendo-versao-2":"Entrada: vinhas combatendo (versão 2)", "entrada-vestigios":"Entrada: vestígios", "mao-professor-besouro":"Mão do professor com o besouro", "sala-vazia-obra":"Sala vazia, sinais de obra","npc-a":"NPC A","npc-b":"NPC B","professor-jonas-fagulha":"Professor Jonas \"Fagulha\"","npc-c":"NPC C","escola-brasilis": "Escola Brasilis", "a-vanguarda": "Vanguarda", "a-vanguarda-2": "Vanguarda", "jabuti-muralha": "Jabuti-Muralha", "o-rebelde": "Rebelde", "brasinha": "Brasinha", "o-curandeiro": "Cuidante", "cantiga": "Cantiga", "o-academico": "Estudante", "verbete": "Verbete", "o-ilusionista": "Ilusionista", "miragem": "Miragem", "o-atleta": "Atleta", "corisco": "Corisco"},
  "categorias": [["personagens","Personagens"],["mascotes","Mascotes"],["npcs","NPCs"],["cenario","Cenário"],["itens","Itens"]],
  "repo": {"nome":"roshkun/rpg-fakesistem","ramo":"main","pasta":"brasilis/assets"}
 };
