@@ -56,9 +56,6 @@
          font:600 13px/1.2 system-ui,sans-serif; color:#f4ecfa; background:rgba(29,20,36,.78); border:1px solid #7b4a8a;
          padding:10px 16px; border-radius:99px; backdrop-filter:blur(6px); white-space:nowrap; transition:opacity .5s; pointer-events:none; }
   #hint.off{ opacity:0; }
-  #motion{ position:absolute; left:50%; transform:translateX(-50%); bottom:calc(env(safe-area-inset-bottom) + 62px); z-index:20; display:none;
-           font:600 12px/1 system-ui,sans-serif; color:#f4ecfa; background:rgba(29,20,36,.78); border:1px solid #7b4a8a; padding:9px 12px; border-radius:99px; }
-  #motion.show{ display:block; }
 
   #dic{ position:absolute; top:calc(env(safe-area-inset-top) + 12px); left:12px; z-index:20; font:600 13px/1 system-ui,sans-serif; color:#f4ecfa;
         background:rgba(29,20,36,.78); border:1px solid #7b4a8a; padding:10px 13px; border-radius:99px; text-decoration:none; backdrop-filter:blur(6px); }
@@ -66,7 +63,7 @@
   #scene.picked #dic{ opacity:0; pointer-events:none; }
   #cred{ position:absolute; right:12px; bottom:calc(env(safe-area-inset-bottom) + 12px); z-index:20; white-space:nowrap; text-align:right; font:600 11px/1.35 system-ui,sans-serif; color:#fff; background:rgba(34,18,46,.82); border:1px solid rgba(201,166,214,.45); padding:6px 9px; border-radius:12px; backdrop-filter:blur(4px); letter-spacing:.02em; }
   #cred b{ display:block; font:700 12px Georgia,serif; font-variant:small-caps; letter-spacing:.08em; color:#e2c9ee; }
-  @media (max-width:700px){ #cred{ left:50%; right:auto; transform:translateX(-50%); bottom:calc(env(safe-area-inset-bottom) + 104px); text-align:center; } }
+  @media (max-width:700px){ #cred{ left:50%; right:auto; transform:translateX(-50%); bottom:calc(env(safe-area-inset-bottom) + 62px); text-align:center; } }
   #scene.picked #cred{ opacity:0; pointer-events:none; }
   /* véu de transição */
   #veil{ position:absolute; inset:0; z-index:30; background:radial-gradient(circle at 50% 45%, #4a2e66, #1d1424 75%); opacity:0; pointer-events:none; transition:opacity .55s ease-in .25s; }
@@ -74,7 +71,7 @@
   #scene.picked #bg{ filter:blur(5px) brightness(.7); }
   #scene.picked #ground{ opacity:.6; }
   #scene.picked #veil{ opacity:1; }
-  #scene.picked #hint, #scene.picked #motion{ opacity:0; pointer-events:none; }
+  #scene.picked #hint{ opacity:0; pointer-events:none; }
   .char.out{ opacity:0; transition:opacity .35s ease; pointer-events:none; }
   .char.sel{ z-index:15; }
   .char.sel .in{ animation:none; }
@@ -129,7 +126,6 @@
   <div class="layer" id="ground" data-depth="0.1"></div>
   <div id="chars"></div>
   <div id="hint">Toque em um aluno para abrir a ficha</div>
-  <button id="motion" type="button">Ativar movimento</button>
   <div id="cred"><b>Sistema criado por Rafa Reis</b>Editora Balde Galáctico · <button type="button" id="avisolink">Aviso legal</button></div>
   <a id="dic" href="dicionario.html">📖 Dicionário</a>
   <a id="mestre" href="mestre.html" aria-label="Área do mestre">🔒 Mestre</a>
@@ -187,15 +183,8 @@
     var g=e.gamma, b=e.beta-50;
     setTarget(g/22, b/28);
   }
-  var btn=document.getElementById('motion');
-  if(window.DeviceOrientationEvent){
-    if(typeof DeviceOrientationEvent.requestPermission==='function'){
-      btn.classList.add('show');
-      btn.addEventListener('click',function(e){ e.stopPropagation();
-        DeviceOrientationEvent.requestPermission().then(function(r){ if(r==='granted'){ addEventListener('deviceorientation',onOri); } btn.classList.remove('show'); }).catch(function(){ btn.classList.remove('show'); });
-      });
-    } else { addEventListener('deviceorientation',onOri); }
-  }
+  /* giroscópio: só onde não pede permissão (Android); no iPhone o movimento segue o toque */
+  if(window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission!=='function'){ addEventListener('deviceorientation',onOri); }
   function frame(t){
     if(!running){ return; }
     var idle=(t-lastInput>2500 && !gyro);
